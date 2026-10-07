@@ -1,0 +1,315 @@
+# 常用词补充词典（本插件自带，MIT）
+# 形式：中文[|同义词],english tag[,english tag 2]
+# 社区对照表偏"tag 对 tag"，缺少日常词（漂亮/姑娘/站着…），这份专补这一块。
+
+# —— 数量 + 人物（规则也能算，这里给一份确定的）——
+一个女孩|1个女孩,1girl
+一个男孩|1个男孩,1boy
+两个女孩|2个女孩,2girls
+两个男孩|2个男孩,2boys
+三个女孩|3个女孩,3girls
+三个男孩|3个男孩,3boys
+多个女孩|几个女孩,multiple girls
+多个男孩,multiple boys
+一群人|人群多,multiple people
+
+# —— 人物 ——
+少女|小姑娘,girl
+姑娘,girl
+女孩,girl
+男孩|男孩子,boy
+男人|男性,man
+女人|女性,woman
+年轻人|青年,young man
+老人|老者|老头,old man
+老太太|老妇人,old woman
+孩子|小孩|儿童,child
+婴儿|宝宝,baby
+朋友|友人,friend
+情侣|恋人,couple
+姐妹|姊妹,sisters
+兄弟|兄弟俩,brothers
+家人|家庭,family
+人群|群众,crowd
+陌生人,stranger
+背影,back
+
+# —— 外貌评价 ——
+漂亮|美丽|好看|美貌,beautiful
+可爱,adorable
+帅气|英俊|俊美,handsome
+丑陋|丑,ugly
+年轻|年少,young
+成熟,mature
+娇小|小巧,petite
+高挑|个子高,tall
+丰满|身材丰满,curvy
+苗条|纤细|纤瘦,slim
+胖|肥胖,chubby
+健壮|肌肉发达,muscular
+白皙|皮肤白|苍白的皮肤,pale skin
+小麦色皮肤|古铜色皮肤|深色皮肤,dark skin
+
+# —— 表情 ——
+开心|高兴|快乐,happy
+难过|悲伤|伤心,sad
+生气|恼怒|愤怒,angry
+惊讶|吃惊,surprised
+害羞|羞涩,shy
+紧张|不安,nervous
+自信,confident
+温柔,gentle
+冷漠|面无表情,expressionless
+忧郁|忧愁,melancholy
+疲惫|疲倦|累了,tired
+沉思|若有所思,thoughtful
+疑惑|困惑,confused
+害怕|恐惧|惊恐,scared
+哭泣|哭了,crying
+微笑|笑容,smile
+大笑|咧嘴笑,grin
+嘟嘴|撅嘴,pout
+
+# —— 动作与姿态 ——
+站着|站立|站在|立着,standing
+坐着|坐下|坐在, sitting
+躺着|躺下|躺在,lying
+跪着|跪下, kneeling
+蹲着|蹲下, squatting
+靠在|倚靠,leaning
+趴在,lying on stomach
+走路|行走|走在,walking
+跑步|奔跑|跑着,running
+跳跃|跳起来|跳着,jumping
+回头|回头看,looking back
+转身,turning around
+挥手|招手,waving
+鼓掌|拍手,clapping
+抱着|拥抱,hugging
+牵手|手牵手,holding hands
+拿着|手持|握住,holding
+举起|举着,holding up
+伸手,reaching out
+双手叉腰,hand on hip
+举手,raising hand
+看向|望着|望,looking
+吃东西|进食,eating
+喝水|喝饮料,drinking
+睡觉|睡着|睡了,sleeping
+看书|阅读,reading
+写字,writing
+唱歌,singing
+跳舞,dancing
+思考|思索,thinking
+说话|交谈|聊天,talking
+亲吻,kiss
+战斗|打斗,fighting
+遮住脸,covering face
+抱膝,hugging own legs
+
+# —— 场景与地点 ——
+床,bed
+沙发,sofa
+椅子,chair
+桌子,table
+窗边|窗户,window
+门口|门,door
+楼梯,stairs
+街道|街头,street
+城市|都市,city
+乡村|村庄,village
+花园,garden
+公园,park
+教室,classroom
+图书馆,library
+咖啡厅|咖啡馆,cafe
+餐厅,restaurant
+厨房,kitchen
+浴室,bathroom
+天台|屋顶,rooftop
+桥,bridge
+河边|河,river
+湖边|湖,lake
+海边|海滩,beach
+山|高山,mountain
+森林|树林,forest
+草原|草地,grassland
+沙漠,desert
+水面,water surface
+室内|屋内,indoors
+室外|户外,outdoors
+简单背景,simple background
+白色背景,white background
+黑色背景,black background
+花瓣|落花,petals
+落叶,fallen leaves
+云|云朵,clouds
+天空,sky
+灯笼,lantern
+烛光|candle,candlelight
+
+# —— 光影 ——
+光线|光照,lighting
+暖光|暖色光,warm lighting
+冷光|冷色光,cool lighting
+柔光|柔和的光,soft lighting
+强光,strong lighting
+背光|逆光,backlighting
+侧光|边缘光,rim light
+阴影,shadow
+高光,highlight
+投影,cast shadow
+
+# —— 季节与天气 ——
+春天|春季,spring
+夏天|夏季,summer
+秋天|秋季,autumn
+冬天|冬季,winter
+刮风|起风,wind
+下雪|雪景,snow
+雾|雾气,fog
+阴天,cloudy
+晴天|阳光明媚,sunny
+雷雨,thunderstorm
+
+# —— 服饰补充 ——
+裙子|短裙,skirt
+连衣裙|长裙,dress
+校服,school uniform
+制服,uniform
+西装|西服,suit
+衬衫,shirt
+毛衣,sweater
+外套|夹克,jacket
+大衣,coat
+帽子,hat
+围巾,scarf
+手套,gloves
+袜子,socks
+长筒袜,thighhighs
+丝袜,pantyhose
+凉鞋,sandals
+运动鞋,sneakers
+背包,backpack
+手提包,handbag
+珠宝,jewelry
+戒指,ring
+头饰|发饰,hair ornament
+发带,hairband
+发夹,hair clip
+面具,mask
+腰带,belt
+手镯,bracelet
+
+# —— 五官与头发补充 ——
+大眼睛,large eyes
+眼睛小,small eyes
+眯眼,squinting
+睫毛,eyelashes
+长睫毛,long eyelashes
+瞳孔,pupils
+眼泪|泪水,tears
+汗水|汗,sweat
+齐肩发,shoulder-length hair
+波浪卷发|大波浪,wavy hair
+丸子头|盘发,hair bun
+辫子|麻花辫,braid
+长直发,long straight hair
+挑染|挑发,streaked hair
+双色发,two-tone hair
+发光的眼睛,glowing eyes
+睁眼,open eyes
+
+# —— 风格补充 ——
+写实|写实风格,photorealistic
+动漫风格|二次元风格,anime style
+插画|插画风格,illustration
+像素风格|像素画,pixel art
+厚涂,impasto
+水彩|水彩风格,watercolor
+
+# —— 自然语言动作/姿态补充（日常口语描述也能翻） ——
+穿着|身着,wearing
+穿,wearing
+脱|褪下,undressing
+街|街上|街道,street
+打伞|撑伞,holding umbrella
+收伞,holding closed umbrella
+举手|抬手,raised hand
+挥手,waving
+伸手|伸出手,outstretched hand
+张开双臂|伸开双臂|张开双手,outstretched arms
+抱臂|双手抱胸|crossed arms
+叉腰|手叉腰,hands on hips
+双手合十,own hands together
+握拳,clenched hand
+牵手|手拉手,holding hands
+捂嘴,covering mouth
+捂脸,covering face
+摸头,headpat
+回头看|回头,looking back
+回头笑,looking back at viewer
+抬头|仰望,looking up
+低头|垂下头,looking down
+闭眼|闭着眼睛,closed eyes
+睁大眼|瞪大眼睛,wide-eyed
+半睁眼,half-closed eyes
+斜视,sidelong glance
+望着|凝视|注视着,staring
+看着观众|看向镜头,looking at viewer
+望向远方|眺望,looking afar
+微笑|浅笑,smile
+大笑|开怀大笑,laughing
+哭着|流泪,crying
+皱眉|皱眉头,frowning
+张嘴|张着嘴,open mouth
+咬牙|咬牙切齿,clenched teeth
+噘嘴|撅嘴,pout
+脸红|害羞,blush
+生气|愤怒,angry
+惊讶|吃惊,surprised
+安静|沉默,silent
+站着|站立,standing
+坐着|坐下,sitting
+坐着椅子|坐在椅子上,sitting on chair
+蹲下|蹲着,squatting
+趴着|躺着,lying
+跪着,kneeling
+靠在墙上,leaning against wall
+靠着|倚靠,leaning
+跑|奔跑,running
+走动|走路,walking
+跳|跳跃,jumping
+转身|背对,turning around
+漂浮|悬浮,floating
+飞|飞行,flying
+摔倒|跌倒,falling
+拥抱|抱抱,hug
+抱着,hugging
+背着|背在背上,carrying on back
+抱着猫,holding cat
+正在读书|看书,reading book
+写作业|写字,writing
+玩手机|看手机,holding phone
+打电话,talking on phone
+喝水,drinking
+吃东西|进食,eating
+睡觉|睡着,sleeping
+唱歌|歌唱,singing
+弹吉他,playing guitar
+跳舞|舞蹈,dancing
+弹钢琴,playing piano
+撑伞走路,walking with umbrella
+在雨中|雨天,rain
+雨中行走,walking in rain
+下雨|雨滴,rain
+被风吹起|随风飘动,wind
+风吹动着头发,windblown hair
+摸着头发,hand in own hair
+整理头发,adjusting hair
+牵着裙子,holding skirt
+提着裙摆,lifting skirt
+摆姿势|摆pose,posing
+交叉双腿|crossed legs
+翘腿|翘着腿,crossed legs
+盘腿坐着|席地而坐,sitting on floor

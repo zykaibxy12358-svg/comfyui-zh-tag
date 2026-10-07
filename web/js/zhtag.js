@@ -18,6 +18,8 @@ const DEFAULTS = {
     auto: true,
     trigger: "blur", // blur | idle | off
     idleMs: 900,
+    unknownMode: "drop", // drop | keep | fallback
+    normalize: true,
     fallback: false, // 是否让后端走兜底翻译（LLM/在线）
     showToast: true,
 };
@@ -39,8 +41,9 @@ function getSetting(id) {
 
 const S = (k) => getSetting(`${PLUGIN}.${k}`);
 
-function toast(summary, detail) {
-    if (!S("showToast")) return;
+function toast(summary, detail, force = false) {
+    // force=true 用于用户主动点菜单触发的操作：结果必须给反馈，不受「翻译后弹提示」开关影响
+    if (!force && !S("showToast")) return;
     try {
         app.extensionManager?.toast?.add?.({ severity: "info", summary, detail, life: 3000 });
     } catch (e) {
@@ -52,7 +55,13 @@ async function translateText(text) {
     const res = await fetch("/zhtag/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, mode: "tags", fallback: !!S("fallback") }),
+        body: JSON.stringify({
+            text,
+            mode: "tags",
+            fallback: !!S("fallback"),
+            unknownMode: String(S("unknownMode") || "drop"),
+            normalize: S("normalize") !== false,
+        }),
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
     return await res.json();
@@ -147,6 +156,9 @@ app.registerExtension({
         setting(`${PLUGIN}.trigger`, "ZHTag：自动触发时机", "combo", DEFAULTS.trigger,
             { options: ["blur", "idle", "off"] }),
         setting(`${PLUGIN}.idleMs`, "ZHTag：停顿多久后翻译（毫秒）", "number", DEFAULTS.idleMs),
+        setting(`${PLUGIN}.unknownMode`, "ZHTag：词典没查到的词怎么办", "combo", DEFAULTS.unknownMode,
+            { options: ["drop", "keep", "fallback"] }),
+        setting(`${PLUGIN}.normalize`, "ZHTag：输出用 Danbooru 正名并按热度排序", "boolean", DEFAULTS.normalize),
         setting(`${PLUGIN}.fallback`, "ZHTag：词库没有时走兜底翻译（LLM/在线）", "boolean", DEFAULTS.fallback),
         setting(`${PLUGIN}.showToast`, "ZHTag：翻译后弹出提示", "boolean", DEFAULTS.showToast),
     ],
@@ -197,6 +209,28 @@ app.registerExtension({
                             const d = await r.json();
                             toast("ZHTag 词库", `${d.entries} 条中文词条；来源：${(d.sources || []).join("、") || "无"}`);
                         } catch (e) { toast("ZHTag", "读取失败：" + e); }
+                    },
+                });
+                options.push({
+                    content: "ZHTag：下载/更新社区词典",
+                    callback: async () => {
+                        toast("ZHTag", "开始下载社区词典，可能要等十几秒…", true);
+                        try {
+                            const r = await fetch("/zhtag/dict/download", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ ids: [], reload: true }),
+                            });
+                            const d = await r.json();
+                            const lines = (d.results || []).map(
+                                (x) => `${x.ok ? "✓" : "✗"} ${x.name || x.id}：${x.message || ""}`);
+                            const head = d.entries ? `词库现有 ${d.entries} 条中文词条` : "下载结束";
+                            toast("ZHTag 词典更新", [head, ...lines].join("\n"), true);
+                            log("词典下载结果", d);
+                        } catch (e) {
+                            toast("ZHTag", "下载失败：" + e, true);
+                            log("词典下载失败", e);
+                        }
                     },
                 });
             } catch (e) {

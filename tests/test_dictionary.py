@@ -56,9 +56,12 @@ def main():
     ok('long hair' in out2 or 'long_hair' in out2, '[[xxx]] 括号内的词也翻了', out2)
 
     print('\n[6] 去重 / 未命中 / 英文原样保留')
-    out3, rep3 = d.translate('微笑, 微笑, smile, 完全未知词XYZ')
+    out3, rep3 = d.translate('微笑, 微笑, smile, 完全未知词XYZ', unknown_mode='keep')
     ok(out3.lower().count('smile') == 1, '去重生效', out3)
-    ok('完全未知词XYZ' in out3 and rep3['unknown'], '未命中保留原文并报告', '/'.join(rep3['unknown']))
+    ok('完全未知词XYZ' in out3 and rep3['unknown'], '未命中保留原文并报告（keep 模式）', '/'.join(rep3['unknown']))
+    out3b, rep3b = d.translate('微笑, 微笑, smile, 完全未知词XYZ')
+    ok('完全未知词XYZ' not in out3b and rep3b['dropped'] == 1,
+       '默认 drop 模式：未命中只进报告不写进提示词', out3b)
     out4, _ = d.translate('1girl, masterpiece, 微笑')
     ok('1girl' in out4 and 'masterpiece' in out4, '本来就是英文的 tag 原样保留', out4)
 
@@ -67,6 +70,62 @@ def main():
     ok('red long upper shan' not in out5, '默认只输出最佳英文，脏别名不跟着输出', out5)
     out6, _ = d.translate('红色长发', first_only=False)
     ok('red long upper shan' in out6, '需要时可切换为输出全部同义写法', out6)
+
+    print('\n[6.2] 自然语言整句（用户报过的问题：一个蓝发漂亮姑娘）')
+    out_nl, rep_nl = d.translate('一个蓝发漂亮姑娘')
+    ok(out_nl == 'blue hair, beautiful, girl', '「一个蓝发漂亮姑娘」→ 干净三个 tag', out_nl)
+    ok('一个' not in out_nl and '的' not in out_nl, '量词「一个」与「的」不会变成 tag', out_nl)
+    ok(all(has_cjk(x) is False for x in out_nl.split(', ')), '输出里没有残留中文')
+    out_nl2, rep_nl2 = d.translate('一个蓝发漂亮姑娘站在樱花树下微笑')
+    for need in ('girl', 'blue hair', 'smile', 'cherry blossoms'):
+        ok(need in out_nl2, f'长句里包含 {need}', out_nl2)
+    ok(rep_nl2['dropped'] == 0, '自然口语长句无丢词', f"丢弃 {rep_nl2['dropped']}")
+    ok(rep_nl2['function'] >= 1, '功能词被识别并跳过', f"功能词 {rep_nl2['function']}")
+
+    print('\n[6.3] 功能词 / 人称代词 / 数量短语')
+    out_fw, rep_fw = d.translate('她非常缓慢地闭上眼睛')
+    ok('她' not in out_fw and '非常' not in out_fw, '人称代词与程度副词被丢掉', out_fw)
+    ok('closed eyes' in out_fw, '「闭上眼睛」翻成 closed eyes', out_fw)
+    out_num, _ = d.translate('两个女孩')
+    ok(out_num == '2girls', '「两个女孩」→ 2girls', out_num)
+    ok(d.translate('一个男孩')[0] == '1boy', '「一个男孩」→ 1boy')
+    ok(d.translate('三个人物')[0] in ('3people', '3people'), '「三个人物」→ 3people',
+       d.translate('三个人物')[0])
+    ok(d.is_function_word('的') and d.is_function_word('她') and d.is_function_word('突然'),
+       'is_function_word 覆盖虚词/代词/副词')
+    ok(not d.is_function_word('女孩'), '实词不会被误判为功能词')
+
+    print('\n[6.4] 未命中处理 unknown_mode')
+    src = '一个蓝发姑娘骑着完全未知词XYZ'
+    out_drop, rep_drop = d.translate(src, unknown_mode='drop')
+    ok('完全未知词XYZ' not in out_drop, 'drop：丢掉未命中词', out_drop)
+    ok(rep_drop['dropped'] == 1 and rep_drop['unknown'], 'drop：仍上报未命中词', '/'.join(rep_drop['unknown']))
+    out_keep, _ = d.translate(src, unknown_mode='keep')
+    ok('完全未知词XYZ' in out_keep, 'keep：保留中文原文', out_keep)
+    calls = []
+
+    def fake_fb(word):
+        calls.append(word)
+        return 'mystery tag'
+
+    out_fb, rep_fb = d.translate(src, unknown_mode='fallback', fallback=fake_fb)
+    ok('mystery tag' in out_fb and calls, 'fallback：交给翻译器处理', out_fb)
+    ok(d.translate(src, fallback=fake_fb)[0].find('mystery tag') < 0,
+       '默认 drop 模式下不会偷偷调用翻译器')
+
+    print('\n[6.5] Danbooru 规范化与热度排序')
+    ok(d.canonical_en('longhair') == 'long_hair', '别名归一：longhair → long_hair', str(d.canonical_en('longhair')))
+    ok(d.normalize_en('long_hair') == 'long hair', 'normalize 默认空格风格', d.normalize_en('long_hair'))
+    ok(d.normalize_en('long_hair', underscore=True) == 'long_hair', 'underscore=True 保留下划线',
+       d.normalize_en('long_hair', underscore=True))
+    ok(d.popularity('long_hair') > d.popularity('impasto'), '热度可比较', 
+       f"{d.popularity('long_hair')} > {d.popularity('impasto')}")
+    out_p1, _ = d.translate('微笑，长发，蓝发，女孩')
+    out_p2, _ = d.translate('女孩，蓝发，长发，微笑')
+    ok(out_p1 == out_p2, '输出顺序与输入顺序无关（按热度稳定排序）', out_p1)
+    ok(out_p1.split(', ')[0] in ('long hair', 'girl'), '最热的 tag 排在最前', out_p1)
+    raw, _ = d.translate('红色长发', normalize=False)
+    ok('red' in raw, 'normalize=False 也能出结果', raw)
 
     print('\n[7] 兜底翻译（不联网：用假配置验证链路）')
     import tempfile
@@ -93,7 +152,16 @@ def main():
         ok('sticker' in d2.lookup('表情包') and 'sticker' in d2.lookup('表情'), '同义词（|）生效')
         ok('another custom tag' in d2.lookup('另一个自定义词'), 'JSON 自定义词典生效')
 
-    print('\n[9] 性能（词典 3600 条，整句翻译）')
+        # 兜底翻译的 config.json / cache.json 与 README 不能被当成词典来源
+        with open(os.path.join(tmp, 'config.json'), 'w', encoding='utf-8') as f:
+            f.write('{"fallback": "keep", "base_url": "http://127.0.0.1:11434/v1"}')
+        with open(os.path.join(tmp, 'README.txt'), 'w', encoding='utf-8') as f:
+            f.write('这是说明文件\nfallback,keep\n')
+        d3 = TagDictionary([tmp]).load_all()
+        ok('config.json' not in d3.sources and 'README.txt' not in d3.sources,
+           '配置文件/说明文件不会被当成词典', ', '.join(d3.sources))
+
+    print('\n[9] 性能（词典近 4000 条，整句翻译）')
     import time
     text = '一个女孩站在樱花树下微笑，长发飘动，黄昏，电影感光线，高质量，杰作，' * 10
     t0 = time.time()

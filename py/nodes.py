@@ -28,15 +28,31 @@ def translator() -> FallbackTranslator:
 
 def do_translate(text: str, mode: str = 'tags', dedupe: bool = True,
                  keep_unknown: bool = True, use_fallback: bool = False,
-                 first_only: bool = True):
+                 first_only: bool = True, unknown_mode: str = None,
+                 normalize: bool = True, underscore: bool = False):
     dic = get_dictionary()
     fb = translator() if use_fallback else None
+    if unknown_mode is None:
+        unknown_mode = 'keep' if keep_unknown else 'drop'
     result, report = dic.translate(text, mode=mode, dedupe=dedupe,
                                    keep_unknown=keep_unknown, fallback=fb,
-                                   first_only=first_only)
+                                   first_only=first_only, unknown_mode=unknown_mode,
+                                   normalize=normalize, underscore=underscore)
     if fb is not None:
         fb.save_cache()
     return result, report
+
+
+UNKNOWN_MODES = ['丢弃未命中（推荐，只写进报告）', '保留中文原文', '交给兜底翻译（LLM/在线）']
+
+
+def unknown_mode_of(value) -> str:
+    v = str(value or '')
+    if v.startswith('保留'):
+        return 'keep'
+    if v.startswith('交给'):
+        return 'fallback'
+    return 'drop'
 
 
 class ZHTagTranslate:
@@ -47,12 +63,13 @@ class ZHTagTranslate:
         return {
             'required': {
                 '中文提示词': ('STRING', {'multiline': True, 'dynamicPrompts': False,
-                                          'default': '一个女孩站在樱花树下微笑，长发，黄昏，电影感光线'}),
+                                          'default': '一个蓝发漂亮姑娘站在樱花树下微笑，长发，黄昏，电影感光线'}),
                 '输出模式': (['tags（逗号分隔的 tag 串）', 'raw（保留换行与顺序）'],),
+                '未命中处理': (UNKNOWN_MODES,),
                 '去重': ('BOOLEAN', {'default': True}),
-                '未命中时保留中文': ('BOOLEAN', {'default': True}),
-                '用兜底翻译（LLM/在线）': ('BOOLEAN', {'default': False}),
                 '同义词': (['只输出最佳英文', '输出全部同义写法'],),
+                'Danbooru 规范化': ('BOOLEAN', {'default': True}),
+                '用兜底翻译（LLM/在线）': ('BOOLEAN', {'default': False}),
             },
         }
 
@@ -60,18 +77,23 @@ class ZHTagTranslate:
     RETURN_NAMES = ('英文提示词', '未命中报告')
     FUNCTION = 'run'
     CATEGORY = CATEGORY
-    DESCRIPTION = '把中文提示词按内置 tag 词典翻译成英文；词典没有的片段可选走兜底翻译。'
+    DESCRIPTION = ('把中文提示词翻成英文 tag：功能词过滤 + 词典最长匹配 + 数字人物规则 + Danbooru 规范化；'
+                   '未命中默认丢弃并列在报告里。')
 
     def run(self, **kw):
         text = kw.get('中文提示词', '')
         mode = 'raw' if str(kw.get('输出模式', '')).startswith('raw') else 'tags'
+        umode = unknown_mode_of(kw.get('未命中处理'))
         out, report = do_translate(text, mode=mode, dedupe=bool(kw.get('去重', True)),
-                                   keep_unknown=bool(kw.get('未命中时保留中文', True)),
                                    use_fallback=bool(kw.get('用兜底翻译（LLM/在线）', False)),
-                                   first_only=not str(kw.get('同义词', '')).startswith('输出全部'))
+                                   first_only=not str(kw.get('同义词', '')).startswith('输出全部'),
+                                   unknown_mode=umode,
+                                   normalize=bool(kw.get('Danbooru 规范化', True)),
+                                   keep_unknown=(umode == 'keep'))
         unknown = report.get('unknown') or []
-        info = (f"词典命中 {report['matched']} 段；兜底翻译 {report['translated']} 段；"
-                f"保留原文 {report['kept']} 段；词库 {report['entries']} 条")
+        info = (f"命中 {report['matched']} 段；兜底 {report['translated']} 段；"
+                f"丢弃 {report['dropped']} 段；功能词 {report['function']} 段；"
+                f"词库 {report['entries']} 条 + Danbooru {report['index']} 条")
         if unknown:
             info += '\n未命中：' + '、'.join(dict.fromkeys(unknown))[:500]
         print('[ZHTag] ' + info.splitlines()[0])

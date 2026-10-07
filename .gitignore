@@ -5,14 +5,17 @@ desktop.ini
 .vscode/
 .idea/
 
-# 依赖与构建（本扩展无构建步骤，仅防误入）
+# 依赖与构建（本插件无构建步骤，仅防误入）
 node_modules/
 dist/
 *.log
 
-# 运行时导出（记忆链导出的 JSON，属于用户数据，不入库）
-memory-chain-*.json
-
 # Python
 __pycache__/
 *.pyc
+
+# 用户本地数据：配置文件、翻译缓存、下载来的社区词典都不入库
+data/user/config.json
+data/user/cache.json
+data/user/community_*
+data/user/*.log
