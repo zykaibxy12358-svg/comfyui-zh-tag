@@ -170,6 +170,24 @@ def main():
     dt = (time.time() - t0) / 50 * 1000
     ok(dt < 50, '单次整句翻译耗时 < 50ms', f'{dt:.1f} ms/次、{len(text)} 字')
 
+    print('\n[10] ComfyUI 节点层（脱离 ComfyUI 也能跑，CLIP 节点自动跳过）')
+    from py.nodes import ZHTagTranslate, ZHTagQuery, unknown_mode_of  # noqa: E402
+    types = ZHTagTranslate.INPUT_TYPES()['required']
+    ok('未命中处理' in types and 'Danbooru 规范化' in types,
+       '节点暴露了未命中处理与规范化开关', ', '.join(types.keys()))
+    ok(unknown_mode_of('保留中文原文') == 'keep' and unknown_mode_of('丢弃未命中（推荐，只写进报告）') == 'drop'
+       and unknown_mode_of('交给兜底翻译（LLM/在线）') == 'fallback', '下拉文字能映射成策略')
+    out, report = ZHTagTranslate().run(**{
+        '中文提示词': '一个蓝发漂亮姑娘站在樱花树下微笑',
+        '输出模式': 'tags（逗号分隔的 tag 串）', '未命中处理': '丢弃未命中（推荐，只写进报告）',
+        '去重': True, '同义词': '只输出最佳英文', 'Danbooru 规范化': True,
+        '用兜底翻译（LLM/在线）': False,
+    })
+    ok('blue hair' in out and '一个' not in out, '节点的默认设置就能出干净结果', out)
+    ok('命中' in report and '词库' in report, '第二个输出是给人看的报告', report.splitlines()[0])
+    q, st = ZHTagQuery().run('双马尾')
+    ok('twintails' in q, '词典查询节点可用', q)
+
     print(f'\n结果：{PASS} 通过 / {FAIL} 失败')
     return 1 if FAIL else 0
 

@@ -178,14 +178,14 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 七、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 55 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 60 项
 node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 28 项
 ```
 
-**后端 55 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 60 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、自定义词典加载、
-配置文件不被误当词典、性能（单次整句 0.5 ms）。
+配置文件不被误当词典、节点层默认设置、性能（单次整句 0.5 ms）。
 
 **前端 28 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 真实的 `zhtag.js`，验证
 注册与 7 项设置（含"settings 里不能有 undefined"这类新版前端的坑）、失焦自动翻译并写回、

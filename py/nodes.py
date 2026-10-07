@@ -139,6 +139,10 @@ def _build_clip_node():
                 'required': {
                     'clip': ('CLIP',),
                     '中文提示词': ('STRING', {'multiline': True, 'dynamicPrompts': False, 'default': ''}),
+                    '未命中处理': (UNKNOWN_MODES,),
+                    '去重': ('BOOLEAN', {'default': True}),
+                    '同义词': (['只输出最佳英文', '输出全部同义写法'],),
+                    'Danbooru 规范化': ('BOOLEAN', {'default': True}),
                     '用兜底翻译（LLM/在线）': ('BOOLEAN', {'default': False}),
                 },
             }
@@ -151,9 +155,14 @@ def _build_clip_node():
 
         def run(self, clip=None, **kw):
             text = kw.get('中文提示词', '')
-            use_fb = bool(kw.get('用兜底翻译（LLM/在线）', False))
-            english, _report = do_translate(text, mode='tags', dedupe=True,
-                                            keep_unknown=True, use_fallback=use_fb)
+            umode = unknown_mode_of(kw.get('未命中处理'))
+            english, _report = do_translate(text, mode='tags',
+                                            dedupe=bool(kw.get('去重', True)),
+                                            use_fallback=bool(kw.get('用兜底翻译（LLM/在线）', False)),
+                                            first_only=not str(kw.get('同义词', '')).startswith('输出全部'),
+                                            unknown_mode=umode,
+                                            normalize=bool(kw.get('Danbooru 规范化', True)),
+                                            keep_unknown=(umode == 'keep'))
             node = CLIPTextEncode()
             cond, = node.encode(clip, english)
             return (cond, english)
