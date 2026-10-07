@@ -12,3 +12,7 @@ dist/
 
 # 运行时导出（记忆链导出的 JSON，属于用户数据，不入库）
 memory-chain-*.json
+
+# Python
+__pycache__/
+*.pyc
