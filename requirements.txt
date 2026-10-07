@@ -1,0 +1,1 @@
+﻿# ZHTag 无第三方依赖，requirements 留空即可（ComfyUI-Manager 需要该文件存在）

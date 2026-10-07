@@ -1,0 +1,3604 @@
+# 中文 → 英文 tag 词典（内置）
+# 形式：中文[|同义词...],english tag[,english tag 2...]
+# 词条来源：sd-webui-prompt-all-in-one (group_tags/zh_CN.yaml, MIT License) 派生 + 本插件补充
+吊帶連衣裙（大熱天穿的無袖連衣裙）,sundress
+欠损|独脚|肢体残缺|欠损少女,amputee
+严肃的（和angry有点像）,serious
+头发上成对的像无线蓝牙的发饰,hairpods
+从背后揉胸|从背后抓住胸部,grabbing_from_behind
+指掀起裙子时形成的篮子形状,skirt_basket
+腿上系着带子或工具包或枪套,thigh_holster
+一部作品中的主要人物集齐,everyone
+加尔格·马可大修道院制服,garreg_mach_monastery_uniform
+嘴角画着口水滴形状的缺口,mouth_drool
+国立音乃木坂学院女子制服,otonokizaka_school_uniform
+有不现实的包裹程度的衣服,impossible_clothes
+露出单边服饰上的垂直条纹,single_vertical_stripe
+青少年早期（11-15）,early teen
+一种女性展示臀部的姿势,trefoil
+从容器中倒出液体的动作,spilling
+双手叉腰|双手搁在腰上,hands_on_hips
+双手手指交叉|双手紧握,hands_clasped
+和袖子分开的手腕的袖口,wrist_cuffs
+圣葛罗莉安娜女学园校徽,st._gloriana's_(emblem)
+圣葛罗莉安娜女学园校服,st._gloriana's_school_uniform
+将系头发的东西叼在嘴里,hair_tie_in_mouth
+小舌头|口盖垂|悬雍垂,uvula
+握着头发|手指绕着头发,holding_hair
+摘下头盔|被摘下的头盔,helmet_removed
+贴合程度不合逻辑的衬衫,Impossible shirt
+透过头发可以看到的眼睛,eyes_visible_through_hair
+面罩|遮阳帽舌|遮阳板,visor
+一部分头部没画进框里,head_out_of_frame
+一部分画到了背景框外,outside_border
+中间有一条黑线的袜子,back-seamed_legwear
+从嘴里吐出液体的动作,spitting
+共享食物|用嘴递食物,shared_food
+厚如玻璃瓶底的圆眼镜,coke-bottle_glasses
+双手放在别人的肩膀上,hands_on_another's_shoulders
+双手放在对方的脸颊上,hands_on_another's_cheeks
+双手放在自己的大腿上,hands_on_own_thighs
+双手放在自己的肚子上,hands_on_own_stomach
+双手放在自己的脸颊上,hands_on_own_cheeks
+双手放在自己的膝盖上,hands_on_own_knees
+头上有非头饰类的物体,object_on_head
+帽子被摘下|摘下帽子,hat_removed
+很短的手套|半截手套,half_gloves
+手叉着腰|手搁在腰上,hand_on_hip
+把手放在自己的肚子上,hand_on_own_stomach
+把手放在自己的脸颊上,hand_on_own_cheek
+把泳衣的裆部挪到一边,swimsuit_aside
+把连衣裤裆部剥到一边,leotard_aside
+拿着眼镜|正在摘眼镜,holding_eyewear
+服饰上有两条平行条纹,double_vertical_stripe
+樱丘女子高等学校校服,sakuragaoka_high_school_uniform
+白色贝雷帽上的蝴蝶结,bowknot_over_white_beret
+私立光坂高等学校校服,hikarizaka_private_high_school_uniform
+站立劈叉|站立高抬腿,standing_split
+脸上有阴影，配合蔑视,shaded_face
+超级高分辨率/大文件,huge filesize
+长袖手套（肘部手套）,elbow_gloves
+鲁纳诺娃魔法学校校服,luna_nova_school_uniform
+一列列小图组成大图,column lineup
+不与本体相连的翅膀,detached_wings
+从三点剥开的比基尼,bikini_aside
+从正面打结的比基尼,front-tie_bikini
+任天堂switch,nintendo_switch
+传统媒体（手绘稿）,traditional media
+传统服装|民族服装,traditional_clothes
+传统画布（如纸等）,traditional_media
+侧面没有布料的服饰,sideless_outfit
+剥下裙子胸口的部分,dress_pull
+单手戴着过肘的手套,single_elbow_glove
+双层样式的服饰画法,two-sided_fabric
+双手交叉伸进袖子里,hands_in_opposite_sleeves
+双手放在别人的脸上,hands_on_another's_
+双手放在自己的头上,hands_on_own_head
+双手放在自己的胸口,hands_on_own_chest
+双手放在自己的脸上,hands_on_own_face
+双手碰到头上的饰物,hands_on_headwear
+吊带式的上身的服饰,halter_top
+圣祥大附小学校校服,seishou_elementary_school_uniform
+头发遮住了一只眼睛,hair_over_one_eye
+夹鼻眼镜|无脚眼镜,pince-nez
+学校泳装（死库水）,school_swimsuit
+屈膝礼（女仆行礼）,curtsy
+心形图案|心形印花,heart_print
+手放在对方的头发上,hand_in_another's_hair
+手放在对方的肚子上,hand_on_another's_stomach
+手放在自己的膝盖上,hand_on_own_knee
+扯住裙摆|按住裙摆,skirt_tug
+把手放在自己的胸口,hand_on_own_chest
+抓住男性器插入自己,guided_penetration
+插入其他镜头或图片,inset
+有整件衣物长的拉链,full-length_zipper
+某著名伸手扭腰动作,caramelldansen
+用绷带包扎一只眼睛,bandage_over_one_eye
+白色大理石发光皮肤,white_marble_glowing_skin
+眼中闪现强烈的情感,glint
+私立直江津高校制服,naoetsu_high_school_uniform
+耳朵穿过帽子或头饰,ears_through_headwear
+背景是前景的放大版,zoom layer
+胸部互碰|胸顶着胸,asymmetrical_docking
+膝盖合并，两脚分开,knees_together_feet_apart
+花卉图案装饰的背景,foral_background
+蛇形发饰|蛙头发饰,snake_hair_ornament
+表情绘（各种表情）,expressions
+起风效果|上升气流,wind_lift
+迎接射精而伸出舌头,oral_invitation
+遮住关键部位的手臂,convenient_arm
+露出虎牙|露出尖牙,fang_out
+马克笔（中性灰色）,copics
+BC自由学园制服,bc_freedom_military_uniform
+EVA神经连接器,inter_headset
+Q版实心椭圆眼睛,solid_oval_eyes_
+Yes/No枕头,yes-no_pillow
+cos成初音未来,hatsune_miku_(cosplay)
+一条腿上挂着短裙,skirt_around_one_leg
+与上衣搭配的短裙,skirt_set
+与原设不同的头饰,alternate_headwear
+为角留了洞的头饰,horns_through_headwear
+乳胶材质的长筒袜,latex_thighhighs
+人体彩绘般的泳衣,impossible_swimsuit
+人物视角向下看↘,looking_down
+人物视角抬头看↗,looking_up
+从后脑戴上的耳机,behind-the-head_headphones
+从正面打结的衣物,front-tie_top
+低胸装高跟鞋打扮,pumps
+准备扣扳机的手势,finger_on_trigger
+前系带比基尼上衣,front-tie_bikini_top
+单边没脱掉的袖子,single_detached_sleeve
+单边穿着过膝服饰,single_kneehigh
+双手放在两腿之间,hands_on_lap
+只扎了一边的头发,one_side_up
+只穿着比基尼上衣,bikini_top
+含菱形花纹的裤袜,argyle_legwear
+圣葛罗莉安娜军装,st._gloriana's_military_uniform
+头发往上蜷的发型,updo
+头骨和交叉的骨头,skull_and_crossbones
+富有表现力的衣服,expressive_clothes
+尾巴蜷到两腿之间,tail_between_legs
+展示（后接部位）,presenting
+带O型环的比基尼,o-ring_bikini
+带有蝴蝶结的帽子,hat_bow
+带蝴蝶结的比基尼,bow_bikini
+帽子遮住了一只眼,hat_over_one_eye
+往上剥开的比基尼,bikini_lift
+往上掰衣物的吊带,strap_lift
+戴着头戴显示设备,head_mounted_display
+手托着对方的下巴,hand_on_another's_chin
+手指没放在扳机上,trigger_discipline
+手接触到对方的脸,hand_on_another's_
+手摸着对方的脸颊,hand_on_another's_cheek
+手放在对方的头上,hand_on_another's_head
+手放在对方的肩上,hand_on_another's_shoulder
+手放在对方的胸前,hand_on_another's_chest
+手碰着自己的下巴,hand_on_own_chin
+手臂上贴着创可贴,bandaid_on_arm
+把手放在自己脸上,hand_on_own_
+拉起掀起卷起衬衫,shirt_lift
+拉链在正面的泳衣,front_zipper_swimsuit
+挂在脖子上的耳机,headphones_around_neck
+挡住关键部位的腿,convenient_leg
+改款过的日本服饰,nontraditional_miko
+旗袍类衣物的前摆,pelvic_curtain
+景深（协调人景）,depth of field
+有多种颜色的翅膀,multicolored_wings
+死后世界战线制服,shinda_sekai_sensen_uniform
+没透出眼睛的眼镜,opaque_glasses
+浦之星女学院校服,uranohoshi_school_uniform
+穿在腰部的小披风,waist_cape
+站在水上或液体上,standing_on_liquid
+系在前腰的蝴蝶结,bow tied at the waist
+背景或画框是圆角,rounded_corners
+脱下了比基尼上衣,bikini_top_removed
+衣服里面穿着泳衣,swimsuit_under_clothes
+表情差分（大概）,expressions
+被逗笑，咧嘴傻笑,teasing_smile
+见泷原中学校制服,mitakihara_school_uniform
+越南校服（奥黛）,Ao_Dai
+趴在地上并翘起脚,the_pose
+连衣裙上的蝴蝶结,dress_bow
+透过头发看见眼睛,eyes visible through hair
+重呼吸，可能没用,heavy_breathing
+阿什福特学院制服,ashford_academy_uniform
+雪中打伞的恋人梗,special_feeling_(meme)
+靴子穿在袜子外面,thighhighs_under_boots
+GIF格式图片,animated gif
+Q版实心圆瞳孔,solid_circle_pupils
+一只脚没穿靴子,single_boot
+七色丘中学校服,nanairogaoka_middle_school_uniform
+与原设不同衣服,alternate_costume
+五角星形状瞳孔,star-shaped_pupils
+亚利亚公司制服,aria_company_uniform
+优雅地提着裙子,skirt_hold
+侧边开口的服饰,side_cutout
+侧面有缝的服饰,side_slit
+倚靠|身体倾斜,leaning
+八十神高中校服,yasogami_school_uniform
+内层穿着连衣裤,leotard_under_clothes
+准备拔刀的姿势,ready_to_draw
+动物耳朵过膝袜,animal_ear_legwear
+十字架元素图案,cross_print
+单侧头上有翅膀,single_head_wing
+单边穿着连裤袜,single_leg_pantyhose
+双手搭在刀柄上,hands_on_hilt
+双手放在屁股上,hands_on_ass
+只一边戴着耳环,single_earring
+只画了一部分腿,cropped_legs
+哥特洛丽塔风格,gothic_lolita
+喘气（张大嘴）,gasping
+多彩多姿的眼睛,multicolored_eyes
+多色款腿部服饰,multicolored_legwear
+多角度|多姿势,multiple_views
+失去高光的眼睛,empty_eyes
+头上别着护目镜,goggles_on_head
+头发上系着铃铛,hair_bell
+头巾式室内女帽,mob_cap
+头戴式潜水面罩,diving_mask_on_head
+宝石之国的制服,gem_uniform_(houseki_no_kuni)
+实心椭圆形眼睛,solid oval eyes
+展现魅力的姿势,curvy
+巨大的石头物体,monolith
+布满血丝的眼睛,bloodshot_eyes
+带O型环的上衣,o-ring_top
+带O型环的衣物,o-ring
+带有缎带的帽子,hat_ribbon
+带有羽毛的帽子,hat_feather
+带有饰物的帽子,hat_ornament
+带束带的高跟鞋,strappy_heels
+带蝴蝶结的裤袜,bow_legwear
+常盘台中学校服,tokiwadai_school_uniform
+帽子上的护目镜,goggles_on_headwear
+往地上插的武器,planted_weapon
+德国国旗比基尼,german_flag_bikini
+抓着对方的头发,grabbing_another's_hair
+抓着自己的屁股,grabbing_own_ass
+抓着颈部的衣服,neckwear_grab
+拉下自己的衣物,pulled_by_self
+拉开上部分拉链,partially_unzipped
+损坏了的长筒袜,torn_thighhighs
+掀到头上的面具,mask_on_head
+掀起自己的衣物,lifted_by_self
+新世纪福音战士,neon genesis evangelion
+新大岛学园校服,national_shin_ooshima_school_uniform
+无裆裤（紧身）,crotchless_pants
+日本弓道護胸甲,muneate
+时空管理局军服,tsab_ground_military_uniform
+明治女学生制服,meiji_schoolgirl_uniform
+极地迦勒底制服,polar_chaldea_uniform
+枕着头|托着头,head_rest
+桑德斯附高校服,saunders_school_uniform
+毛皮镶边连衣裙,fur-trimmed_dress
+水手服款比基尼,sailor_bikini
+海军蓝腿部服饰,navy_blue_legwear
+点兔兔之家制服,rabbit_house_uniform
+用手指做出笑脸,fingersmile
+畸形的手和手指,mutated hands and fingers
+眼对眼（对视）,eye_contact
+知波单学院制服,chi-hatan_military_uniform
+短裙里穿着短裤,shorts_under_skirt
+短裤穿在袜子外,legwear_under_shorts
+矮跟休闲皮草靴,fur_boots
+秀知院学园制服,shuuchiin_academy_uniform
+穗群原学园制服,homurahara_academy_uniform
+穿着全套盔甲的,full_armor
+穿过眼睛的疤痕,scar_across_eye
+竖的瞳孔/猫眼,slit_pupils
+紧身裤/运动裤,tight_pants
+绕颈露背吊带裙,halter_dress
+缝在衣服上衬料,gusset
+缠着绷带的手臂,bandaged_arm
+美国国旗比基尼,american_flag_bikini
+美少女战士制服,sailor_senshi_uniform
+羽毛装饰的袖子,feather-trimmed_sleeves
+脖子上挂着口哨,whistle_around_neck
+膝盖上的创可贴,bandaid_on_knee
+舌吻|法式湿吻,french_kiss
+舰C舰娘专用鞋,rudder_footwear
+花咲川女子学园,hanasakigawa_school_uniform
+花朵点缀的背景,floral_background
+药丸样式的耳环,pill_earrings
+蓬松裤/宽松裤,puffy_pants
+衣服上贴着符纸,ofuda_on_clothes
+被对方掀起衣物,lifted_by_another
+解开的裤子拉链,open_fly
+解开纽扣的衬衫,unbuttoned shirt
+超时空要塞机体,variable_fighter
+过分紧身的衣服,impossible_dress
+运动导致的模糊,motion_blur
+闪着星光的背景,sparkle_background
+闪闪发光的印花,sparkle_print
+闪闪发光的眼睛,sparkling eyes
+防晒霜|身体乳,lotion
+阿伊努人的服饰,ainu_clothes
+阿盖尔菱形花纹,argyle
+露出屁股的服饰,ass_cutout
+靴子下的长筒袜,thighhighs_under_boots
+香霖堂天狗装束,kourindou_tengu_costume
+8bit游戏,8 Bit Game
+Q版腮红贴纸,blush_stickers
+一只眼被遮住,one_eye_covered
+丁字裤比基尼,thong_bikini
+七森中学校服,nanamori_school_uniform
+下半无框眼镜,over-rim_eyewear
+不匹配的瞳孔,mismatched_pupils
+不匹配的袖子,mismatched_sleeves
+不均匀的眼睛,uneven eyes
+不均匀的袖子,uneven_sleeves
+不对称的手套,asymmetrical_gloves
+不对称的服饰,asymmetrical_clothes
+不对称的翅膀,asymmetrical_wings
+不对称的裤子,asymmetrical_legwear
+中紫罗兰红色,mediumvioletred
+九尾|九尾狐,kyuubi
+交叉花边服饰,cross-laced_clothes
+仅比基尼上衣,bikini_top_only
+仅比基尼下装,bikini_bottom_only
+从衬衫下方瞥,upshirt
+任天堂3ds,nintendo_3ds
+传统中式客房,traditional_chinese_room
+体现运动的线,motion_lines
+作物顶部悬垂,crop_top_overhang
+侧面空气刘海,side_blunt_bangs
+傍晚背对阳光,against backlight at dusk
+共浴|鸳鸯浴,shared_bathing
+出租车司机帽,cabbie_hat
+动物耳朵绒毛,animal_ear_fluff
+化妆舞会面具,masquerade_mask
+单只袖子卷起,sleeves_rolled_up
+单手托在脑后,shou
+单手搂着脖子,arm_around_neck
+单手背到身后,arm_behind_back
+单脚不在图内,foot_out_of_frame
+厚涂（风格）,highres
+原设服装改编,adapted_costume
+友枝小学校服,tomoeda_elementary_school_uniform
+双手搂着脖子,arms_around_neck
+双手放在脚上,hands_on_feet
+双脚不在图内,feet_out_of_frame
+双腿之间的手,hand_between_legs
+发髻|团子头,hair_bun
+叠起来的袖子,sleeves_folded_up
+另一条世界线,what_if
+吊带袜的吊带,garter_straps
+嘴巴微微张开,Slightly_open_mouth
+嘴里含着勺子,spoon_in_mouth
+国际友好手势,middle_finger
+圣诞风格服装,santa_costume
+在摆动的头发,hair_flaps
+在液体上行走,walking_on_liquid
+埃及风格服饰,egyptian_clothes
+城市灯光背景,city_lights
+处男杀手毛衣,virgin_killer_sweater
+多绑带比基尼,multi-strapped_bikini
+多色款比基尼,multicolored_bikini
+多色款连衣裙,multicolored_dress
+大洗联队军装,ooarai_military_uniform
+大洗联队校服,ooarai_school_uniform
+头发上别着花,hair_flower
+头发遮着双眼,hair_over_eyes
+头部愤怒符号,anger_vein
+夹克部分移除,jacket_partially_removed
+女侍从的制服,stile_uniform
+小人儿在头上,person_on_head
+尖叫|大声喊,screaming
+展会女郎装束,showgirl_skirt
+帕拉迪岛军装,paradis_military_uniform
+带着花的帽子,hat_flower
+带翅膀的头盔,winged_helmet
+带翅膀的鞋子,winged_footwear
+带耳朵的帽子,hat_with_ears
+帽舌划到侧面,sideways_hat
+心形状的礼盒,heart-shaped_box
+手交叉于胸前,arms_crossed
+手埋在头发里,hand_in_hair
+手抵在嘴唇边,finger_to_mouth
+手持长柄武器,holding_polearm
+手指卷着头发,hair_twirling
+手插在口袋里,hand_in_pocket
+手搁在刀柄上,hand_on_hilt
+手放在屁股上,hand_on_ass
+把嘴画在侧脸,sideways_mouth
+抓着对方屁股,grabbing_another's_ass
+披下来的头发,hair_down
+抱着毛绒玩具,holding_stuffed_animal
+抱自己的双腿,hugging_own_legs
+拉丁式十字架,latin_cross
+拉平（悬挂）,rappelling
+拥抱自己的腿,hugging_own_legs
+指向看图的人,pointing_at_viewer
+指尖抵着指间,steepled_fingers
+换衣play,costume_switch
+握着自己的脚,holding_own_foot
+斜倒斜躺姿势,reclining
+无肩带比基尼,strapless_bikini
+无肩带连衣裙,strapless_dress
+无袖高领毛衣,sleeveless_turtleneck
+时定高校校服,tokisadame_school_uniform
+星光学园制服,starlight_academy_uniform
+有光泽的皮肤,shiny_skin
+有光泽的衣服,shiny_clothes
+有腿环的裤袜,thighband_pantyhose
+柱状画布背景,pillarboxed
+栅川中学校服,sakugawa_school_uniform
+棕色镜框眼镜,brown-framed_eyewear
+毛皮边饰夹克,fur-trimmed_jacket
+毛皮镶边短裙,fur-trimmed_skirt
+水手服款裙子,sailor_dress
+汤普森冲锋枪,thompson_submachine_gun
+波路中学校服,nami_junior_high_school_uniform
+泰事达牌足球,telstar
+淡紫罗兰红色,palevioletred
+清澄高中校服,kiyosumi_school_uniform
+溶解掉的衣服,dissolving_clothes
+照片（物体）,photo_(object)
+照片（风格）,photo_(medium)
+燃烧着的翅膀,fiery_wings
+猫耳造型镂空,cat_ear_cutout
+用手遮住胸部,covering_chest_by_hand
+由室外向室内,from_outside
+电线杆和电线,power_lines
+画的不好的手,poorly drawn hands
+画的不好的脸,poorly drawn face
+瘟疫医生口罩,plague_doctor_mask
+盘起来的头发,hair_up
+真理学院军装,pravda_military_uniform
+真理学院校服,pravda_school_uniform
+眼睛上的疤痕,scar_across_eye
+眼睛下方的痣,mole_under_eye
+眼睛里有符号,symbol_in_eye
+眼睛里的星星,star_in_eye
+眼镜别在头上,eyewear_on_head
+短裤腿连体衣,short_jumpsuit
+破损的牛仔裤,torn_jeans
+神山高中校服,kamiyama_high_school_uniform
+秀尽学院制服,shuujin_academy_uniform
+积雨性层积云,stratocumulus_cumulogentis
+穿衣方式错了,undersized_clothes
+竖条纹连衣裙,vertical-striped_dress
+竖起来的衣领,popped_collar
+细带款比基尼,side-tie_bikini
+经润饰的服装,embellished_costume
+继续高中军服,keizoku_military_uniform
+绷紧的连衣裙,taut_dress
+缎带饰边短裙,ribbon-trimmed_skirt
+耳朵穿过头饰,ears_through_headwear
+耸肩（服装）,shrug_(clothing)
+聚焦在xx上,xx_focus
+聚焦在屁股上,ass_focus
+聚焦在载具上,vehicle_focus
+脖子上护目镜,goggles_around_neck
+脖子上的毛巾,towel_around_neck
+脚的画法错误,dirty_feet
+脚部作画错误,wrong_feet
+腿套|暖腿袜,leg_warmers
+腿部系着带子,leg_belt
+膝盖上有动物,animal_on_lap
+膝盖顶到胸部,knees_to_chest
+自行车运动服,biker_clothes
+色差、色失焦,chromatic_aberration
+荧光蘑菇森林,fluorescent mushroom forests background
+萌向的内八腿,pigeon-toed
+蕾丝边连衣裙,lace-trimmed_dress
+蕾丝边饰发带,lace-trimmed_hairband
+蜂窝风格背景,honeycomb_background
+血从眼里流出,blood_from_eyes
+衣服下的袜子,stocking_under_clothes
+袖子里的手臂,arm_out_of_sleeve
+袖子长过手指,sleeves_past_fingers
+裆胯以下裸着,no_legwear
+裤袜里的内裤,panties_under_pantyhose
+解开的比基尼,untied_bikini
+解开部分纽扣,partially_unbuttoned
+赛博朋克城市,cyberpunk city
+身体上有食物,food_on_body
+轻轻向侧面瞥,sideways_glance
+过大号的衣服,oversized_clothes
+远景透视画法,fisheye
+连帽运动夹克,hooded_track_jacket
+连续重复花纹,unmoving_pattern
+连裤袜|裤袜,pantyhose
+透明的长筒袜,see-through_thighhighs
+部分露指手套,partially_fingerless_gloves
+钻头卷公主卷,drill hair
+钻石形状瞳孔,diamond-shaped_pupils
+钻石（形状）,diamond_(shape)
+锐利的手指甲,sharp_fingernails
+镶边皮草大衣,fur-trimmed_coat
+长袖运动卫衣,sweatshirt
+阿尔卑斯山脉,Alps
+陵樱学园制服,ryouou_school_uniform
+雄英高中校服,u.a._school_uniform
+雷门足球队服,raimon_soccer_uniform
+非洲野狗印花,african_wild_dog_print
+领巾状宽领带,ascot
+颈部系着缎带,neck_ribbon
+食物主题发饰,food-themed_hair_ornament
+高开衩的泳衣,highleg_swimsuit
+高开衩的衣物,highleg
+鸡尾酒连衣裙,cocktail_dress
+黄金时段照明,golden hour lighting
+3/4视角,three-quarter view
+xx在头上,xx_on_head
+一体式泳衣,one-piece_swimsuit
+一种宽上衣,haori
+丁达尔效应,Tyndall effect
+万圣节快乐,happy_halloween
+万圣节服装,halloween_costume
+万花筒摄影,Kaleidoscope Photography
+三叶草印花,clover_print
+三叶草发饰,clover_hair_ornament
+上翘的眼睛,upturned_eyes
+不对称刘海,asymmetric bangs
+不对称袖子,asymmetrical_sleeves
+不对称裤袜,asymmetrical_legwear
+丙烯漆料画,acrylic_paint_(medium)
+中兰花紫色,mediumorchid
+中心褶花边,center_frills
+中石板蓝色,mediumslateblue
+中等长裙子,Medium length skirt
+中绿宝石色,mediumseagreen
+中绿松石色,turquoise
+举起的拳头,raised_fist
+乳沟处开洞,cleavage_cutout
+乳状高层云,altostratus_mammatus
+交叉吊带衫,criss-cross_halter
+交叉系带鞋,cross-laced_footwear
+亮鲑鱼肉色,lightsalmon
+任天堂ds,nintendo_ds
+仿造的翅膀,fake_wings
+低腰比基尼,lowleg_bikini
+侧坐在鞍上,sidesaddle
+侧头瞪着你,kubrick_stare
+倾斜的天空,gradient_sky
+倾斜的头饰,tilted_headwear
+充血的眼睛,bloodshot eyes
+分层比基尼,layered_bikini
+分层的半裙,layered_skirt
+分层连衣裙,layered_dress
+分离式袖子,detached_sleeves
+剥开连衣裤,leotard_pull
+办公室小姐,office_lady
+加帕里馒头,japari_bun
+动物口鼻部,snout
+动画式脸红,anime_style_blush
+勒出下胸围,underbust
+包扎过的腿,bandaged_leg
+北高中制服,kita_high_school_uniform
+十字架项链,cross_necklace
+半无框眼镜,semi-rimless_eyewear
+半闭的双眼,half-closed_eyes
+南瓜灯印花,jack-o'-lantern_print
+印第安红色,indianred
+印花比基尼,print_bikini
+印花连衣裙,print_dress
+厚底高跟鞋,platform_heels_
+双头假阴茎,double_dildo
+双腿抬过头,legs_over_head
+双臂摆出V,v_arms
+双臂摆出W,w_arms
+双色比基尼,mismatched_bikini
+双色调背景,two-tone_background
+双钻头发型,twin_drills
+反光的眼睛,one-eyed
+反扣的帽子,backwards_hat
+发光的双眼,glowing_eyes
+发光的眼睛,glowing eyes,glowing_eye
+可爱的女孩,adorable_girl
+吉卜力风格,Studio Ghibli
+吊架；秋千,Trapeze
+向日葵印花,sunflower_print
+向日葵发饰,sunflower_hair_ornament
+哥特式建筑,gothic architecture
+嘟嘴|抿嘴,homu
+嘴里有头发,hair_in_mouth
+嘴里有食物,food_in_mouth
+围巾在嘴上,scarf_over_mouth
+围巾蝴蝶结,scarf_bow
+围巾被取下,scarf_removed
+围裙连衣裙,pinafore_dress,sweater_dress
+图上有字样,sample
+圆斑比基尼,polka_dot_bikini
+圣斗士星矢,saint seiya
+在电影院里,in_the_movie_theatre
+坐在人身上,sitting_on_person
+坐在大腿上,sitting_on_lap
+坐在栏杆上,sitting_on_railing
+坐在桌子上,lotus_position,sitting_on_table
+坐在椅子上,sitting_on_chair
+坐在楼梯上,sitting_on_stairs
+坐在物体上,sitting_on_xx
+坐在肩膀上,sitting_on_shoulder
+坐在课桌上,sitting_on_desk
+坚定的眼睛,solid_eyes
+堡状卷积云,cirrocumulus_castellanus
+堡状层积云,stratocumulus_castellanus
+堡状高积云,altocumulus_castellanus
+复仇者联盟,avengers
+复合高层云,altostratus_duplicates
+外星人耳朵,alien ears
+多余的手臂,extra arms
+多余的肢体,extra limb
+多彩的背景,multicolored_background
+多色款手套,multicolored_gloves
+多色款衣服,multicolored_clothes
+多色款裙子,multicolored_skirt
+多视角分解,multiple_views
+大尺寸武器,huge_weapon
+头上有动物,animal_on_head
+头上有翅膀,head_wings
+头上的叶子,leaf_on_head
+头上的围巾,scarf_on_head
+头上趴着猫,cat_on_head
+头发往后扎,hair_pulled_back
+头戴式耳机,headset
+头足类眼睛,cephalopod eyes,cephalopod_eyes
+头饰已移除,headwear_removed
+夹克被移除,jacket_removed
+女式灯笼裤,buruma
+奶油在脸上,cream_on_face
+妖精的翅膀,fairy_wings
+嫌弃的眼神,scowl
+安齐奥军服,anzio_military_uniform
+安齐奥校服,anzio_school_uniform
+宝丽来艺术,Polaroid art
+小尺寸短裤,micro_shorts
+层状卷积云,cirrocumulus_stratiformis
+层状层积云,stratocumulus_stratiformis
+层状高积云,altocumulus_strataformis
+幼儿园制服,kindergarten_uniform
+床垫；褥子,mattress
+开心的眼泪,happy_tears
+开襟毛衣衫,cardigan
+弄脏的衣服,dirty_clothes
+微型连衣裙,microdress
+忍耐的表情,endured_face
+快乐|幸福,happy
+情人节快乐,happy_valentine
+戴着头盔的,helm
+手拉着吊带,holding_strap
+手持手写笔,holding_stylus
+手持摄像机,holding_camera
+手持注射器,holding_syringe
+手指枪手势,finger_gun
+手放在嘴边,hand_to_mouth
+手放在头上,hand_on_head
+手放在肩上,hand_on_shoulder
+手放在身后,arms_behind_back
+手臂往后拉,arm_held_back
+手臂被束缚,bound_arms
+手触碰帽子,hand_on_headwear
+手里捧着头,holding_head
+扯着比基尼,bikini_pull
+抓住|抓着,grabbing
+抱着宝可梦,holding_pokemon
+拉链的拉片,zipper_pull_tab
+拍照|自拍,taking_picture
+拙劣的模仿,parody
+拜占庭风格,byzantine_fashion
+拿着易拉罐,holding_can
+拿着棒棒糖,holding_lollipop
+拿着精灵球,holding_poke_ball
+拿着缝衣针,holding_needle
+拿着避孕套,holding_condom
+拿着麦克风,holding_microphone
+挥舞着手臂,waving_arms
+掀自己衣服,lifted_by_self,untied
+掀起的刘海,bangs_pinned_back
+掌上游戏机,handheld_game_console_
+摘下的面具,mask_removed
+撅起的嘴唇,Pouted lips
+撕裂的帽子,torn_hat
+撕裂的衣服,torn_clothes
+撕裂的衬衫,torn_shirt
+撕裂的袖子,torn_sleeves
+敞开的衣服,open_clothes
+敞开的裙子,open_skirt
+散开的头发,hair_spread_out
+新式死库水,new_school_swimsuit
+方向键发饰,d-pad_hair_ornament
+无袖连帽衫,sleeveless_hoodie
+无袖连衣裙,sleeveless_dress
+旧式死库水,old_school_swimsuit
+旭日形首饰,sunburst
+明亮的眼睛,light_eyes
+明亮的瞳孔,bright_pupils
+明胶、布丁,Gelatin
+普通玻璃杯,tumbler
+暗兰花紫色,darkorchid
+暗紫罗兰色,darkviolet
+曲棍球面具,hockey_mask
+最好的质量,best quality
+有多张嘴巴,extra_mouth
+有接缝的袜,seamed_legwear
+有领连衣裙,collared_dress
+服务器机房,server room
+朝画外伸手,reaching_out
+机器人耳朵,robot_ears
+条纹比基尼,striped_bikini
+条纹连衣裙,striped_dress
+松软的耳朵,floppy_ears
+极高分辨率,incredibly absurdres
+柔和的色彩,pastel_color
+查特酒绿色,lawngreen
+格子呢图案,plaid
+格子呢短裙,plaid_skirt
+格子呢背景,plaid_background
+格子呢裤子,plaid_pants
+格子呢领子,plaid_neckwear
+格子比基尼,plaid_bikini
+格子连衣裙,plaid_dress
+桑德斯军装,saunders_military_uniform
+棕色的眼睛,brown_eyes
+棕褐色背景,tan_background
+正向提示词,positive prompt
+歪斜的眼镜,crooked_eyewear
+比基尼泳裤,bikini_bottom
+比基尼盔甲,bikini_armor
+水手服衬衫,sailor_shirt
+水蓝色眼睛,aqua eyes
+没画出眼睛,no_eyes
+沮丧的眉头,frustrated_brow
+波浪形头发,wavy hair
+波点连衣裙,polka_dot_dress
+波状高层云,altostratus_undulatus
+洛丽塔发带,lolita_hairband
+洛丽塔风格,lolita
+浅棕色眼睛,light_brown_eyes
+浅浅的微笑,light smile
+浅黄白绿短,light yellow with green with white short shan
+浅黄白绿长,light yellow with green with white long shan
+浅黄绿相间,light yellow with green with white pleated skirt
+海苔卷寿司,makizushi
+淡淡的腮红,light_blush
+淡黄白破裙,light orange with white chest po skirt
+淡黄白褶裙,light orange with white chest pleated skirt
+深绿松石色,mediumturquoise
+深鲑鱼肉色,darksalmon
+渐变的背景,gradient background,gradient_background
+渐变色头发,gradient hair
+漂浮的肢体,floating limbs
+漂白杏仁色,blanchedalmond
+灰豆绿破裙,green with white chest po skirt
+灰豆绿褶裙,green with white chest pleated skirt
+点兔女仆装,fleur_de_lapin_uniform
+烧焦的衣服,burnt_clothes
+热带特征的,Tropical
+無肩甲盔甲,off-shoulder_armor
+熊印花头饰,bear_hair_ornament
+爱尔兰毛衣,aran_sweater
+爱心形瞳孔,heart-shaped_pupils
+猫耳式耳机,cat_ear_headphones
+用双腿夹住,leg_lock
+用夹克披肩,jacket_on_shoulders
+用手支撑住,arm_support
+电影级光照,Cinematic Lighting
+男友的衣服,borrowed_garments
+畸形的肢体,malformed limbs
+疯狂的眼睛,crazy eyes,crazy_eyes
+白偏粉破裙,white with pink chest po skirt
+白偏粉褶裙,white with pink chest pleated skirt
+白化病患者,albino
+白皙的皮肤,fair_skin
+白色长筒袜,white_thighhighs
+百褶连衣裙,pleated_dress
+皮克斯动画,style of Pixar
+皱眉/蹙额,frown
+相机取景框,viewfinder
+看着另一个,looking_at_another
+眯起眼睛看,squinting
+眼罩比基尼,eyepatch_bikini
+睁着眼睛哭,crying with eyes open,crying_with_eyes_open
+睁着眼落泪,crying_with_eyes_open
+破损的手套,torn_gloves
+破损的泳衣,torn_swimsuit
+破损的短裤,torn_shorts
+破损的裤子,torn_pants
+破损的裤袜,torn_legwear
+破片高层云,altostratus_pannus
+破碎的武器,broken_weapon
+穆斯林头巾,turban
+空洞的眼睛,empty eyes
+空白的眼睛,blank eyes
+竖条纹围巾,vertical-striped_scarf
+竖条纹裙子,vertical-striped_skirt
+竞泳死库水,competition_school_swimsuit
+符号形瞳孔,symbol-shaped_pupils
+等高线强化,contour_deepening
+筋疲力尽的,exhausted
+简单的背景,simple background,simple_background
+类人机器人,humanoid_robot_
+粉色长筒袜,pink_thighhighs
+系绳比基尼,string_bikini
+素股|臀推,grinding
+紧扣的双手,interlocked_fingers
+紫碎花宋抹,purple floral songmo
+絮状卷积云,cirrocumulus_floccus
+絮状层积云,stratocumulus_lacunosus
+絮状高积云,altocumulus_floccus
+细跟高跟鞋,stiletto_heels
+绷紧的衣服,taut_clothes
+绷紧的衬衫,taut_shirt
+绿碎花宋抹,green floral songmo
+缠结型植物,entangled_plants
+网点图背景,halftone_background
+网状卷积云,cirrocumulus_lacunosus
+网状高积云,altocumulus_lacunosus
+罗纹连衣裙,ribbed_dress
+美丽的眼睛,beautiful_detailed_eyes
+美少女战士,sailor_senshi
+美洲豹印花,jaguar_print
+美洲豹耳朵,jaguar_ears
+耳后有头发,hair_behind_ear
+聊天框风格,chat_log
+聚焦在眼睛,eyes_focus
+聚焦在脚上,foot_focus
+聚焦在臀部,hip_focus
+聚焦在面部,face_focus
+肢体不连贯,disconnected limbs
+肩上的武器,weapon_over_shoulder
+背上的武器,weapon_on_back
+背带；挽具,harness
+胡萝卜印花,carrot_print
+胡萝卜发饰,carrot_hair_ornament
+胡萝卜项链,carrot_necklace
+胸口的袋子,breast_pocket
+脖子上有痣,mole_on_neck
+脱下的短裙,skirt_removed
+脱下的衣服,clothes_removed
+脱下的靴子,boots_removed
+脱下的鞋子,shoes_removed
+脸上有瘀伤,bruise_on_face
+脸上有食物,food_on_
+腰间的翅膀,low_wings
+腿上的绷带,bandaid_on_leg
+腿环|袜带,leg_garter
+自动贩卖机,vending_machine
+自行车短裤,bike_shorts
+色彩斑斓的,colorful
+芭蕾舞演员,ballerina
+花边比基尼,frilled_bikini
+花边连衣裙,frilled_dress
+苍白的皮肤,pale_skin
+荚状层积云,stratocumulus_lenticularis
+荚状高积云,altocumulus_lenticularis
+荷鲁斯之眼,eye_of_horus
+莱特曼夹克,letterman_jacket
+蒙住的眼睛,covered_eyes
+蓝宝石胸针,sapphire brooch
+蓬松的袖子,puffy_sleeves
+蓬蓬的短裤,puffy_shorts
+蓬蓬的袖子,puffy_detached_sleeves
+蔽光高层云,altostratus_opacus
+蕾丝边发带,lace-trimmed_hairband
+蕾丝边手套,lace-trimmed_gloves
+蕾丝边短裙,lace-trimmed_skirt
+蕾丝边袖子,lace-trimmed_sleeves
+薄荷奶油色,mintcream
+虚线的眼睛,dashed_eyes
+蝴蝶形瞳孔,butterfly-shaped_pupils
+蝴蝶结发饰,hair_bow
+蝴蝶结领带,bowtie
+融合的手指,fused fingers
+衍射十字星,diffraction_spikes
+衣服上的字,clothes_writing_
+衣服的抽绳,drawstring
+衣物紧紧的,tight
+衬衫塞进去,shirt_tucked_in
+衬衫拉下来,shirt_pull
+袜子有开口,leg_cutout
+裤子卷起来,pants_rolled_up
+裤子塞进去,pants_tucked_in
+褪下的裤袜,pantyhose_pull
+西罗马建筑,greco-roman architectur
+要哭的表情,tearing_up
+角上有饰物,horn_ornament
+角上的头发,hair_on_horn
+解开的衬衫,untucked_shirt
+调整过膝袜,adjusting_thighhigh
+贝壳比基尼,shell_bikini
+负面提示词,negative prompt
+超高分辨率,absurdres
+趾尖|脚尖,toe-point
+身体往后靠,leaning_back
+躺在人身上,lying_on_person
+躺在湖面上,lying_on_the_lake
+轻蔑的眼神,jitome
+辐状高层云,altostratus_radiatus
+过大号衬衫,oversized_shirt
+运动比基尼,sports_bikini
+迦勒底制服,chaldea_uniform
+迪士尼乐园,Disney_land
+迪士尼电影,disney movie
+迷你魔女帽,mini_witch_hat
+透光高层云,altostratus_translucidus
+透明水彩绘,watercolor (medium)
+透明的背景,transparent background
+透明的袜子,see-through_legwear_
+透视连衣裙,see-through_dress
+遮盖的动作,covering
+邪恶的眼睛,evil_eyes
+鄙夷的眼神,jitome
+酒吧审查员,bar censor
+钉子|指甲,nail
+铁十字勋章,iron_cross
+银色的眼睛,silver_eyes
+锁链带牵绳,chain_leash
+锋利的牙齿,sharp_teeth
+错误的比例,bad proportions
+错误的解剖,bad anatomy
+长方形瞳孔,rectangular_pupils
+长颈鹿印花,giraffe_print
+闪亮的眼睛,shiny_eyes
+闪光动画眼,sparkling_anime_eyes
+闭上的眼睛,closed_eyes
+阴贴/乳贴,maebari/pasties
+阿拉伯服饰,arabian_clothes
+隆起的腹部,inflation
+露肩连衣裙,off-shoulder_dress
+露背连衣裙,backless_dress
+露齿咧嘴笑,grin
+青碎花宋抹,cyan floral songmo
+靠在物体上,leaning_on_object
+面对另一个,facing_another
+项链被移除,necklace_removed
+额前有图案,forehead_mark
+额前有宝石,forehead_jewel
+额外的眼睛,extra eyes
+额外的瞳孔,extra_pupils
+额外的耳朵,extra_ears
+额头贴额头,forehead-to-forehead
+风吹动头发,wind
+飞行员夹克,bomber_jacket
+食物在脸上,food_on_face
+马赛克背景,mosaic background
+骨头状饰品,bone_hair_ornament
+骷髅头印花,skull_print
+高腰比基尼,highleg_bikini
+魅惑的微笑,seductive_smile
+麻美断头梗,mami_mogu_mogu
+黑色长筒袜,black_thighhighs
+80动画,1980s anime
+80电影,80s movie
+M字摆腿,m_legs,lowleg
+OK手势,ok_sign
+SM面具,domino_mask
+V字泳衣,slingshot_swimsuit
+X形瞳孔,x-shaped_pupils
+n.铜币,copper
+x_发饰,x_hair_ornament
+一只膝盖,one_knee
+三角印花,triangle_print
+三角头饰,triangular_headpiece
+下臂护甲,vambraces
+专辑封面,album cover
+东亚建物,east asian architecture
+东亚建筑,east_asian_architecture
+两胸之间,between breasts
+两腿分开,legs_apart
+两腿并拢,legs_together
+两色夹克,two-tone_jacket
+中分刘海,centre parting bangs
+中国服饰,china_dress
+中式阁楼,chinese_style_loft
+中春绿色,springgreen
+中景镜头,medium_shot,mid_shot
+中海绿色,seagreen
+乐队制服,band_uniform
+乳液瓶子,lotion_bottle
+乳胶手套,latex_gloves
+互挽手臂,locked_arms
+五彩围巾,multicolored_scarf
+五颜六色,multicolored hair
+交叉刘海,crossed bangs
+交叉双臂,crossed_arms
+交叉脚踝,crossed_ankles
+亮石板灰,lightslategray
+亮金黄色,lightgoldenrodyellow
+亲吻额头,forehead_kiss
+人物倾斜,gradient
+从上方↘,from_above
+从下方↗,from_below
+从裙底瞥,upshorts
+休闲夹克,loating_jacket
+伸出双臂,outstretched_arms
+伸出手臂,outstretched_arm
+低分辨率,lowres
+低腰裤子,lowleg_pants
+体操教练,gym_leader
+体操短裤,gym_shorts
+作者犯病,what
+侧扫刘海,swept bangs
+侧面视角,from_side
+保龄球馆,bowling alley
+俩包子头,double bun
+俯卧后入,prone_bone
+倒三角脸,inverted triangle face
+倾斜角度,dutch angle
+假面骑士,kamen rider
+僵尸姿势,zombie_pose
+兔子印花,bunny_print
+兔子服装,bunny_costume
+兔子玩偶,stuffed_bunny
+兔子耳朵,bunny ears
+兔子饰品,bunny_hair_ornament
+公然猥亵,public_indecency
+兽耳头罩,animal_hood
+内裤偷看,panty_peek
+内裤走光,pantyshot
+军服蓝色,lightseagreen
+军用载具,military_vehicle
+军装夹克,military_jacket
+冬季大衣,winter_coat
+凌乱发型,messy hair
+凹版姿势,gravure_pose
+分层袖子,layered_sleeves
+初音未来,hatsune miku
+前景模糊,blurry_foreground
+剥开和服,kimono_pull
+动力装甲,power_armor
+动态角度,dynamic_angle
+动漫风格,anime style
+动物印花,animal_print
+动物拖鞋,animal_slippers
+动物耳朵,fake animal ears
+包肩上衣,shrug_(clothing)
+医用口罩,surgical_mask
+医用眼罩,medical_eyepatch
+十字发饰,cross_hair_ornament
+十字耳环,cross_earrings
+十字项链,ankh_necklace
+半机械人,cyborg
+半透白裙,translucent white pleated skirt
+半闭双眼,half_closed_eyes
+半露前胸,unbuttoned clothes
+单只手套,single_glove
+单手垂放,arm_at_side
+单手搂腰,arm_around_waist
+单片眼镜,monocle
+单眼遮蔽,one eye closed
+单腿抬高,leg_lift
+单腿站立,standing_on_one_leg
+单色图片,monochrome
+单边长裤,single_pantsleg
+南瓜发饰,pumpkin_hair_ornament
+卡夫奇诺,kafuu_chino
+印度风格,indian_style
+印花和服,print_kimono
+印花围巾,print_scarf
+印花头饰,print_headwear
+印花手套,print_gloves
+印花旗袍,print_cheongsam
+印花睡衣,print_pajamas
+印花短裙,print_skirt
+印花衬衫,print_shirt
+印花领带,print_neckwear
+即将接吻,imminent_kiss
+卷层云类,cirrostratus
+卷积云类,cirrocumulus
+压住裙摆,dress_tug
+厕所隔间,toilet stall
+原神冲击,genshin impact
+厨师工装,chef_uniform
+双手叉腰,hands_on_hips
+双手反袖,hands_in_opposite_sleeves
+双手垂放,arms_at_sides
+双手抱头,arms_behind_head
+双色手套,mismatched_gloves
+双色裤袜,mismatched_legwear,two-tone_legwear
+双色鞋子,mismatched_footwear
+双马尾二,twintails
+取下眼镜,eyewear_removed
+变异的手,mutated hands
+口内指交,finger_in_another's_mouth
+古风建筑,chinese style architecture
+史莱姆娘,slime_musume
+叶子发饰,leaf_hair_ornament
+吊带短裤,suspender_shorts
+吊起来的,hanging
+名画模仿,fine art parody
+后背视角,from_back,from behind
+吮吸手指,finger_in_mouth
+和风女仆,wa_maid
+咬紧牙关,clenched_teeth
+咯咯傻笑,giggling
+哆啦A梦,doraemon
+哈利波特,harry potter
+哥特摇滚,goth
+哥特风格,gothic
+哺乳动物,mammal
+啦啦队服,cheerleader
+嘴唇张开,parted_lips
+四肢着地,all_fours
+回忆场景,flashback
+团子抱枕,dumpling_Hug_Pillow
+围腰毛衣,sweater_around_waist
+圆斑泳衣,polka_dot_swimsuit
+圆斑背景,polka_dot,striped_background
+圆框眼镜,round_eyewear
+圆顶礼帽,bowler_hat
+圈形耳环,hoop earrings
+土狼印花,aardwolf_print
+圣诞老人,santa alter
+在容器中,in_container
+在想象的,imagining
+在膝盖上,on_lap
+在逃跑的,fleeing
+坐在头上,sitting_on_head
+坐在床上,sitting_on_bed
+坐在树上,sitting_in_tree
+坐在水上,sitting_on_water
+坐在石头,sitting_on_rock
+城市背景,cityscape
+城市风景,cityscape
+夏威夷衫,hawaiian_shirt
+夏季制服,summer_uniform
+夏日长裙,summer_dress,summer_long_skirt
+多个女孩,multiple_girls
+多个耳环,multiple_earrings
+多余的腿,extra legs
+多只手臂,extra_arms
+多只眼睛,extra_eyes
+多对翅膀,multiple_wings
+多彩指甲,multicolored_nails
+多彩条纹,colored_stripes,multicolored_stripes
+多彩眼睛,multicolored eyes
+多条项链,multiple_necklaces
+多根呆毛,antenna hair
+多足角色,multiple_legs
+多重人格,multiple_persona,Jekyll_and_Hyde
+大腿皮套,thigh_holster
+大腿绑带,thigh_strap
+大腿缎带,thigh_ribbon
+大象耳朵,elephant ears
+天使耳朵,angel ears
+天狗面具,tengu_mask
+天空印花,sky_print
+天蓝破裙,blue with white chest po skirt
+天蓝褶裙,blue with white chest pleated skirt
+太多手指,too many fingers
+太阳印花,sun_print
+头上的鸟,bird_on_head
+头上起包,head_bump
+夹在腋下,carrying_under_arm
+套頭毛衣,pullover_sweaters
+女仆围裙,maid_apron
+女仆头饰,maid_headdress
+女式衬衫,blouse
+女服务员,waitress
+奶牛印花,cow_print
+子弹项链,bullet_necklace
+字符印花,character_print
+宅男房间,otaku room
+实心圆眼,solid circle eyes
+害怕侧目,fear_kubrick
+宽松领带,loose_necktie
+对坐体位,upright_straddle
+对镜自拍,mirror selfie
+将人抱起,lifting_person
+层积云类,stratocumulus
+展望未来,looking_ahead
+山羊耳朵,goat ears
+巧克力色,chocolate
+巫师帽子,wizard_hat
+巴士车站,bus stop
+市场摊位,market stall
+带框眼镜,under-rim_eyewear
+带角头盔,horned_helmet
+带钉手镯,spiked_bracelet
+幻想风格,fantasy
+幽灵印画,ghost_print
+庚氏灰色,gainsboro
+建筑废墟,building_ruins
+张开手指,spread_fingers
+张开的嘴,parted lips
+弹性纤维,spandex
+强边缘光,strong rim light
+彩色玻璃,Dalle de verre,colourful glass
+彩色睫毛,colored_eyelashes,colored eyelashes
+彩色破裙,multicolour chest po skirt
+彩色褶裙,multicolour chest pleated skirt
+彩色铅笔,colored_pencil_(medium)
+彩虹印花,rainbow_print
+彩虹背景,rainbow_background
+微笑眯眼,smile, closed eyes
+微距镜头,macro_shot
+德国服装,german_clothes
+心形发饰,heart_hair_ornament
+心形开口,heart_cutout
+心形眼睛,heart-shaped eyes
+心形瞳孔,heart-shaped pupils
+心形耳环,heart_earrings
+心形项链,heart_necklace
+心情不好,badmood
+忍者面具,ninja_mask
+怒目而视,glaring
+恶搞行为,trolling
+恶魔之眼,devil_eyes
+恶魔之翼,demon_wings
+恶魔耳朵,demon ears
+情趣睡衣,babydoll
+成熟女性,mature_female
+戒指项链,ring_necklace
+战斗中的,fighting
+战斗姿态,fighting_stance,fighting stance
+截短上衣,crop_top
+戴眼镜的,bespectacled
+手叼香烟,holding_cigarette
+手在头上,arm_above_head
+手抓裆部,crotch_grab
+手持匕首,holding_dagger
+手持卡片,holding_card
+手持扫帚,holding_broom
+手持招牌,holding_sign
+手持旗帜,holding_flag
+手持杯子,holding_cup
+手持法杖,holding_staff
+手持盾牌,holding_shield
+手持糖果,holding_candy
+手持辫子,bunching_hair
+手持铅笔,holding_pencil
+手持镰刀,holding_scythe
+手持长矛,holding_spear
+手指并拢,fingers_together
+手指比W,w
+手捧花束,holding_bouquet
+手握画笔,holding_paintbrush
+手放头后,arm_behind_head
+手机屏幕,phone_screen
+手画草稿,sketch
+手腕发圈,wrist_scrunchie
+手臂丝带,arm_ribbon
+手臂刀刃,arm_blade
+手臂围巾,arm_scarf
+手臂纹身,arm_tattoo
+手臂袜带,arm_garter
+托着盘子,holding_tray
+扯下泳衣,swimsuit_pull
+抓住手臂,arm_grab
+抓着大腿,thigh_grab
+抓着头发,hair_grab
+抓着尾巴,tail_grab
+抓着屁股,ass_grab
+抓着床单,sheet_grab
+抓着手腕,wrist_grab
+抓着枕头,pillow_grab
+抓着贫乳,flat_chest_grab
+抓着躯干,torso_grab
+抓着阴茎,penis_grab
+抓着领带,necktie_grab
+抬一只腿,legs_up
+抬腿露阴,folded
+抬起面罩,mask_lift
+抱着动物,holding_animal
+抱着枕头,holding_pillow
+抱着玩偶,holding_doll
+抽象背景,abstract_background
+拉开衣物,clothes_pull
+拉开衬衫,shirt_pull
+拉开裙子,skirt_pull
+拉着口罩,mask_pull
+拉着裤子,pants_pull
+拍打动作,flapping
+拎着包袱,holding_sack
+拔出鞘的,unsheathing
+拖拽衣服,clothes_tug
+拖拽衬衫,shirt_tug
+拧干衣服,wringing_clothes
+拨弄手套,adjusting_gloves
+拨弄泳衣,adjusting_swimsuit
+拨弄衣服,adjusting_clothes
+拱形鞋底,arched_soles
+拼贴艺术,Collage
+拿着乐器,holding_instrument
+拿着叶子,holding_leaf
+拿着围巾,holding_scarf
+拿着头盔,holding_helmet
+拿着帽子,holding_hat
+拿着扇子,holding_fan
+拿着手机,holding_phone
+拿着披萨,holding_pizza
+拿着某物,holding
+拿着毛巾,holding_towel
+拿着水果,holding_fruit
+拿着汤勺,holding_spoon
+拿着泳圈,holding_innertube
+拿着烟斗,holding_pipe
+拿着瓶子,holding_bottle
+拿着礼物,holding_gift
+拿着筷子,holding_chopsticks
+拿着衣服,holding_clothes
+拿着面具,holding_mask
+拿着鞋子,holding_shoes
+拿着项链,holding_necklace
+拿着食物,holding_food
+拿着餐叉,holding_fork
+指着自己,pointing_at_self
+挡住乳头,covering_nipples
+挡住嘴巴,covering_mouth
+挡着眼睛,shading eyes
+捏着帽檐,hat_tip
+掀起和服,kimono_lift
+掀起衣物,clothes_lift
+掀起衬衫,shirt_lift
+掀起裙子,skirt_lift,dress_lift
+提着篮子,holding_basket
+握着刀鞘,holding_sheath
+握着斧头,holding_axe
+握着棒子,holding_wand
+握着鞭子,holding_whip
+摩托车手,motorcyclist
+撕破衣服,tearing_clothes
+改装制服,adapted_uniform
+数字文身,number_tattoo
+整理头饰,adjusting_headwear
+整理帽子,adjusting_hat
+整理裤袜,adjusting_legwear
+文字背景,wall_of_text
+斑马印花,zebra_print
+斜纹领结,diagonal-striped_neckwear
+新娘头纱,bridal_veil
+新娘手套,bridal_gauntlets
+新年快乐,happy_new_year
+新月印花,crescent_print
+新月项链,crescent_necklace
+方形瞳孔,square_pupils
+方格背景,checkered_background
+旋转木马,carousel
+旗帜印花,flag_print
+无框眼镜,rimless_eyewear
+无袖和服,sleeveless_kimono
+无袖衬衫,sleeveless_shirt
+日常T恤,casual T-shirts
+日式服装,japanese_clothes
+日式草鞋,zouri
+日晒痕迹,tanlines
+日本床垫,futon
+日本旅馆,Japanese_hotel
+日本武士,samurai
+日本清酒,sake
+日本铠甲,japanese_armor
+时尚姿势,stylish_pose
+时钟背景,clock_background
+昆虫翅膀,insect_wings
+星形印花,star_print
+星形符号,star_(symbol)
+星形耳环,star_earrings
+星形项链,star_necklace
+星星发饰,star_hair_ornament
+星星轨迹,star_trail
+星空印花,starry_sky_print
+星空背景,starry_background
+晚会礼服,canonicals
+智能手机,Smartphones
+暗卡其色,darkkhaki
+暗洋红色,darkmagenta
+暗海绿色,mediumaquamarine
+暗灰蓝色,teal,darkslateblue
+暗金菊色,darkgoldenrod
+最差质量,worstquality
+最高画质,ultra detailed
+月亮印花,moon_print
+月牙发饰,crescent_hair_ornament
+有台词的,talking
+有色眼镜,tinted_eyewear
+有领衬衫,collared_shirt
+服饰互换,costume_switch
+朝鲜服饰,korean_clothes
+木偶戒指,puppet rings
+木屐凉鞋,clog_sandals
+木质地板,tile_floor
+朱丽叶袖,juliet_sleeves
+机械义足,mechanical_legs
+机械光环,mechanical_halo
+机械关节,robot_joints
+机械武装,machinery
+杂志扫描,magazine scan
+杂技演员,acrobat
+材质增强,fine_fabric_emphasis
+束腰外衣,tunic
+条纹围巾,striped_scarf
+条纹手套,striped_gloves
+条纹毛衣,striped_sweater
+条纹泳衣,striped_swimsuit
+条纹短裤,striped_shorts
+条纹衬衫,striped_shirt
+条纹袖子,striped_sleeves
+条纹领子,striped_neckwear
+松鼠耳朵,squirrel_ears
+极其细致,extremely detailed
+极简主义,minimalism
+枫叶印花,maple_leaf_print
+染色玻璃,stain glass
+柠檬绸色,lemonchiffon
+格子围巾,plaid_scarf
+格子花纹,checkered
+格子衬衫,plaid_shirt
+格子领口,checkered_neckwear
+桃色背景,heart_background
+棒球夹克,letterman_jacket
+棒球手套,baseball_mitt
+棕色围巾,brown_scarf
+棕色头发,brown hair
+棕色头饰,brown_headwear
+棕色手套,brown_gloves
+棕色毛衣,brown_sweater
+棕色皮肤,brown_skin
+棕色眼睛,brown eyes
+棕色背景,brown_background
+棕色鞋类,brown_footwear
+棕色领饰,brown_neckwear
+棕色马甲,brown_vest
+森林绿色,green
+棱纹袖子,ribbed_sleeves
+模因服装,meme_attire
+横条短袜,striped_socks
+横条纹袜,striped_legwear
+樱桃印花,cherry_print
+樱花印花,cherry_blossom_print
+橄榄绿色,yellowgreen
+橄榄褐色,limegreen,olivedrab
+橙白上杉,white with orange upper shan
+橙白破裙,orange with white chest po skirt
+橙白褶裙,orange with white chest pleated skirt
+橙色上杉,orange upper shan
+橙色宋抹,orange songmo
+橙色披帛,orange pibo
+橙色眼睛,orange eyes
+橙色瞳孔,orange_pupils,blue_pupils
+橙色系带,orange waistband
+欧泊渲染,opal render
+正常质量,normal quality
+正装短裙,skirt_suit
+正面视角,front view
+比基尼裙,bikini_skirt
+毛卷层云,cirrostratus_fibratus
+毛皮衣领,fur_collar
+毛绒兔子,stuffed_bunny
+毛绒玩偶,stuffed_animal
+毛衣背心,sweater_vest
+毛边头饰,fur-trimmed_headwear
+毛边手套,fur-trimmed_gloves
+毛边袖子,fur-trimmed_sleeves
+毛边靴子,fur-trimmed_boots
+气泡背景,bubble_background
+氛围光照,moody lighting
+水上乐园,waterpark
+水平条纹,horizontal_stripes
+水平瞳孔,horizontal_pupils
+水晶耳环,crystal_earrings
+沙猫印花,sand_cat_print
+没有帽子,no_hat
+没有眼睛,no eyes
+没有瞳孔,no_pupils
+没有鞋子,no_shoes
+没画出腿,no_legs
+没鼻子的,no_nose
+法国之吻,french_kiss
+波点围巾,polka_dot_scarf
+波点睡衣,polka_dot_pajamas
+洋洋得意,smug
+活体衣服,living_clothes
+派克大衣,parka
+浅海绿色,darkturquoise
+浅珊瑚色,lightcoral
+浅紫上杉,light purple upper shan
+浅紫短杉,light purple short shan
+浅紫长杉,light purple long shan
+浅红上杉,light red upper shan
+浅红短杉,light red short shan
+浅红长杉,light red long shan
+浅绿上杉,light green upper shan
+浅绿披帛,light green pibo
+浅绿短杉,light green short shan
+浅绿长杉,light green long shan
+浣熊耳朵,raccoon_ears
+浦西偷看,pussy_peek
+海军制服,naval_uniform
+海边日落,in the ocean
+淋浴喷头,shower_head
+淡紫红色,lavenderblush
+淡蓝上杉,light blue upper shan
+淡蓝短杉,light blue short shan
+淡蓝系带,light blue waistband
+淡蓝长杉,light blue long shan
+淡金菊色,palegoldenrod
+淡钢蓝色,lightsteelblue
+深粉红色,crimson
+深色皮肤,deep_skin
+混合长袍,robe_of_blending
+渐变眼睛,gradient eyes,gradient_eyes
+渐变绿裙,gradient green pleated skirt
+渔网上衣,fishnet_top
+游戏CG,game cg
+漂浮围巾,floating_scarf
+漏光光效,light leaks
+演奏乐器,playing_instrument
+潜水面罩,diving_mask
+灌篮高手,slam dunk
+火焰印花,flame_print
+灰色头发,grey hair
+灰色渐变,grey gradient hair
+灰色眼睛,grey eyes
+灰色背景,grey_background
+热粉红色,hotpink
+熊猫印花,panda_print
+熊猫耳朵,panda_ears
+爪印鞋底,paw_print_soles
+爬行动物,reptile
+牛仔夹克,denim_jacket
+牛仔短裤,denim_shorts
+特写镜头,close-up
+犀牛耳朵,rhino ears
+狐狸印花,fox_print
+狐狸手势,fox_shadow_puppet
+狐狸耳朵,fox ears,fox_ears
+狐狸面具,fox_mask
+狮子耳朵,lion_ears
+猎豹印花,cheetah_print
+猩红月亮,scarlet_moon
+猫咪印花,cat_print
+猫爪手势,cat_pose
+猫系发饰,cat_hair_ornament
+猫系服装,cat_costume
+猫耳帽子,cat_hat
+猫耳造型,cat_ear
+玫瑰印花,rose_print
+玫瑰棕色,rosybrown
+环状耳环,hoop_earrings
+珍珠手链,pearl bracelet
+珍珠项链,pearl_necklace
+珠子手链,bead_bracelet
+珠子项链,bead_necklace
+珠宝首饰,jewelry
+珠玉项链,magatama_necklace
+甘油炸药,dynamite
+生_闷气,sulking
+生日快乐,happy_birthday
+用嘴叼着,mouth_hold
+用手扶着,railing
+用手指着,pointing
+电影角度,cinematic_angle
+男用泳裤,male_swimwear
+番木瓜色,papayawhip
+畸形的手,malformed hands
+疯狂的笑,crazy_smile
+白丝裤袜,white_pantyhose
+白绿相间,green with white pleated skirt
+白色上杉,white upper shan
+白色头发,white hair
+白色宋抹,white songmo
+白色披帛,white pibo
+白色眼睛,white eyes
+白色短杉,white short shan
+白色破裙,white chest po skirt
+白色背景,white_background
+白色褶裙,white chest pleated skirt
+白色长杉,white long shan
+白色领带,white_necktie
+皮带颈环,belt_collar
+皮肤斑点,skin spots
+皮肤瑕疵,skin blemishes
+皮草围巾,fur_scarf
+皮草大衣,fur_coat
+皮草饰边,fur_trim
+监狱酒吧,jail_bars
+眉头紧锁,furrowed_brow
+眉毛翘起,cocked eyebrow
+看向侧面,looking_to_the_side
+看向别处,looking away
+看向观众,looking_at_viewer
+看着别处,looking_away
+看着动物,looking_at_animal
+看着双手,looking_at_hands
+看着屏幕,looking_at_screen
+眯起眼睛,narrowed eyes,narrowed_eyes
+眼尾上扬,tsurime
+眼尾下垂,tareme
+眼神交流,eye_contact
+眼神接触,eye-contact
+眼里流血,blood from eyes
+眼间头发,hair between eyes
+瞳孔收缩,constricted pupils
+瞳孔散大,dilated_pupils
+瞳孔闪光,snake_pupils
+瞳孔闪烁,pupils sparkling
+矢车菊蓝,cornflowerblue
+短款夹克,cropped_jacket
+短袖T恤,short sleeve T-shirts
+短铅笔裙,pencil_skirt
+石墨铅笔,graphite_(medium)
+砧积雨云,cumulonimbus_incus
+破烂衣服,torn_clothes
+碗状帽子,bowl_hat
+碧蓝航线,azur lane
+神奇女侠,mazinger
+秃积雨云,cumulonimbus_calvus
+科技幻想,science fiction,ban
+积雨云类,cumulonimbus
+空气刘海,air bangs
+竖条纹袜,vertical-striped_legwear
+端着碟子,holding_plate
+端着箱子,holding_box
+第三只眼,third_eye
+签绘风格,faux_traditional_media
+箭头打印,arrow_print
+米色围巾,beige_scarf
+米色毛衣,beige_sweater
+米色背景,beige_background
+粉白破裙,pink with white chest po skirt
+粉白褶裙,pink with white chest pleated skirt
+粉色上杉,pink upper shan
+粉色宋抹,pink songmo
+粉色披帛,pink pibo
+粉色指甲,pink_nails
+粉色眼影,pink eyeshadow
+粉色眼睛,pink eyes
+粉色短杉,pink short shan
+粉色破裙,pink chest po skirt
+粉色系带,pink waistband
+粉色褶裙,pink chest pleated skirt
+粉色长杉,pink long shan
+粉黑上杉,pink with black upper shan
+粗呢大衣,duffel_coat
+精灵耳朵,elf ears
+紫白破裙,purple with white chest po skirt
+紫白系带,purple with white waistband
+紫白褶裙,purple with white chest pleated skirt
+紫色头发,purple hair
+紫色宋抹,purple songmo
+紫色披帛,purple pibo
+紫色眼影,purple eyeshadow
+紫色眼睛,purple eyes
+紫色瞳孔,purple_pupils
+紫色短杉,purple short shan
+紫色破裙,purple chest po skirt
+紫色褶裙,purple chest pleated skirt
+紫色长杉,purple long shan
+繁华都市,Bustling city
+繁花草甸,flowers meadows
+红框眼镜,red-framed_eyewear
+红白系带,red with white waistband
+红绿渐变,red green gradient pleated skirt
+红色上杉,red upper shan
+红色头发,red hair
+红色宋抹,red songmo
+红色披帛,red pibo
+红色眼影,red eyeshadow
+红色眼睛,red eyes
+红色短杉,red short shan
+红色破裙,red chest po skirt
+红色系带,red waistband
+红色褶裙,red chest pleated skirt
+红色长杉,red long shan
+红青渐变,red cyan gradient pleated skirt
+红黑系带,red with black waistband
+纤细的腰,slender_waist
+纳瓦霍白,navajowhite
+纳粹制服,ss_uniform/nazi_uniform
+纽扣眼睛,button eyes
+线条变粗,contour_deepening
+细节丰富,detailed
+绑定手腕,bound_wrists
+绕颈系带,halterneck
+绷带手臂,bandaged_arm
+绿松石色,aquamarine,darkseagreen
+绿白系带,light green waistband
+绿色上杉,green upper shan
+绿色头发,green hair
+绿色宋抹,green songmo
+绿色眼影,green eyeshadow
+绿色眼睛,green eyes
+绿色短杉,green short shan
+绿色破裙,green chest po skirt
+绿色系带,green waistband
+绿色褶裙,green chest pleated skirt
+绿色长杉,green long shan
+缺少手指,missing fingers
+缺少肢体,missing limb
+罐装饮料,soda_can
+罗纹毛衣,ribbed_sweater
+美国队长,captain america
+羚羊耳朵,antelope ears
+羽毛项链,feather_necklace
+翘大拇指,thumbs_up
+翘臀姿势,bent_over
+翻开的书,open_book
+翼状头发,hair wings
+老鼠耳朵,mouse ears,mouse_ears
+耐火砖色,firebrick
+耳朵通红,ear_blush
+职场制服,business_suit
+职场女性,office lady
+肚脐偷看,midriff_peek
+肚脐开洞,navel_cutout
+肤色虎牙,skin_fang
+背对观众,facing away
+背景文字,background_text
+背景模糊,blurry
+背景虚化,depth of field
+胜利手势,v
+胡须斑纹,whisker_markings
+胸前宝石,chest_jewel
+胸部分开,breasts apart
+脚趾甲油,toenail_polish
+脚踝丝环,ankle_strap
+脚踝系带,ankle_lace-up
+脱下凉鞋,sandals_removed
+脱下手套,gloves_removed
+脱下衬衫,shirt_removed
+脱下裙子,dress_removed
+脱离焦点,out of focus
+脱衣服中,undressing
+腋窝偷看,armpit_peek
+腋窝皱痕,armpit_crease
+腰围夹克,jacket_around_waist
+腰间衣服,clothes_around_waist
+自助餐厅,cafeteria
+自我抚摸,self_fondle
+舰队收藏,kantai collection
+艾莉丝蓝,aliceblue
+芙蓉印花,hibiscus_print
+芭蕾舞裙,tutu
+花状瞳孔,flower-shaped pupils
+花瓣印花,petal_print
+花边手套,frilled_gloves
+花边泳衣,frilled_swimsuit
+花边衣领,frilled_collar
+花边裙子,frilled_skirt
+草莓印花,strawberry_print
+草莓发饰,strawberry_hair_ornament
+菱形围巾,argyle_scarf
+菱形背景,argyle_background
+蒙住的嘴,covered_mouth
+蒙住眼睛,covered eyes
+蒸汽朋克,steampunk
+蓝框眼镜,blue-framed_eyewear
+蓝色上杉,blue upper shan
+蓝色头发,blue hair
+蓝色宋抹,blue songmo
+蓝色眼影,blue eyeshadow
+蓝色眼睛,blue eyes
+蓝色短杉,blue short shan
+蓝色破裙,blue chest po skirt
+蓝色褶裙,blue chest pleated skirt
+蓝色长杉,blue long shan
+蓬蓬短袖,puffy_short_sleeves
+蓬蓬长袖,puffy_long_sleeves
+蕾絲短裙,lace_skirt
+蕾边袜丝,lace-trimmed_legwear
+薄雾玫瑰,mistyrose
+薰衣草色,lavender
+蘑菇印花,mushroom_print
+蜡笔小新,crayon shin-chan
+蝙蝠印花,bat_print
+蝙蝠发饰,bat_hair_ornament
+蝙蝠翅膀,bat_wings
+蝙蝠耳朵,bat ears,bat_ears
+蝴蝶印花,butterfly_print
+蝴蝶发饰,butterfly_hair_ornament
+蝴蝶翅膀,butterfly_wings
+蠕动夜虫,wriggle_nightbug
+衣服滑落,wardrobe_error
+衣服漏洞,clothing_cutout
+袖子上推,sleeves_pushed_up
+袖子卷起,sleeve_rolled_up
+袖子过指,sleeves_past_fingers
+袖子过肘,sleeves_past_elbows
+袖子过腕,sleeves_past_wrists
+被封住嘴,cleave_gag
+被抓现行,caught
+裙底视角,upskirt
+裸足凉鞋,barefoot_sandals
+褪下短裤,shorts_pull
+褪下衣物,clothes_down
+褪下裤子,pants_down
+褶边发带,frilled_hairband
+褶边衬衫,frilled_shirt
+褶边项链,frilled_choker
+西服衬衫,dress_shirt
+西瓜印花,watermelon_print
+西装外套,blazer
+西部风格,western
+视觉错误,optical illusion
+角状头饰,horned_headwear
+角色扮演,cosplay
+解开领带,undone_necktie
+讲悄悄话,whispering
+调整围巾,adjusting_scarf
+调皮的脸,naughty_face
+贝壳项链,shell_necklace
+赛博朋克,cyberpunk
+赛用泳衣,competition_swimsuit
+赛车女郎,race_queen
+赤壁插图,chibi_inset
+超级银河,hyper_galaxy
+超高质量,amazing quality
+足球运动,soccer
+趴着翘臀,top-down_bottom-up
+跟踪导弹,track missiles
+踮起脚尖,tiptoes
+身体前倾,leaning_forward
+躺在水中,lying_on_water
+轨迹拖尾,complex Trajectory
+轮廓加深,contour_deepening
+轻微脸红,light_blush
+辫子刘海,braided bangs
+边缘行者,rebecca (cyberpunk)
+运动夹克,track_jacket
+连体泳衣,casual_one-piece_swimsuit
+连体白丝,white_bodystocking
+连体黑丝,black_bodystocking
+连帽大衣,hooded_coat
+连帽斗篷,hooded_cloak
+连帽毛衣,hooded_sweater
+迷你女孩,minigirl
+迷你皇冠,mini_crown
+迷你礼帽,mini_top_hat
+迷你翅膀,mini_wings
+迷彩夹克,camouflage_jacket
+透明背景,transparent_background
+透明袖子,see-through_sleeves
+透明雨伞,transparent_umbrella
+透镜光晕,lens flare
+递|赠送,giving
+遮住眼睛,covering eyes,covering_eyes
+遮盖xx,covering_xx
+遮着臀部,covering_ass
+遮着裆部,covering_crotch
+遮阳手势,shading_eyes
+郊狼耳朵,coyote_ears
+部分着色,partially_colored
+金属光泽,metallic luster
+金属项圈,metal collar
+金色头发,blonde hair
+金色眼睛,yellow eyes
+金鱼印花,goldfish_print
+金黄色的,blonde
+钟形女帽,cloche_hat
+钥匙项链,key_necklace
+铁十字架,iron_cross
+铅笔速写,pencil_sketch_lines
+铜版雕刻,Mezzotint
+银色头发,silver hair
+锁链项链,chain_necklace
+锐利的眼,sharp_eyes,slanted_eyes
+错配巩膜,mismatched_sclera
+锚形发饰,anchor_hair_ornament
+镜头光晕,lens_flare
+长发飘飘,floating hair
+长尖耳朵,long_pointy_ears
+长连衣裙,long_dress
+闪电印花,lightning_bolt_print
+闭上眼睛,closed eyes
+闭着的嘴,closed_mouth
+防毒面具,gas_mask
+阴阳印花,yin_yang_print
+陆军制服,military_uniform
+隐形椅子,invisible_chair
+隐藏眼睛,hidden eyes
+隔热手套,oven_mitts
+雪花印花,snowflake_print
+雪花发饰,snowflake_hair_ornament
+雾卷层云,cirrostratus_nebulosus
+露指手套,fingerless_gloves
+露肩毛衣,off-shoulder_sweater
+露背上衣,back_cutout
+露背毛衣,backless_sweater
+露腰上衣,midriff
+青色眼睛,aqua_eyes
+青蓝上杉,cyan blue upper shan
+青蓝短杉,cyan blue short shan
+青蓝长杉,cyan blue long shan
+青蛙印花,frog_print
+青蛙发饰,frog_hair_ornament
+靠在一边,leaning_to_the_side
+面向别处,facing_away
+面无表情,expressionless
+面部标记,facial_mark
+面部涂装,facepaint
+音符印花,musical_note_print
+音符发饰,musical_note_hair_ornament
+顶起膝盖,knee_up
+颈部纹身,neck_tattoo
+颈部饰品,choker
+额头宝石,forehead_jewel
+额头标记,forehead_mark
+食指抬起,index_finger_raised
+食物印花,food_print
+饭团打印,onigiri_print
+饭在脸上,rice_on_face
+马尾编发,braided ponytail
+马鞍棕色,saddlebrown
+骑行套装,bikesuit
+骨架印花,skeleton_print
+骷髅发饰,skull_hair_ornament
+骷髅耳环,skull_earrings
+骷髅面具,skull_mask
+骷髅项链,skull_necklace
+高分辨率,highres
+高对比度,high_contrast
+高层云类,altostratus
+高积云类,altocumulus
+高顶礼帽,top_hat
+高领服饰,turtleneck
+高领毛衣,turtleneck_sweater
+鬃积雨云,cumulonimbus_capillatus
+鬼火印花,hitodama_print
+魔人经卷,sorcerer's_sutra_scroll
+魔法少女,magical_girl
+魔法旋涡,Magic Vortex
+魔鬼身材,curvy
+鱼形发饰,fish_hair_ornament
+鲑鱼肉色,salmon
+鲨鱼印花,shark_print
+鲸鱼印花,whale_print
+鹿皮鞋色,moccasin
+黄土赭色,sienna
+黄白披帛,white with yellow pibo
+黄白短杉,white with yellow short shan
+黄白破裙,white with yellow chest po skirt
+黄白系带,yellow with white waistband
+黄白褶裙,white with yellow chest pleated skirt
+黄白长杉,white with yellow long shan
+黄绿系带,green with yellow waistband
+黄色上杉,yellow upper shan
+黄色头发,yellow hair
+黄色宋抹,yellow songmo
+黄色眼睛,yellow eyes
+黄色短杉,yellow short shan
+黄色系带,yellow waistband
+黄色长杉,yellow long shan
+黑丝裤袜,black_pantyhose
+黑框眼镜,black-framed_eyewear
+黑色之翼,black_wings
+黑色头发,black hair
+黑色披帛,black pibo
+黑色眼睛,black eyes
+黑色背景,black_background
+黑色颈圈,black_choker
+黑蓝上杉,black with blue upper shan
+黑蓝短杉,black with blue short shan
+黑蓝长杉,black with blue long shan
+1女孩,1girl
+1男孩,1boy
+2女孩,2girls
+2男孩,2boys
+3女孩,3girls
+3男孩,3boys
+V字眉,v-shaped eyebrows
+X射线,x-ray
+七分裤,capri_pants
+七夕节,tanabata
+万圣节,halloween
+三叉戟,trident
+三角嘴,triangle_mouth
+三角脸,triangular face
+上半身,upper_body
+上厕所,toilet_use
+下半身,lower_body
+东方龙,eastern_dragon
+中国结,chinese_knot
+中国风,chinese_style,chinese style
+中国龙,loong
+中秋节,mid-autumn festival
+中积云,cumulus_mediocris
+中筒袜,kneehighs
+中紫色,mediumpurple
+中蓝色,mediumblue
+中长发,medium hair
+举着手,arm_up
+乐福鞋,loafers
+乱卷云,cirrus_intortus
+二郎腿,crossed_legs
+云印花,cloud_print
+五条悟,gojou satoru
+亚麻色,linen
+交易卡,trading_card
+人外娘,monster_girl
+休闲服,loungewear
+传教士,missionary
+伸懒腰,stretch
+低着头,head_down
+低质量,low quality
+体操服,athletic_leotard
+体积光,Volumetric Lighting
+体育场,stadium
+作战靴,combat_boots
+使困惑,confused
+侧开衩,side_slit
+侧身坐,yokozuwari
+侧边帽,side_cap
+侧面绘,profile
+侧马尾,Side ponytail
+便利店,convenience store
+修女服,domineering
+俱乐部,clubroom
+假兽耳,fake_animal_ears
+做手势,hand_gesture
+做运动,exercise
+做鬼脸,grimace,eyelid_pull
+健身房,gym
+偷衣服,clothes_theft
+像素画,pixel art
+元宵节,lantern festival
+全身像,full_shot,full body
+全身袜,bodystocking
+公主切,hime cut
+公主抱,princess_carry
+兰花紫,orchid
+冰激凌,ice_cream
+冲锋衣,windbreaker
+分层的,layered
+创可贴,bandaid
+剖面图,cross-section
+办公椅,office_chair
+动物园,zoo
+动物帽,animal_hat
+动物脚,animal_feet
+动画眼,anime_style_eyes
+勒住嘴,bit_gag
+包子头,hair bun
+医务室,infirmary
+午夜蓝,midnightblue
+半人马,centaur
+半兽人,orc
+半色调,halftone
+半身像,bust,upper body
+半闭眼,half-closed eyes
+半面罩,half_mask
+单短袜,single_sock
+单耳环,single_earring
+南瓜帽,pumpkin_hat
+南瓜灯,jack-o'-lantern
+南瓜裤,pumpkin_pants
+博物馆,museum
+卡其色,khaki
+印花袜,print_legwear
+卷层云,Cirrostratus
+卷积云,Cirrocumulus
+厚嘴唇,thick lips
+厚底鞋,platform_footwear
+厨师帽,chef_hat
+双_v,double_v
+双辫子,twin braids
+双马尾,bunches,twintails
+发_圈,hair_rings
+发_夹,hairclip
+发_带,hair_ribbon,hairband,hair_tie
+发_花,hair_flower
+发_铃,hair_bell
+变异的,mutated
+古董白,antiquewhite
+台球桌,billiard
+史莱姆,slime
+叶印花,leaf_print
+吊带袜,suspenders
+吊带裙,suspender_skirt
+吐舌头,tongue_out
+向上指,pointing_up
+向后坐,sitting_backwards
+向外看,looking_outside
+吸血鬼,vampire
+吹泡泡,bubble_blowing
+和服裙,kimono_skirt
+和果子,wagashi
+咖啡师,barista
+咖啡馆,coffee house,cafe
+咬嘴唇,lip_biting
+咬手指,finger_biting
+咬耳朵,ear_biting
+哈伦裤,harem_pants
+啤酒杯,beer_mug
+啦啦队,cheerleader
+喝醉的,drunk
+嘘手势,shushing
+嘴下痣,mole under mouth
+回头看,looking back
+团子头,double_bun
+困乏的,sleepy
+图书馆,library
+圆斑袜,polka_dot_legwear
+圆珠笔,ballpoint_pen_(medium)_
+圣诞帽,santa_hat
+圣诞树,christmas_tree
+圣诞节,christmas
+圣诞装,santa
+圣诞靴,santa_boots
+在头上,on_head
+在笑的,laughing
+地下室,basement
+坏身体,bad body
+堡卷云,cirrus_castellanus
+夏日祭,summer festival
+大小姐,ojousama
+大小眼,uneven_eyes
+大帽子,large_hat
+大提琴,cello
+大教堂,cathedral
+大礼帽,tokin_hat
+大翅膀,large_wings
+大胸肌,large_pectorals
+大腿靴,thigh_boots
+大自然,nature
+大草原,savanna
+大鼻子,big nose
+天妇罗,tempura
+天文馆,planetarium
+太阳帽,sun_hat
+太阳镜,sunglasses
+失望的,disappointed
+头花环,head_wreath
+夹克衫,jacket
+女仆装,maid
+女巨人,giantess
+女演员,actress
+女长服,gown
+妹妹切,bob cut
+娃娃脸,baby face
+孙悟空,sun wukong
+宇航员,astronaut
+宇航服,space_suit
+守门员,goalkeeper
+安全帽,hardhat
+宝可梦,pokemon
+实验室,laboratory
+室内鞋,uwabaki
+害怕的,scared
+害羞的,shy
+密卷云,cirrus_spissatus
+寿司卷,A_sushi_roll
+封闭伞,closed_umbrella
+小丑帽,jester_cap
+小女孩,little_girl
+小恶魔,imp
+小男孩,little_boy
+小精灵,fairy
+小胡子,mustache
+小麦色,wheat
+小鼻子,small nose
+尖头鞋,pointy_footwear
+尖耳朵,pointy_ears
+尖鼻子,pointed nose
+层积云,Stratocumulus
+居家服,homewear
+居酒屋,izakaya
+山羊胡,goatee
+山羊角,goat_horns
+工作坊,workshop
+工作服,overalls
+工装裤,cargo_pants
+巫女服,miko
+市中心,downtown
+帆布的,canvas
+幼儿园,kindergartener
+幽灵白,ghostwhite
+异色瞳,heterochromia
+弓身体,arched_back
+强奸脸,rape_face
+强阴影,intense shadows
+彼岸花,spider_lily
+德鲁伊,druid
+心形嘴,heart-shaped mouth
+心形眼,heart_in_eye
+心形脸,heart shaped face
+忧郁的,gloom
+情人节,valentine
+慌张的,flustered
+戏剧光,dramatic lighting
+战甲裙,armored_dress
+截肢者,amputee
+戳脸颊,cheek_poking
+戴眼镜,glasses
+手持剑,holding_sword
+手指甲,fingernails
+扑克牌,playing_card
+打哈欠,yawning
+打喷嚏,sneezing
+打屁股,spanking
+打游戏,playing_games
+打电话,talking_on_phone
+托脸颊,chin_rest
+扯围巾,scarf_pull
+扯脸颊,cheek_pull
+扶手椅,armchair
+扶眼镜,adjusting_eyewear
+抓着腿,leg_grab
+折叠椅,folding_chair
+护士帽,nurse_cap
+护身符,amulet
+报童帽,newsboy_cap
+抬起腿,leg_up
+抱着猫,holding_cat
+抱着球,holding_ball
+拉头发,hair_pull
+拉着弓,holding_arrow
+拖某物,dragging
+拨头发,hair_flip
+拳击手,boxer
+拿着刀,holding_knife
+拿着枪,holding_gun
+拿着纸,holding_paper
+拿着花,holding_flower
+指甲油,nail_polish
+挠痒痒,tickling
+挡住脸,covering_face
+捏脸颊,cheek_pinching
+捧着书,holding_book
+掀裙子,skirt_lift
+掏耳勺,mimikaki
+掐袖子,pinching_sleeves
+排球服,volleyball_uniform
+推拉门,sliding_doors
+提着包,holding_bag
+插肩袖,raglan_sleeves
+摆姿势,posing
+摇尾巴,tail_wagging
+摔角场,wrestling_ring
+摔角服,wrestling_outfit
+摩天楼,skyscraper,Skyscraper
+摩天轮,ferris wheel
+摩托车,motorcycle
+摸下巴,chin_stroking
+撩头发,hair_tucking
+擦眼泪,wiping_tears
+收银员,cashier
+救生员,lifeguard
+斗鸡眼,cross eyed,cross-eyed
+斜条纹,diagonal_stripes
+方头巾,kerchief
+无聊的,bored
+旱冰鞋,roller_skates
+星星眼,sparkling_eyes
+晒衣服,clothesline
+暗橙色,darkorange
+暗精灵,dark_elf
+暗红色,darkred
+暴民帽,mob_cap
+未成年,underage
+机械化,mechanization
+机械眼,mechanical_eye
+机械耳,robot_ears
+机械臂,mechanical_arms
+机甲娘,mecha_musume
+条纹裙,striped_skirt
+条纹裤,striped_pants
+栗子嘴,chestnut mouth,chestnut_mouth
+格子的,checkered
+格子裙,checkered_skirt
+桃肉色,peachpuff
+棉花糖,cotton_candy_
+棒棒糖,candy_cane
+棒球帽,baseball_cap
+棒球服,baseball_uniform
+棕榈树,palm_tree
+棕褐色,tan
+植物园,botanical garden
+榻榻米,tatami
+横条纹,striped
+橄榄色,darkolivegreen,olive
+橙红色,orangered
+橙褐色,sandybrown
+橡皮鸭,rubber_duck
+武士刀,katana
+武道服,dougi
+歪着头,head_tilt
+比基尼,bikini
+毛卷云,cirrus_fibratus
+毛茸茸,fluffy
+毛边的,fur-trimmed
+水墨画,Ink wash painting
+水手帽,sailor_hat
+水手服,sailor,serafuku
+水手领,sailor_collar
+水族馆,aquarium
+水汪汪,water_eyes
+水银头,suigintou
+水鸭色,darkcyan
+水龙头,faucet
+沙滩椅,beach_chair
+没有嘴,no_mouth
+油纸伞,oil-paper_umbrella
+泡泡帽,bobblehat
+泡泡袜,loose_socks
+泡泡龙,bubble bobble
+波层云,stratus_undulatus
+波波头,bob_cut
+波浪嘴,wavy_mouth
+波浪纹,wave_print
+泰迪熊,teddy bear,teddy_bear
+洋李色,plum
+洋红色,magenta
+派对帽,party_hat
+流口水,drooling
+流星雨,meteor shower
+流鼻血,nosebleed
+浅景深,depth of field
+浅棕色,light_brown
+浅灰色,lightgray
+浅粉色,lightpink
+浅蓝裙,light blue pleated skirt
+浅黄色,lightyellow
+浓积云,cumulus_congestus
+浣熊娘,raccoon_girl
+海军蓝,navy
+海盗帽,pirate_hat
+海绿色,forestgreen
+涂鸦墙,Graffiti wall
+消防员,firefighter
+淡积云,cumulus_humilis
+淡绿色,palegreen
+淡蓝色,lightblue
+淡青色,paleturquoise
+深天蓝,skyblue
+深灰色,darkgray
+深粉色,dark_pink,deeppink
+深绿色,darkslategray
+深蓝色,darkblue
+深青色,cadetblue
+清真寺,mosque
+渔夫帽,bucket_hat
+渔网袜,stirrup_legwear
+游乐园,amusement_park
+游乐场,playground
+游泳池,swimming pool
+湿头发,wet_hair
+湿泳衣,wet_swimsuit
+湿衬衫,wet_shirt
+溜冰鞋,skates
+漩涡眼,spiral_eyes
+潜水员,diver
+火车站,train station
+灯笼裤,bloomers
+灰石色,slategray
+点状鼻,dot_nose
+点瞳孔,dot_pupils
+点装纹,polka_dot_
+点阵图,pixel art
+照片级,photorealistic
+照镜子,looking_at_mirror
+熊印花,bear_print
+熊套装,bear_costume
+熊耳朵,bear ears,bear_ears
+燕尾服,tuxedo
+爪印花,paw_print
+爪手势,claw_pose
+牙项链,tooth_necklace
+牛仔布,denim
+牛仔帽,cowboy_hat
+牛仔裙,denim_skirt
+牛仔裤,jeans
+牛耳朵,cow ears
+牧羊人,makihitsuji
+狗印花,dog_print
+狗盆帽,dixie_cup_hat
+狗耳朵,dog ears,dog_ears
+狼女孩,wolf_girl
+狼牙棒,spiked_club
+狼耳朵,wolf ears
+猪耳朵,pig ears
+猫头鹰,owl
+猫耳朵,cat ears,cat_ears
+玉米色,cornsilk
+珊瑚色,coral
+珍妮鞋,mary_janes
+理头发,adjusting_hair
+琥珀色,burlywood
+瑜伽裤,yoga_pants
+瓶裝水,bottled_water
+甜甜圈,doughnut
+生气的,angry
+用户名,username
+电影感,cinematic lighting
+电影院,movie theater
+电源线,power_lines
+电话亭,phone booth
+电锯人,chainsaw man
+男演员,actor
+番茄红,tomato
+疯狂的,crazy
+白大褂,labcoat
+白烟色,whitesmoke
+白皮肤,white_skin
+白虎纹,white_tiger_print
+白衬衫,white_shirt
+白金裙,white golden pleated skirt
+百合花,lily
+百褶裙,pleated_skirt
+皇家蓝,royalblue
+皮卡丘,pikachu
+皮夹克,leather_jacket
+皮套狗,dog_costume
+皮带裙,beltskirt
+皮带靴,belt_boots
+皮手套,leather_gloves
+盘腿坐,indian_style
+盯着看,eyeball
+看手机,looking_at_phone
+看着手,looking_at_hand
+看镜头,looking at viewer
+看食物,looking_at_food
+真实感,realistic
+眼下痣,mole under eye
+睫毛膏,mascara
+短和服,short_kimono
+短眉毛,short eyebrows
+短衬衫,cropped_shirt
+短领带,short_necktie
+短马尾,short ponytail
+石蓝色,slateblue
+石鬼面,stone_mask
+碎层云,stratus_fractus
+碎积云,cumulus_fractus
+碎花裙,floral_skirt
+碧绿色,cyan
+磁带盒,Cassette
+礼物盒,gift_box
+秀肌肉,flexing
+科学家,scientist
+秘鲁色,peru
+积雨云,cumulonimbus,Cumulonimbus
+空间站,from_space_station
+突码头,pier
+竖条纹,vertical_stripes
+竞技场,arena
+端着碗,holding_bowl
+竹印花,bamboo_print
+笔记本,notebook
+粉色花,hair pink flowers
+粉蓝色,powderblue
+系带靴,cross-laced_footwear,lace-up_boots
+紧身褡,girdle
+紫红色,fuchsia
+絮卷云,cirrus_floccus
+红指甲,red_nails
+红领巾,red_neckerchief
+绘图笔,millipen_(medium),nib_pen_(medium)
+绣球花,hydrangea
+缠腰布,loincloth
+网球衫,tennis_uniform
+羊耳朵,sheep ears
+羊驼耳,alpaca_ears
+美人鱼,mermaid
+美少女,bishoujo
+美术室,art room
+美术馆,art gallery
+羽绒服,down jacket,down_jacket,puffer_jacket
+翘起脚,feet_up
+翻白眼,rolling eyes
+老花色,oldlace
+肿嘴唇,puffy lips
+背对背,back-to-back
+背影像,back
+背景光,background light
+胡萝卜,carrot
+胸挤胸,symmetrical_docking
+脚趾甲,toenails
+脚踝套,ankle_wrap
+脱袜子,socks_removed
+腰围裙,waist_apron
+腹股沟,groin
+腿锻带,leg_ribbon
+自然光,available light
+舔嘴唇,licking_lips
+舔阴茎,licking_penis
+舞娘服,harem_outfit
+色谱图,chemigram
+芙蓉花,hibiscus
+花手镯,flower_bracelet
+花白色,floralwhite
+花盛开,flower_bloom
+花耳环,flower_earrings
+花边袜,frilled_legwear
+苦恼的,annoyed
+苹果糖,candy_apple
+草坪绿,mediumspringgreen
+草绿色,lightgreen
+药盒帽,pillbox_hat
+菱形脸,diamond face
+落地窗,ceiling window
+葡萄酒,wine
+蒸汽波,synthwave
+蓝眼睛,blue_eyes
+蓝紫色,blueviolet
+蓬蓬裙,bubble_skirt
+蔚蓝色,azure
+蛛网纹,spider_web_print
+蜘蛛侠,spider-man
+蜘蛛娘,spider_girl
+蝴蝶坐,butterfly_sitting
+被绊倒,tripping
+装甲的,armored
+装甲靴,armored_boots
+裸围巾,naked_scarf
+褶袖边,frilled_sleeves
+解开的,untying
+警察帽,police_hat
+象牙色,ivory
+贝壳白,seashell
+贝雷帽,beret
+贫民窟,shanty town/slum
+赛车手,racer
+超短裙,microskirt
+超长发,very long hair
+蹲便器,squat_toilet
+身体长,long body
+躺着的,lying
+轮回眼,ringed_eyes
+轮廓光,rim light
+轮廓线,outline
+轮机舱,engine room
+过膝袜,over-kneehighs
+运动员,athletes
+运动服,sportswear,gym_uniform
+运动裤,track_pants
+运动鞋,shoes,sneakers
+连帽衫,hoodie
+连衣裙,dress
+连衣裤,leotard
+迷你帽,mini_hat
+迷你裙,miniskirt
+迷彩裤,camouflage_pants
+透明的,transparent
+透视法,foreshortening
+递礼物,incoming_gift
+递食物,incoming_food
+速度线,speed_lines
+道士帽,porkpie_hat
+道奇蓝,dodgerblue
+遮盖嘴,covering_mouth
+遮阳伞,Parasol
+邪恶的,evil
+邪恶笑,evil smile
+邮递员,mailman
+配电房,electrical room
+酸橙绿,lime
+酸橙色,greenyellow
+金菊色,goldenrod
+金项链,gold_necklace
+钢管舞,pole_dancing
+钢蓝色,steelblue
+钩卷云,cirrus_uncinus
+铅笔裙,pencil_dress
+锅盖头,bowl_cut
+锚印花,anchor_print
+锚符号,anchor_symbol
+锚项链,anchor_necklace
+长刘海,long bangs
+长围巾,long_scarf
+长外套,long_coat
+长手套,long_gloves
+长指甲,long_fingernails
+长柄勺,ladle
+长睫毛,long_eyelashes,longeyelashes
+长短袜,uneven_legwear
+长舌头,long_tongue
+阿嘿颜,ahegao
+阿黑颜,ahegao
+雌小鬼,mesugaki
+雨层云,Nimbostratus
+雪地靴,snow_boots
+雪白色,snow
+雪紡裙,chiffon_skirt
+雾层云,stratus_nebulosus
+霓虹灯,glowing neon lights,neon lights
+露趾袜,toeless_legwear
+露趾靴,toeless_boots
+露额头,forehead
+靛蓝色,indigo
+面包店,bakery
+音乐会,concert
+颈丝带,ribbon_choker
+飞行员,pilot
+食品摊,food_stand
+饼干色,bisque
+马丁靴,doc_martens
+马克笔,marker_(medium)
+马尾辫,ponytail
+马球衫,polo_shirt
+马耳朵,horse ears
+马蹄铁,horseshoe
+马里奥,mario
+马面具,horse_mask
+马面裙,mamian skirt
+驻军帽,garrison_cap
+骆驼趾,cameltoe
+骑扫帚,broom_riding
+骨印花,bone_print
+骨项链,bone_necklace
+高层云,Altostratus
+高积云,Altocumulus
+高腰裙,high-waist_skirt
+高质量,high quality
+高跟靴,high_heel_boots
+高跟鞋,high_heels,high heels
+高马尾,high ponytail
+鬼面具,oni_mask
+魔女帽,witch_hat
+魔导师,magister
+魔术师,magician
+魔法环,magic circles
+魔鬼眼,devil eyes
+鱼印花,fish_print
+鲨鱼嘴,shark mouth
+鲨鱼牙,shark_mouth
+鲷鱼烧,taiyaki
+鸟印花,bird_print
+鸟面具,bird_mask
+鸭子坐,wariza
+鸭舌帽,flat_cap
+鹅蛋脸,oval face
+鹿耳朵,deer ears
+麦克风,microphone
+黄绿色,chartreuse
+黑化的,dark_persona
+黑指甲,black_nails
+黑皮肤,dark_skin,black_skin
+鼻腮红,nose_blush
+齐刘海,blunt bangs
+龙印花,dragon_print
+龙耳朵,dragon ears
+8k,8k
+T恤,t-shirt
+V领,v-neck
+上牙,upper_teeth
+下垂,hanging breasts
+下跪,kneeling
+下雨,rain
+下雪,snowing
+丑陋,ugly
+专辑,album
+丝带,ribbon
+中发,medium hair
+中景,cowboy shot
+丰满,plump
+乌鸦,crow
+书摞,book_stack
+书架,bookshelf
+乳头,nipples
+乳晕,areola
+乳沟,cleavage
+乳胶,latex
+乳贴,latex
+云肩,overlapping collar
+交领,overlapping collar
+亮棕,light brown hair
+亮的,light
+人偶,doll
+人群,crowd
+仓库,warehouse
+仓鼠,hamster
+仰视,from below
+仰躺,on_back
+企鹅,penguin
+休闲,casual
+伞裙,flared_skirt
+伤心,sad
+伪娘,otoko_no_ko,crossdressing,trap
+低头,head_down
+侦探,detective
+侧光,rim light
+侧卧,on_side
+侧面,from side
+便当,obento
+修女,nun
+俯视,from above
+倒立,upside-down
+假角,fake_horns
+做梦,dreaming
+偶像,idol
+偷窥,peeking
+傲娇,Tsundere
+儿童,child
+光环,halo
+兔娘,bunny_girl
+兔子,bunny
+兔年,year of the rabbit
+兔耳,bunny_ears
+入口,inlet
+全景,panorama
+全身,full body
+公园,park
+兰花,orchid
+关节,joints
+兽人,furry
+兽耳,animal_ears
+兽角,horns
+写作,writing
+写实,realistic,photorealistic
+军帽,military_hat
+冥想,meditation
+冬天,in winter
+冬装,winter_clothes
+冰川,glacier
+凉鞋,sandals
+凝视,stare
+出血,bleeding
+出鞘,unsheathing
+击打,hitting
+刀鞘,scabbard
+分子,molecule
+刘海,bangs
+刷牙,brushing_teeth
+刺客,assassin
+刺绣,embroidery
+剧院,theater
+剪刀,scissors
+剪影,silhouette
+助威,cheering
+勺子,spoon
+匕首,dagger
+化妆,makeup,applying_makeup
+医生,doctor
+十字,cross
+单人,solo
+单色,monochrome
+单袖,single_sleeve
+单鞋,single_shoe,the_only_shoe
+南瓜,pumpkin
+卧室,bedroom
+卫星,satellite
+卫衣,hoodie
+卷云,cirrus
+卷发,curly hair
+厚涂,impasto
+原创,original
+原画,artbook
+厨师,chef
+厨房,kitchen
+叉子,fork
+双持,dual_wielding
+双腿,legs
+双色,two-tone hair
+反转,reversal
+发夹,hairpin
+发棒,hair_stick
+发管,hair_tubes
+发翼,hair_flaps
+发饰,hair_ornament
+发髻,hair_bun
+变异,mutation
+口红,lipstick
+口罩,mouth_mask
+可爱,kawaii
+叹气,sigh
+吉他,guitar
+吊坠,pendant
+同上,diadem
+后宫,harem
+呆毛,ahoge
+呻吟,moaning
+和尚,monk
+和服,japanese_clothes,kimono
+咖啡,coffee
+哭泣,crying
+唇彩,lipgloss
+唐装,chinese_clothes
+唱歌,sing,singing
+唾液,saliva
+商店,shop
+商标,logo
+啜泣,tear
+喂食,feeding
+喊叫,shouting
+喷泉,fountain
+喷火,breathing_fire
+嘟嘴,pout
+嘴唇,lips
+四格,4koma
+回眸,looking_back
+团子,dango
+团扇,uchiwa
+围巾,scarf
+围裙,apron
+圆脸,round face
+圆领,round collar
+圆齿,round_teeth
+圣代,sundae
+地库,dungeon
+地板,floor
+地毯,carpet
+地牢,dungeon
+坏手,bad hands
+坏脚,bad feet
+坐垫,cushion
+坟墓,grave
+坦克,tank
+垂耳,ears_down
+城堡,castle
+城市,city
+堵嘴,gag
+塔楼,turret
+墓地,graveyard
+墓碑,tombstone
+墨镜,sunglasses
+壁咚,Kabedon
+壁炉,fireplace
+壁纸,wallpaper
+士兵,soldier
+复眼,compound_eyes
+夏天,in summer
+外裙,overskirt
+多云,cloudy
+多人,Multiple people
+夜晚,night
+夜空,night_sky
+大人,adult
+大哭,crying
+大海,sea,ocean
+大炮,cannon
+大笑,laughing,grin
+大葱,spring_onion
+大街,avenue
+大衣,overcoat
+大道,in_main_street
+天使,angel
+天空,sky
+天线,radio_antenna
+太空,space
+太阳,sun
+头冠,tiara,circlet
+头巾,bandana
+头带,headband
+头盔,helmet
+头绳,hair_bobbles
+头饰,headwear,headpiece
+头鳍,head_fins
+奔跑,running
+奖杯,trophy
+套装,costume
+女人,female
+女仆,maid,housemaid
+女孩,girl
+女巫,witch
+女性,female
+女王,queen
+奶嘴,pacifier
+奶油,cream
+妆花,makeup flower
+妖精,elf
+姐妹,sisters
+姿势,pose
+娇小,petite
+婚戒,wedding_band
+婚纱,wedding_dress
+嫉妒,envy
+孤独,lonely
+学生,student
+宇宙,universe
+安慰,comforting
+宝石,gem
+室内,indoor,indoors
+室外,outdoors
+害羞,embarrassed
+家具,bedroom
+宽袖,wide_sleeves
+宿舍,dormitory
+寺庙,temple
+封面,cover
+射击,firing
+小巷,alley
+小熊,koakuma
+小鸡,chick
+尖牙,fangs
+层云,stratus
+山上,on a hill
+山丘,hills
+山脉,mountain
+山顶,the top of the hill
+峡谷,canyon
+巫女,miko
+帽子,hat
+幼童,toddler
+床单,bed_sheet
+废墟,ruins,remains,rubble_ruins
+建筑,building,architecture,magnificent_architecture
+开心,kind_smile
+张嘴,open mouth,open_mouth
+张腿,spread legs
+弯角,curled_horns
+彩虹,rainbow
+微笑,smile
+徽章,emblem
+忍者,ninja
+忍耐,restrained
+怀孕,pregnant
+思考,thinking
+怪物,monster
+恶魔,demon
+悬崖,cliff
+悲伤,sad
+惊讶,surprised
+憋气,holding_breath
+戏弄,teasing
+成熟,mature
+戒指,ring
+手套,gloves
+手指,fingering_through_clothes
+手机,cellphone
+手杖,cane
+手枪,handgun
+手炮,arm_cannon
+手表,wristwatch
+手铐,handcuffs,shackles
+手链,bracelet
+手镯,bracelet,bangle
+打扫,cleaning,sweeping
+托头,head_rest
+托盘,tray
+投掷,cast,tossing_
+折扇,folding_fan
+护士,nurse
+护腕,bracer
+护膝,knee_pads
+护额,forehead_protector
+披肩,cape,capelet
+披风,cloak
+抬手,arms_up
+抱枕,dakimakura,pillow_hug
+抱起,carrying
+抽搐,twitching
+抽烟,smoking
+拉弓,drawing_bow
+拉面,ramen
+拖鞋,slippers
+招手,waving,beckoning
+拟人,personification
+拥抱,cuddling,hug
+拿剑,holding sword
+拿着,take
+持枪,holding gun
+指交,fingering
+按钮,buttons
+挑染,streaked hair
+挥拳,punching
+振袖,furisode
+挽手,arm_hug
+捂脸,facepalm
+损坏,damaged
+掌掴,slapping
+推搡,pushing
+插画,illustration
+握笔,holding_pen
+搞基,yaoi
+摆动,swing
+摸索,groping
+撑伞,holding_umbrella
+攀爬,climbing
+收拢,hair in takes
+教堂,church
+教室,classroom
+散景,bokeh
+敬礼,salute
+文字,text
+斗笠,rice_hat
+斗篷,cloak,cape
+斜倚,reclining
+斧头,axe
+新年,new year
+新月,crescent_moon
+方脸,square face
+方领,square collar
+旋转,spinning
+旗印,flag_print
+旗袍,cheongsam,china_dress,qipao
+无袖,sleeveless
+日光,sunlight
+日出,sunrise
+日晒,tan
+日落,sunset
+星星,stars
+星球,planet
+星空,starry sky,starry_sky
+春天,in spring
+晃动,bouncing breasts
+景观,landscape
+暗的,dark
+月亮,moon
+月光,moonlight
+月牙,crescent
+木屐,geta
+札符,ofuda
+机场,airport
+机械,machine
+机甲,mecha
+杯子,cup
+杰作,masterpiece
+松树,pine_tree
+松鼠,squirrel
+板甲,plate_armor
+构图,composition
+枕头,pillow
+枕帽,pillow_hat
+果酱,jam
+枫叶,maple_leaf
+枫树,maple_tree
+柔光,soft lighting
+柴刀,nose_hatchet
+栅栏,fence
+栏杆,handrail,railing
+树屋,treehouse
+树林,grove
+树枝,branch
+栗色,maroon
+校帽,school_hat
+校服,school_uniform
+桃子,peach
+桌子,table
+桥下,under_bridge
+梅花,plum_blossom
+梦幻,dreamlike
+梳头,hair_brushing
+棋子,chess_piece
+棍子,stake
+棕发,brown hair
+棕色,brown
+森林,forest
+棱纹,ribbed
+椅子,chair
+植物,plant
+楼梯,stairs
+模仿,parody
+模糊,blurry
+樱花,cherry_blossoms,cherry blossoms
+橙白,white with orange long upper shan
+橙色,orange,orange long upper shan
+欺负,bullying
+正太,shota
+正面,front view
+武器,weapon
+歪头,head_tilt
+毁容,disfigured
+毛皮,fur
+毛衣,sweater
+水中,underwater
+水仙,narcissu
+水印,watermark
+水墨,ink wash painting
+水库,reservoir
+水彩,watercolor_(medium),watercolor
+水晶,crystal
+水杯,drinking_glass
+水果,fruit
+水瓶,water_bottle
+汉堡,burger
+汉服,hanfu
+汗衫,undershirt
+汽车,car
+沙发,couch
+沙子,sand
+沙漠,on a desert
+沮丧,frustrated
+河流,river
+油性,oil
+油画,oil_painting,oil painting
+法庭,courtroom
+泡脚,soaking_feet
+波浪,waves
+泪珠,teardrop
+泳帽,swim_cap
+泳衣,swimwear
+泳装,swimsuit
+泳裤,swim_briefs,swim_trunks
+洗涤,washing
+洗澡,bathing
+流汗,sweat
+流泪,streaming_tears
+流苏,tassel
+浅紫,light purple long upper shan
+浅红,light red long upper shan
+浅绿,light green long upper shan
+浓眉,thick eyebrows
+浮岛,floating island
+浴室,bathroom,bathing
+浴衣,yukata
+海洋,ocean
+海滩,on the beach,beach
+海藻,seaweed
+海贝,seashell
+海边,beach,over the sea
+涉水,wading
+涟漪,ripples
+淋浴,showering
+淘气,naughty
+淡蓝,light blue long upper shan
+深领,plunging_neckline
+混浴,mixed_bathing
+温室,greenhouse
+温泉,onsen
+港口,harbor
+游泳,swimming
+湖泊,lake
+溪流,stream
+满月,full moon,full_moon
+滴水,dripping
+漩涡,swirl
+漫画,comic
+潜水,diving
+瀑布,waterfall
+火山,volcano
+灯笼,lantern/lamp
+灰度,greyscale,grayscale
+灰色,gray
+炸弹,bomb
+点嘴,dot_mouth
+烟斗,smoking_pipe
+热裤,short_shorts,hot_pants,cutoffs
+烹饪,cooking
+焦散,bokeh
+焰火,fireworks
+焰目,flaming_eye
+照片,photo
+熊猫,panda
+熟女,milf
+燃烧,burning
+爆炸,explosion
+牙刷,toothbrush
+牙齿,teeth
+牛娘,cow_girl
+牧师,priest
+牵手,holding_hands
+特写,close-up
+特工,agent
+犬娘,dog_girl
+狐妖,kitsune
+狐娘,fox_girl
+狐狸,fox
+狐耳,fox ears
+狗牌,dog_tags
+狩衣,kariginu
+猎奇,guro
+猥亵,groping
+猫娘,cat_girl
+猫眼,slit pupils
+猫耳,cat ears
+玫瑰,rose
+瓷画,Encaustic painting
+瓷砖,tiles
+甘薯,sweet_potato
+生气,angry
+用嘴,oral
+田园,field
+电缆,cable
+电脑,computer
+男人,male
+男孩,boy
+男性,male
+画画,Painting_(Action)
+画笔,paintbrush
+画质,high quality
+畸形,deformed
+疤痕,scar
+病娇,yandere
+痉挛,spasm
+痤疮,acnes
+痴女,female_pervert
+瘦脸,slender face
+白发,white hair
+白天,day
+白色,white long upper shan
+白裙,white pleated skirt
+百合,yuri
+百奇,pocky
+皇冠,crown
+皮制,leather
+皮带,leash,belt
+皮帽,fur_hat
+皮靴,leather_boots
+监狱,prison
+盔甲,armor
+盘子,plate
+直发,straight_hair,straight hair
+相机,camera
+真实,real,reality
+眼圈,ringed eyes,ringed_eyes
+眼影,eyeshadow
+眼泪,tears
+眼球,eyeball
+眼睛,eyes,eyewear
+眼线,eyeliner
+眼罩,eyepatch,Blindfold
+眼袋,bags under eyes,bags_under_eyes
+眼镜,glasses
+着装,dressing_another
+睡衣,pajamas,nightgown,sleepwear
+睡觉,sleeping
+瞄准,aiming
+瞳孔,pupils
+短发,short hair
+短斧,hatchet
+短袄,short coat
+短袖,short_sleeves
+短袜,socks
+短裙,skirt
+短裤,shorts
+石头,stone
+硬币,coin
+碎花,floral_print
+礼堂,Auditorium
+礼服,formal_dress,evening_gown
+祈祷,praying
+神社,gohei
+秃头,bald
+秋天,in autumn
+积云,cumulus
+稍息,open_stance
+稻田,rice paddy
+空中,aerial
+空姐,stewardess
+空调,air_conditioner
+穿越,crossover
+窗帘,curtains
+窗扇,sash
+立领,standing collar
+站立,standing
+竹林,bamboo forest
+筷子,chopsticks
+签名,signature
+管顶,tube_top
+箭头,arrow_(symbol)
+篮子,basket
+米色,beige
+粉发,pink hair
+粉底,fundoshi
+粉色,pink,pink long upper shan
+粉裙,pink pleated skirt
+粉黑,pink with black long upper shan
+精灵,elf
+糖果,candy,sweets
+素描,sketch,sketches
+紧身,tight
+紫发,purple hair
+紫瞳,purple eyes
+紫色,violet,purple
+紫藤,wisteria
+红发,red hair
+红唇,red_lips_
+红色,red,red long upper shan
+红裙,red pleated skirt
+纯色,spot_color
+纸扇,paper_fan
+纹身,tattoo
+细腰,narrow_waist
+织金,woven gold
+绘画,drawing,painting
+绝望,despair
+绝顶,female_orgasm
+绞首,strangling
+绷带,bandage
+绿发,green hair
+绿洲,oasis
+绿色,darkgreen,green long upper shan
+绿裙,green pleated skirt
+缝纫,sewing
+缝饰,stitches
+罐子,can
+美甲,nail_art
+美瞳,color contact lenses
+群像,multiple views
+羽衣,hagoromo
+翅膀,wings
+翼印,wing_print
+老人,elder
+老师,teacher
+老年,old
+老虎,tiger
+老鼠,mouse
+耳坠,drop earrings
+耳机,earphones,headphones
+耳洞,ear_piercing
+耳环,earrings
+耳罩,earmuffs
+耳钉,stud_earrings,stud earrings
+耳饰,ear_ornament
+肉腿,thick_thighs
+肌肉,muscular
+肚子,belly
+肚脐,navel
+肚链,belly_chain_
+肥皂,soap
+肥胖,fat
+肩带,aiguillette
+肩扛,carrying_over_shoulder
+肩甲,shoulder_armor
+背包,backpack
+背面,from behind
+胫甲,greaves,shin_guards
+胶靴,rubber_boots
+胸甲,breastplate
+胸肌,pectorals
+胸花,corsage
+胸衣,bustier
+胸部,chest
+胸针,brooch
+脖子,neck
+脚印,footprints
+脚环,anklet
+脚链,anklet
+脸红,blush
+腋下,armpits
+腕带,wristband
+腕饰,wrist_cuffs
+腹甲,faulds
+腹肌,absolute_territory
+腹部,midriff
+腿毛,leg_hair
+膝枕,lap_pillow
+膝盖,kneepits,knees
+臂环,arm_garter
+臂镯,armlet
+舌头,tongue
+舔阴,cunnilingus
+舞台,stage
+舞女,dancing girl
+舞者,dancer
+舰装,rigging
+船舶,ship,watercraft
+色块,flat_color
+色差,chromatic_aberration
+花束,bouquet
+花海,flower sea
+花瓶,vase
+花田,flower field
+花边,lace
+苗条,slender
+苦闷,anguish
+苹果,apple
+茄子,aubergine
+茶壶,teapot
+茶杯,teacup
+草地,in a meadow
+草坪,lawn
+草帽,straw_hat
+荒地,wasteland
+药店,pharmacy
+莲花,lotus
+菊花,chrysanthemum
+萌萌,chibi
+萝莉,loli
+落日,sunset
+葫芦,gourd
+蒙面,masked
+蒸汽,steam,water vapor
+蓝发,blue hair
+蓝色,blue,blue long upper shan
+蓝裙,blue pleated skirt
+蓟色,thistle
+蓬发,disheveled hair
+蔑视,contempt
+蕾丝,lace
+薯片,chips,potato_chips
+虎牙,fang
+虎纹,tiger_print
+虎耳,tiger_ears
+蛇瞳,snake pupils
+蛇纹,snake_print
+蛋糕,cake
+蛮啾,manjuu_(azur_lane)
+蜜色,honeydew
+蜡烛,candle
+蜻蜓,dragonfly
+蝙蝠,bat
+街道,street
+衣架,clothes_rack
+补服,bufu
+衬衫,shirt
+袖口,cuffs
+袜带,garters
+被炉,kotatsu
+袴裙,hakama_skirt
+袴裤,hakama_pants
+裁剪,cropped
+裤袜,leggings
+裸腿,bare_legs
+裸足,barefoot
+褶边,frilled
+西装,suit
+警察,police
+警服,police_uniform
+诗人,poet
+课桌,school_desk
+象牙,tusks
+豹纹,leopard_print
+贝壳,shell
+购物,shopping
+赌场,casino
+赤肩,bare shoulders
+赤脚,barefoot
+走路,walking
+超市,supermarket
+趴着,on_stomach
+跨坐,straddling
+路口,Intersection
+路径,path
+路标,road_sign
+路灯,street lamp,lamppost
+路障,traffic_cone
+路面,pavement
+跳舞,dancing
+跳跃,jumping
+踝袜,ankle_socks
+踝靴,ankle_boots
+蹲下,squatting
+躲藏,hiding
+躺椅,lounge_chair
+转身,turn_one's_back
+轮椅,wheelchair
+轻蔑,disdain
+辣妹,gyaru
+边框,border
+过曝,overexposure
+近景,close-up
+远景,wide shot
+迷彩,camoflage
+追逐,chasing
+逆光,backlighting
+透明,see-through
+逗猫,cat_teaser
+道袍,Taoist robe
+道路,road
+遥望,looking_afar
+酒吧,bar
+醒来,waking_up
+金发,blonde hair
+金色,gold
+钓鱼,fishing
+钟眼,clock_eyes
+钢琴,piano
+钥匙,key
+钻头,drill
+铁路,railroad,railway
+铁轨,railroad tracks
+铃铛,bell
+铅笔,pencil
+铠甲,armor
+银发,silver hair
+银色,silver
+锁链,chains
+锁骨,collarbonea
+锤子,hammer
+镣铐,shackles
+镰刀,scythe
+长凳,bench
+长发,long hair
+长矛,lance
+长脸,long face
+长袄,long coat
+长袍,robe
+长袖,long_sleeves
+长裙,long_skirt
+长裤,pants
+长靴,boots
+长颈,long neck
+闪电,lighting
+闭嘴,closed mouth,close_mouth
+闭眼,eyes_closed,closed eyes
+间谍,spy
+阅读,reading
+隐士,the hermit
+隧道,tunnel
+雀斑,freckles
+雨伞,umbrella
+雨天,rainy days,rain
+雨衣,raincoat
+雨靴,rain_boots
+雪兔,snow_bunny
+雪景,snow
+雪花,snowflakes
+露出,flashing
+露腋,armpits
+青色,lightcyan
+青蓝,cyan blue long upper shan
+非人,no humans
+面具,mask
+面条,noodles
+面甲,visor
+靴子,boots
+鞋带,shoelaces
+鞋底,shoe_soles
+鞠躬,bowing
+韩服,hanbok
+音乐,music
+项圈,collar,choker
+项链,necklace
+领口,neck_ruff
+领巾,neckerchief
+领带,necktie
+颈环,neck_ring
+颈铃,neck_bell
+额头,forehead
+颤抖,trembling
+风景,landscape/scenery,scenery
+风衣,trench_coat
+风铃,wind_chime
+风镜,goggles
+飞溅,splashing
+飞行,flying
+飞踢,flying_kick
+食物,food
+饭团,onigiri
+饭店,restaurant
+饮料,drink
+饰带,sash
+饼干,cookie
+馅饼,pasties
+首饰,jewelry
+香烟,cigarette
+马娘,horse_girl
+马尾,pony-tail,ponytail
+马桶,toilet
+马耳,horse_ears
+马鞭,riding_crop
+驾驶,driving
+骑士,knight
+骨头,bone
+骨感,skinny
+高原,plateau
+高大,tall
+高踢,high_kick
+鬆餅,pancake
+鬼角,oni_horns
+魅力,glamor
+魅魔,succubus
+魔术,magic
+魔杖,wand
+魔瞳,devil pupils
+魔鬼,devil
+鱼眼,fisheye
+鸟居,torii
+鸡蛋,egg
+鹿角,antlers
+麦田,wheat field
+麻袋,sack
+黄昏,dusk,sunset
+黄色,yellow,yellow long upper shan
+黑发,black hair
+黑客,hacker
+黑色,black
+黑蓝,black with blue long upper shan
+鼠标,mouse
+鼻子,nose
+鼻泡,nose_bubble
+鼻涕,snot
+鼻血,nosebleed
+龅牙,buck_teeth
+龙娘,dragon_girl
+龙角,dragon_horns
+书,book
+刀,sword
+吹,blowing
+咬,biting
+哭,crying
+啃,gnaw
+喝,drinking
+嘴,mouth
+坐,sitting
+塔,tower
+头,head
+床,bed
+弓,bow_(weapon)
+戳,poking
+拉,pulling
+枪,gun
+树,tree
+桥,bridge
+桶,bucket,pail
+熊,bear
+牙,tooth
+牛,cow
+狗,dog
+狼,wolf
+猫,cat
+痣,mole
+瘦,thin
+砍,slashing
+碗,bowl
+秤,scales
+窗,window_
+竹,bamboo
+箭,arrow
+纂,topknot
+肉,meat
+脚,feet
+舔,licking
+花,flower
+茬,stubble
+茶,tea
+蛇,snake
+趴,on stomach
+跪,kneeling
+路,road
+踢,kicking
+躺,on back
+钱,money
+锅,pot
+门,door
+闻,smelling
+雾,fog
+鞭,whip
+马,horse
+骑,riding
+鲸,whale
+鸟,bird
+龙,dragon
