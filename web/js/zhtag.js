@@ -8,7 +8,7 @@
  * 只用到公开 API（app.registerExtension / nodeCreated / getExtraMenuOptions / settings），
  * 并对缺 API 的老版本做了降级保护。
  */
-import { app } from "../../scripts/app.js";
+import { app } from "../../../scripts/app.js";
 
 const PLUGIN = "ZHTag";
 const CJK = /[\u3400-\u9fff\uf900-\ufaff]/;
@@ -23,11 +23,9 @@ const DEFAULTS = {
 };
 
 function setting(id, name, type, defaultValue, extra = {}) {
-    try {
-        app.ui?.settings?.addSetting?.({ id, name, type, defaultValue, ...extra });
-    } catch (e) {
-        log("注册设置失败", id, e);
-    }
+    // 注意：这里只构造设置对象，由 ComfyUI 的 registerExtension({settings}) 负责注册。
+    // 不要再自己调 addSetting——新版前端对 undefined 元素不宽容。
+    return { id, name, type, defaultValue, ...extra };
 }
 
 function getSetting(id) {

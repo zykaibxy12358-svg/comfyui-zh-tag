@@ -136,12 +136,32 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 
 ---
 
-## 七、自测（不需要 ComfyUI）
+## 七、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 25 项
+node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 20 项
 ```
-23 项断言：词典加载、精确/同义词、繁简归一、最长匹配切分、权重保留、去重、未命中保留、兜底链路（含连不上时的安全失败）、自定义词典加载、性能（单次整句 < 1ms）。
+
+**后端 25 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、未命中保留、同义词策略、兜底链路（含连不上时的安全失败）、自定义词典加载、性能（单次整句 < 1ms）。
+
+**前端 20 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 真实的 `zhtag.js`，验证
+注册与设置项（含"settings 里不能有 undefined"这类新版前端的坑）、失焦自动翻译并写回、
+不重复翻译、纯英文不触发、右键菜单注入与点击、`Ctrl+Alt+T` 快捷键、兜底开关随设置变化。
+
+---
+
+## 九、开发注意（踩过的坑）
+
+1. **前端 import 的层级**：`web/js/zhtag.js` 里必须写 `../../../scripts/app.js`（不是 `../../`）。
+   URL 空间是 `/extensions/<插件目录名>/js/zhtag.js`，`../../` 只会走到 `/extensions/` → 404，
+   整个扩展会静默失效。放在 `web/` 根目录的文件才用 `../../`。
+2. **`settings` 数组里不能有 `undefined`**：新版前端（1.45+）会遍历该数组注册设置，
+   写 `settings: [addSetting(...)]` 这种"顺便注册"的写法会炸。正确做法是只返回设置对象。
+3. **`/scripts/app.js` 在新前端是个 shim**：它从 `window.comfyAPI.app.app` 转出 `app`，
+   所以 `import { app } from ".../scripts/app.js"` 仍然可用。
+4. 后端模块要能在没有 ComfyUI 的环境下导入（`routes.py` 里拿不到 `server` 就跳过注册），
+   这样单测才能脱离 ComfyUI 跑。
 
 ---
 
