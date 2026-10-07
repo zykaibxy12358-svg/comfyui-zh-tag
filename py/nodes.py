@@ -43,20 +43,37 @@ def do_translate(text: str, mode: str = 'tags', dedupe: bool = True,
     return result, report
 
 
-UNKNOWN_MODES = ['丢弃未命中（推荐，只写进报告）', '保留中文原文', '交给兜底翻译（LLM/在线）']
+UNKNOWN_MODES = ['跟随「未命中时保留中文」开关（推荐）',
+                 '丢弃未命中（只写进报告）',
+                 '保留中文原文',
+                 '交给兜底翻译（LLM/在线）']
 
 
-def unknown_mode_of(value) -> str:
+def unknown_mode_of(value):
+    """下拉文字 → 策略。返回 None 表示「跟随旧开关」。
+
+    兼容旧值：v1.1.0 的下拉写法（'丢弃未命中（推荐，…）'/'保留中文原文'/…）前缀相同，
+    所以老工作流里存下来的值也能正确识别；存的是 bool 则返回 None，走旧开关。
+    """
     v = str(value or '')
     if v.startswith('保留'):
         return 'keep'
     if v.startswith('交给'):
         return 'fallback'
-    return 'drop'
+    if v.startswith('丢弃'):
+        return 'drop'
+    return None
 
 
 class ZHTagTranslate:
-    """中文提示词 → 英文 tag 串。未命中词典的片段按配置兜底翻译，兜不住就原样保留。"""
+    """中文提示词 → 英文 tag 串。未命中词典的片段按配置兜底翻译，兜不住就原样保留。
+
+    ⚠ 输入顺序不能改：ComfyUI 的工作流里 widgets_values 是**按位置**存的，
+    在中间插入新输入会让老工作流的取值整体错位（v1.1.0 踩过这个坑：
+    老工作流把 True 塞进了「未命中处理」下拉 → prompt_outputs_failed_validation）。
+    新增输入一律追加到最后，并且 BOOLEAN 放前面、COMBO 放最后
+    （BOOLEAN 会被 bool(val) 兜住，COMBO 是唯一会因取值不在列表而校验失败的）。
+    """
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -65,11 +82,17 @@ class ZHTagTranslate:
                 '中文提示词': ('STRING', {'multiline': True, 'dynamicPrompts': False,
                                           'default': '一个蓝发漂亮姑娘站在樱花树下微笑，长发，黄昏，电影感光线'}),
                 '输出模式': (['tags（逗号分隔的 tag 串）', 'raw（保留换行与顺序）'],),
-                '未命中处理': (UNKNOWN_MODES,),
                 '去重': ('BOOLEAN', {'default': True}),
-                '同义词': (['只输出最佳英文', '输出全部同义写法'],),
-                'Danbooru 规范化': ('BOOLEAN', {'default': True}),
+                '未命中时保留中文': ('BOOLEAN', {'default': False,
+                                                 'tooltip': '默认关：没查到的中文片段直接丢掉，只写进「未命中报告」'}),
                 '用兜底翻译（LLM/在线）': ('BOOLEAN', {'default': False}),
+                '同义词': (['只输出最佳英文', '输出全部同义写法'],),
+            },
+            # 新加的输入一律放 optional：老工作流里没有这两项时也能直接跑，不会被
+            # required_input_missing 拦住（缺失时按「跟随旧开关 / 规范化开」处理）。
+            'optional': {
+                'Danbooru 规范化': ('BOOLEAN', {'default': True}),
+                '未命中处理': (UNKNOWN_MODES,),
             },
         }
 
@@ -83,9 +106,13 @@ class ZHTagTranslate:
     def run(self, **kw):
         text = kw.get('中文提示词', '')
         mode = 'raw' if str(kw.get('输出模式', '')).startswith('raw') else 'tags'
+        keep = bool(kw.get('未命中时保留中文', False))
+        use_fb = bool(kw.get('用兜底翻译（LLM/在线）', False))
         umode = unknown_mode_of(kw.get('未命中处理'))
+        if umode is None:                       # 「跟随旧开关」：老工作流的语义原样保留
+            umode = 'fallback' if use_fb else ('keep' if keep else 'drop')
         out, report = do_translate(text, mode=mode, dedupe=bool(kw.get('去重', True)),
-                                   use_fallback=bool(kw.get('用兜底翻译（LLM/在线）', False)),
+                                   use_fallback=use_fb,
                                    first_only=not str(kw.get('同义词', '')).startswith('输出全部'),
                                    unknown_mode=umode,
                                    normalize=bool(kw.get('Danbooru 规范化', True)),
@@ -135,15 +162,19 @@ def _build_clip_node():
     class ZHTagClipEncode:
         @classmethod
         def INPUT_TYPES(cls):
+            # 顺序同 ZHTagTranslate：老输入不动，新输入追加在后，BOOLEAN 在前 COMBO 在后
             return {
                 'required': {
                     'clip': ('CLIP',),
                     '中文提示词': ('STRING', {'multiline': True, 'dynamicPrompts': False, 'default': ''}),
-                    '未命中处理': (UNKNOWN_MODES,),
-                    '去重': ('BOOLEAN', {'default': True}),
-                    '同义词': (['只输出最佳英文', '输出全部同义写法'],),
-                    'Danbooru 规范化': ('BOOLEAN', {'default': True}),
                     '用兜底翻译（LLM/在线）': ('BOOLEAN', {'default': False}),
+                },
+                'optional': {
+                    '未命中时保留中文': ('BOOLEAN', {'default': False}),
+                    '去重': ('BOOLEAN', {'default': True}),
+                    'Danbooru 规范化': ('BOOLEAN', {'default': True}),
+                    '同义词': (['只输出最佳英文', '输出全部同义写法'],),
+                    '未命中处理': (UNKNOWN_MODES,),
                 },
             }
 
@@ -155,10 +186,14 @@ def _build_clip_node():
 
         def run(self, clip=None, **kw):
             text = kw.get('中文提示词', '')
+            keep = bool(kw.get('未命中时保留中文', False))
+            use_fb = bool(kw.get('用兜底翻译（LLM/在线）', False))
             umode = unknown_mode_of(kw.get('未命中处理'))
+            if umode is None:
+                umode = 'fallback' if use_fb else ('keep' if keep else 'drop')
             english, _report = do_translate(text, mode='tags',
                                             dedupe=bool(kw.get('去重', True)),
-                                            use_fallback=bool(kw.get('用兜底翻译（LLM/在线）', False)),
+                                            use_fallback=use_fb,
                                             first_only=not str(kw.get('同义词', '')).startswith('输出全部'),
                                             unknown_mode=umode,
                                             normalize=bool(kw.get('Danbooru 规范化', True)),

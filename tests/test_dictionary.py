@@ -172,9 +172,11 @@ def main():
 
     print('\n[10] ComfyUI 节点层（脱离 ComfyUI 也能跑，CLIP 节点自动跳过）')
     from py.nodes import ZHTagTranslate, ZHTagQuery, unknown_mode_of  # noqa: E402
-    types = ZHTagTranslate.INPUT_TYPES()['required']
-    ok('未命中处理' in types and 'Danbooru 规范化' in types,
-       '节点暴露了未命中处理与规范化开关', ', '.join(types.keys()))
+    types = ZHTagTranslate.INPUT_TYPES()
+    ok('未命中处理' in types['optional'] and 'Danbooru 规范化' in types['optional'],
+       '新增输入都放在 optional（老工作流缺这两项也能跑）', ', '.join(types['optional'].keys()))
+    ok('未命中时保留中文' in types['required'],
+       'v1.0.0 就有的输入仍是 required（位置不变）', ', '.join(types['required'].keys()))
     ok(unknown_mode_of('保留中文原文') == 'keep' and unknown_mode_of('丢弃未命中（推荐，只写进报告）') == 'drop'
        and unknown_mode_of('交给兜底翻译（LLM/在线）') == 'fallback', '下拉文字能映射成策略')
     out, report = ZHTagTranslate().run(**{
@@ -187,6 +189,68 @@ def main():
     ok('命中' in report and '词库' in report, '第二个输出是给人看的报告', report.splitlines()[0])
     q, st = ZHTagQuery().run('双马尾')
     ok('twintails' in q, '词典查询节点可用', q)
+
+    print('\n[11] 老工作流兼容（ComfyUI 的 widgets_values 是按位置存的！）')
+    OLD_ORDER = ['中文提示词', '输出模式', '去重', '未命中时保留中文', '用兜底翻译（LLM/在线）', '同义词']
+
+    def widget_keys(cls):
+        """按 ComfyUI 的规则列出「会出现在 widgets_values 里的输入」（排除 CLIP 这类连线输入）。"""
+        types = cls.INPUT_TYPES()
+        keys = []
+        for section in ('required', 'optional'):
+            for name, spec in types.get(section, {}).items():
+                t = spec[0]
+                if isinstance(t, list) or t in ('STRING', 'BOOLEAN', 'INT', 'FLOAT'):
+                    keys.append((name, spec))
+        return keys
+
+    def emulate_frontend(cls, values):
+        """复刻前端：把 widgets_values 按位置贴到输入上；返回 (kwargs, 会校验失败的项)。"""
+        kw, bad = {}, []
+        for (name, spec), v in zip(widget_keys(cls), values):
+            t = spec[0]
+            if isinstance(t, list):
+                (kw.__setitem__(name, v) if v in t else bad.append((name, v)))
+            elif t == 'BOOLEAN':
+                kw[name] = bool(v)          # 服务端也是 bool(val)，不会校验失败
+            else:
+                kw[name] = v
+        return kw, bad
+
+    new_keys = [n for n, _ in widget_keys(ZHTagTranslate)]
+    ok(new_keys[:len(OLD_ORDER)] == OLD_ORDER,
+       'v1.0.0 的 6 个输入位置原封不动（老工作流不会错位）', ' / '.join(new_keys))
+    combos = [n for n, s in widget_keys(ZHTagTranslate) if isinstance(s[0], list)]
+    ok(new_keys[-1] == '未命中处理' and isinstance(dict(widget_keys(ZHTagTranslate))['未命中处理'][0], list),
+       '新增的 COMBO 一律追加到最后（只有 COMBO 会因取值不在列表而失败）',
+       f'COMBO 顺序：{" / ".join(combos)}')
+
+    # 用户真实工作流 ONE 通用成熟.json 里存下来的 widgets_values
+    user_values = ['skirt, wearing, white long upper shan, beautiful, girl',
+                   'tags（逗号分隔的 tag 串）', True, False, False, '输出全部同义写法', False]
+    kw_user, bad_user = emulate_frontend(ZHTagTranslate, user_values)
+    ok(bad_user == [], '用户现有工作流不再校验失败（这是 prompt_outputs_failed_validation 的根因）',
+       str(bad_user))
+    out_user, _ = ZHTagTranslate().run(**kw_user)
+    ok('girl' in out_user, '老工作流照样能跑出结果', out_user)
+
+    # v1.0.0 时代只有 6 个值的老工作流
+    kw_old, bad_old = emulate_frontend(ZHTagTranslate, ['一个蓝发漂亮姑娘', 'tags（逗号分隔的 tag 串）',
+                                                        True, False, False, '只输出最佳英文'])
+    ok(bad_old == [] and 'blue hair' in ZHTagTranslate().run(**kw_old)[0],
+       'v1.0.0 时代的 6 值工作流也能直接跑', ZHTagTranslate().run(**kw_old)[0])
+    # 老工作流里「未命中时保留中文」= True 的，语义要原样保留（仍然保留中文）
+    kw_keep, _ = emulate_frontend(ZHTagTranslate, ['完全未知词XYZ', 'tags（逗号分隔的 tag 串）',
+                                                   True, True, False, '只输出最佳英文'])
+    ok('完全未知词XYZ' in ZHTagTranslate().run(**kw_keep)[0],
+       '老开关「未命中时保留中文」=True 时行为不变', ZHTagTranslate().run(**kw_keep)[0])
+    kw_nokeep, _ = emulate_frontend(ZHTagTranslate, ['完全未知词XYZ', 'tags（逗号分隔的 tag 串）',
+                                                     True, False, False, '只输出最佳英文'])
+    ok('完全未知词XYZ' not in ZHTagTranslate().run(**kw_nokeep)[0],
+       '老开关 =False 时未命中被丢弃', repr(ZHTagTranslate().run(**kw_nokeep)[0]))
+    ok(unknown_mode_of('跟随「未命中时保留中文」开关（推荐）') is None
+       and unknown_mode_of('丢弃未命中（推荐，只写进报告）') == 'drop',
+       '新旧两版下拉文字都能识别（老工作流里存的旧文案也认）')
 
     print(f'\n结果：{PASS} 通过 / {FAIL} 失败')
     return 1 if FAIL else 0
