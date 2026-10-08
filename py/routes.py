@@ -3,6 +3,7 @@
 
 路由：
   POST /zhtag/translate   {text, mode, fallback}  → {english, unknown, info}
+  GET  /zhtag/complete    ?q=&limit=              → 拼音/中文/英文 补全候选
   GET  /zhtag/status                              → 词库信息
   POST /zhtag/reload                              → 重新加载词典
 失败不影响 ComfyUI 启动（拿不到 server 就直接跳过）。
@@ -11,6 +12,7 @@ from __future__ import annotations
 
 from .dictionary import get_dictionary
 from .nodes import do_translate, translator
+from .complete import get_completer
 from . import sources as community
 
 
@@ -61,6 +63,18 @@ def register_routes() -> bool:
                         report.get('entries', 0), report.get('index', 0))),
         })
 
+    @routes.get('/zhtag/complete')
+    async def zhtag_complete(request):
+        """IDE 式补全：输入 'lanfa' / 'smw' / '蓝发' → 直接给英文 tag 候选。"""
+        q = request.query.get('q') or ''
+        try:
+            limit = int(request.query.get('limit') or 10)
+        except Exception:
+            limit = 10
+        limit = max(1, min(30, limit))
+        results = get_completer().complete(q, limit=limit)
+        return web.json_response({'ok': True, 'q': q, 'results': results})
+
     @routes.get('/zhtag/status')
     async def zhtag_status(request):
         dic = get_dictionary()
@@ -77,6 +91,7 @@ def register_routes() -> bool:
     @routes.post('/zhtag/reload')
     async def zhtag_reload(request):
         dic = get_dictionary(reload=True)
+        get_completer(reload=True)              # 补全索引跟着重建（用户加了自定义词典后要生效）
         return web.json_response({'ok': True, 'entries': dic.size,
                                   'index': dic.index_tags, 'sources': dic.sources})
 
@@ -102,5 +117,6 @@ def register_routes() -> bool:
     async def zhtag_dict_sources(request):
         return web.json_response({'ok': True, 'sources': community.list_sources()})
 
-    print('[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/status, /zhtag/reload, /zhtag/dict/download, /zhtag/dict/sources')
+    print('[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/complete, /zhtag/status, '
+          '/zhtag/reload, /zhtag/dict/download, /zhtag/dict/sources')
     return True

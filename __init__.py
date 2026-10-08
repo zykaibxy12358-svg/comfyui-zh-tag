@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-"""ZHTag —— ComfyUI 中文提示词插件（v1.1.1）
+"""ZHTag —— ComfyUI 中文提示词插件（v1.2.0）
 
-在文本框里打中文（甚至直接写一句自然语言），自动翻成英文 tag：
-先在本地词典里做最长匹配，词典没有的片段按设置丢弃/保留/交给兜底翻译，
-最后所有英文都用 Danbooru 正名归一并按热度排序，输出干净、可直接喂给模型。
+像 IDE 一样写提示词：在文本框里打中文或拼音，光标下方直接列出英文 Danbooru tag
+候选（↑↓ 选、Enter 采用、Esc 关），词库里没有的词给一行「在线翻译」。
+整句翻译（失焦/停顿自动翻）仍然保留，两种用法可以同时开着。
 
+- 补全：中文（蓝发）/ 全拼（lanfa）/ 首字母（lf）/ 多音字（changfa、zhangfa）/ 英文前缀（long_h）
+- 数据：data/zh_tags.csv + data/zh_extra.csv（中英词条）、data/danbooru_index.tsv（正名与热度）、
+        data/pinyin_chars.tsv（汉字→拼音；构建期用 pypinyin 生成，运行时零依赖）
 - 节点：ZHTag 中文→英文Tag / ZHTag 中文CLIP编码 / ZHTag 词典查询
-- 前端：所有文本输入框支持「失焦自动翻译」，节点右键菜单可手动翻译
-- 词库：data/zh_tags.csv（内置 3600+ 条）+ data/zh_extra.csv（日常用语补充）
-        + data/danbooru_index.tsv（3 万条正名与热度）+ data/user/ 你自己的词典
 - 大词典（约 5 万条社区中文表）不随插件分发，右键菜单「下载/更新社区词典」按需拉取
 """
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 import os
 import sys

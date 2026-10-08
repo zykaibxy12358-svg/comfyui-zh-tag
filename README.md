@@ -1,18 +1,20 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.1.1）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.0）
 
-**在文本框里打中文——写词组也行，写一整句大白话也行——自动变成干净的英文 Danbooru tag。**
+**像 IDE 一样写提示词**：在文本框里打**中文或拼音**，光标下方直接弹出英文 Danbooru tag 候选，
+`↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
 
 ```
-一个蓝发漂亮姑娘站在樱花树下微笑
-        ↓
-smile, standing, blue hair, tree, cherry blossoms, beautiful, girl
+打 lanfa  →  候选：blue hair（蓝发 · 拼音）      Enter → blue hair,
+打 lf     →  候选：blue hair / green hair / …     Enter → 绿发那条
+打 蓝发   →  候选：blue hair（蓝发）              Enter → blue hair,
+打 long_h →  候选：long_hair / long_horns / …     Enter → long_hair,
 ```
 
-- 节点：`ZHTag 中文→英文Tag` / `ZHTag 中文CLIP编码` / `ZHTag 词典查询`
-- 前端：所有文本输入框**失焦自动翻译** + 右键菜单「中文Tag→英文」 + 快捷键 `Ctrl+Alt+T`
-- 词库：内置 **3955 条**中文词条 + **31171 条** Danbooru 正名/热度索引 + 繁→简归一（4148 字）
-- 质量：自动过滤「一个／的／她／非常／突然」这类功能词，输出统一用 Danbooru 正名并**按热度排序**
-- 零第三方依赖（只用标准库），纯离线可用
+- **补全**：中文 / 全拼（`lanfa`）/ 首字母（`lf`、`smw`）/ 多音字（`changfa`、`zhangfa` 都查到长发）/ 英文 tag 前缀
+- **排序**：匹配质量优先，同质量按 Danbooru 热度 → 最标准的 tag 排最前
+- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」（LLM/Ollama/在线端点，可一键关掉，关掉就不联网）
+- **数据**：3955 条中英词条 + 31171 条 Danbooru 正名/热度 + 26703 字拼音表，全部本地，**零第三方依赖**
+- 整句翻译（打中文失焦/停顿自动翻）仍然保留，两种用法可以同时开着
 
 ---
 
@@ -30,44 +32,56 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 装好后控制台会打印：
 ```
 [ZHTag] 词典就绪：3955 条中文词条 / Danbooru 索引 31171 条（来源：danbooru_index.tsv, ts_characters.txt, zh_extra.csv, zh_tags.csv）
-[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/status, /zhtag/reload, /zhtag/dict/download, /zhtag/dict/sources
+[ZHTag] 补全索引就绪：3955 条中文词条 / 拼音表 26703 字 / 英文索引 31171 条
+[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/complete, /zhtag/status, /zhtag/reload, /zhtag/dict/download, /zhtag/dict/sources
 ```
 
 ---
 
 ## 二、怎么用
 
-### 1）文本框直接输入中文（最省事）
-在 **CLIPTextEncode** 或 `ZHTag 中文→英文Tag` 节点的文本框里打中文，按设置里的时机触发
-（默认**失焦时**，点到别处就翻）：
+### 1）IDE 式补全（默认，最省事）
+在**任意文本输入框**（CLIPTextEncode、ZHTag 节点…）里打中文或拼音，候选框就会出现在光标下方：
+
+| 你打的 | 候选（按质量+热度排序） |
+| --- | --- |
+| `lanfa` | `blue hair`（蓝发） |
+| `smw` | `twintails`（双马尾） |
+| `changfa` / `zhangfa` | `long hair`（长发，多音字两种拼法都行） |
+| `蓝发` / `双马尾` / `一个女孩` | `blue hair` / `twintails` / `1girl` |
+| `long_h` | `long_hair`、`long_horns`… |
+| `红裙子`（词库里没有） | 先给本地相近词，随后追加「在线翻译 → red skirt」 |
+
+- `↑↓` 移动、`Enter`/`Tab` 采用、`Esc` 关闭；鼠标直接点也行
+- 采用后会把**正在打的拼音/中文替换成英文 tag**，并自动补好 `, ` 方便接着打
+- 也支持 **Ctrl+Space** 手动唤起；在括号权重里（`(蓝发:1.2)`）照样能补全
+- 候选框在**输入法拼字过程中不会弹**（composition 期间静默），选完词立刻弹
+
+### 2）整句翻译（原功能，仍然保留）
+打一整句中文，按设置的时机自动翻（默认**失焦时**）：
 
 | 你写的 | 翻出来的 |
 | --- | --- |
 | `一个蓝发漂亮姑娘` | `blue hair, beautiful, girl` |
 | `一个女孩站在樱花树下微笑，长发，黄昏` | `1girl, long hair, smile, standing, tree, cherry blossoms, sunset` |
 | `两个女孩手拉手跑过街道` | `2girls, holding hands, running, street` |
-| `白发少女抱着猫坐在椅子上闭着眼睛微笑` | `smile, closed eyes, white hair, holding cat, girl, sitting on chair` |
 
-三种触发方式（设置里可切换）：
 | 时机 | 说明 |
 | --- | --- |
 | `blur`（默认） | 点到别处 / 点运行 时翻译，不打断打字 |
 | `idle` | 停止输入 N 毫秒后自动翻译（默认 900ms） |
 | `off` | 关闭自动，只用右键菜单或快捷键 |
 
-手动触发：
-- 节点右键 →「**中文Tag→英文（本节点全部文本框）**」
-- 选中节点后按 **Ctrl+Alt+T**
-- 文本框内按 **Ctrl+Alt+T**（焦点在框里时）
+手动触发：节点右键 →「**中文Tag→英文（本节点全部文本框）**」，或选中节点按 **Ctrl+Alt+T**。
 
-### 2）节点连线
+### 3）节点连线
 `ZHTag 中文→英文Tag`：中文进，英文出 → 接给 CLIPTextEncode。
 它还有第二个输出 **未命中报告**，写着哪些词没查到（方便你补词典）。
 
 `ZHTag 中文CLIP编码`：clip + 中文 → 直接出 CONDITIONING，省一个节点。
 `ZHTag 词典查询`：查「双马尾」→ `twintails`，用来验证词库。
 
-### 3）设置项一览
+### 4）设置项一览
 
 **节点上的输入（顺序不能改，见下方「升级须知」）**
 
@@ -86,12 +100,15 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 | 设置 | 默认 | 说明 |
 | --- | --- | --- |
-| 自动把中文翻成英文Tag | 开 | 总开关 |
-| 自动触发时机 | `blur` | `blur` / `idle` / `off` |
+| **IDE 式补全（打中文/拼音就出候选）** | 开 | 补全总开关 |
+| **补全候选数量** | 10 | 候选行数 |
+| **词库没有时在候选里给出「在线翻译」** | 开 | 关掉后打字完全不联网 |
+| 失焦/停顿时整句翻译 | 开 | 原来的整句翻译开关 |
+| 整句翻译的触发时机 | `blur` | `blur` / `idle` / `off` |
 | 停顿多久后翻译（毫秒） | 900 | 选 `idle` 时生效 |
-| 词典没查到的词怎么办 | `drop` | `drop` 丢掉（推荐，出图更干净）/ `keep` 保留中文原文 / `fallback` 交给兜底翻译 |
+| 词典没查到的词怎么办 | `drop` | `drop` 丢掉（推荐）/ `keep` 保留中文原文 / `fallback` 交给兜底翻译 |
 | 输出用 Danbooru 正名并按热度排序 | 开 | 关掉就按你输入的顺序、用词典里的原始写法 |
-| 词库没有时走兜底翻译（LLM/在线） | 关 | 打开才会联网/调本地模型 |
+| 整句翻译时走兜底翻译（LLM/在线） | 关 | 打开才会联网/调本地模型 |
 | 翻译后弹出提示 | 开 | 每次自动翻译后弹个小提示 |
 
 > **升级须知（v1.1.1 修了一个我自己造成的坑）**：v1.1.0 我把「未命中处理」插在了输入中间，
@@ -183,14 +200,17 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
+| GET | `/zhtag/complete` | `?q=lanfa&limit=10` → `{results:[{en, zh, score, count, kind}]}`（中文/拼音/英文补全） |
 | POST | `/zhtag/translate` | `{text, mode, fallback, unknownMode, normalize, firstOnly}` → `{english, unknown, dropped, function, info}` |
 | GET | `/zhtag/status` | 词库条数、来源文件、兜底配置、社区词典下载状态 |
-| POST | `/zhtag/reload` | 重新加载 `data/` 与 `data/user/` 下所有词典文件 |
+| POST | `/zhtag/reload` | 重新加载 `data/` 与 `data/user/` 下所有词典文件（补全索引一起重建） |
 | POST | `/zhtag/dict/download` | `{ids?, defaultOnly?}` 下载/更新社区词典并热重载 |
 | GET | `/zhtag/dict/sources` | 可下载的词典源清单 |
 
 自测：
 ```bash
+curl "http://127.0.0.1:8188/zhtag/complete?q=lanfa"       # → blue hair（蓝发）
+curl "http://127.0.0.1:8188/zhtag/complete?q=smw"         # → twintails（双马尾）
 curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application/json" -d "{\"text\":\"一个蓝发漂亮姑娘站在樱花树下微笑\"}"
 # → {"ok":true,"english":"smile, standing, blue hair, tree, cherry blossoms, beautiful, girl", ...}
 ```
@@ -200,20 +220,22 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 七、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 69 项
-node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 28 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 87 项
+node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 58 项
 ```
 
-**后端 69 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 87 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、自定义词典加载、
-配置文件不被误当词典、节点层默认设置、**老工作流位置兼容**（复刻前端按位置映射 widgets_values，
-含你现有工作流那份真实取值）、性能（单次整句 0.5 ms）。
+配置文件/拼音表不被误当词典、节点层默认设置、**老工作流位置兼容**（复刻前端按位置映射
+widgets_values，含现有工作流那份真实取值）、
+**补全引擎**（全拼/首字母/多音字/中文精确/英文前缀/排序/limit/耗时）、性能（整句 0.5 ms、补全 2 ms）。
 
-**前端 28 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 真实的 `zhtag.js`，验证
-注册与 7 项设置（含"settings 里不能有 undefined"这类新版前端的坑）、失焦自动翻译并写回、
-不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、`Ctrl+Alt+T` 快捷键、
-设置变化会同步进请求体。
+**前端 58 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
+注册与 10 项设置、失焦自动翻译并写回、不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、
+`Ctrl+Alt+T`、设置变化同步进请求体，以及**补全交互**：片段识别（逗号/权重/光标位置）、
+触发条件（中文 1 字、拼音 2 字母起）、候选框渲染（tag+来源+热度）、`↑↓` 选择、`Enter` 替换并补分隔符、
+`Esc` 关闭、鼠标点选、中文输入、本地没有时追加「在线翻译」、关掉联网后零请求。
 
 ---
 
@@ -223,6 +245,7 @@ Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败�
 - `data/zh_extra.csv` 是本插件自己补充的常用词（自然语言动作/姿态/风格，MIT）。
 - `data/danbooru_index.tsv` 由 **[a1111-sd-webui-tagcomplete](https://github.com/DominikDoom/a1111-sd-webui-tagcomplete)** 的 `tags/danbooru.csv`（MIT）派生，只保留 general/meta 标签的正名、热度与别名。
 - `data/ts_characters.txt` 来自 **[OpenCC](https://github.com/BYVoid/OpenCC)** 的 `TSCharacters.txt`（Apache-2.0），用于繁体输入归一为简体。
+- `data/pinyin_chars.tsv` 由 **[pypinyin](https://github.com/mozillazg/python-pinyin)**（MIT）在本机构建期生成，**运行时零依赖**；`_build/build_pinyin_table.py` 是生成脚本。
 - 社区词典（GPL-3.0 等）仅由 `py/sources.py` 在你本机运行时下载到 `data/user/`，不随本插件分发。
 - 本插件代码：MIT。
 
@@ -239,3 +262,8 @@ Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败�
    所以 `import { app } from ".../scripts/app.js"` 仍然可用。
 4. 后端模块要能在没有 ComfyUI 的环境下导入（`routes.py` 里拿不到 `server` 就跳过注册），
    这样单测才能脱离 ComfyUI 跑。
+5. **拼音要「多读音变体」**：`长` = zhǎng/cháng，只取第一个读音的话 `changfa` 查不到长发；
+   `py/complete.py` 对每个字做读音笛卡尔积（上限 8 个变体），所以 `changfa` 和 `zhangfa` 都能命中。
+6. **补全弹层不能抢焦点**：用 `mousedown` + `preventDefault`，否则点候选框会先 blur 掉 textarea；
+   光标定位用「镜像 div + 标记 span」量坐标（textarea 里唯一可靠的办法），量不准就退化成贴在框下方。
+7. **输入法**：`compositionstart` 时先关候选框，`compositionend` 再弹，否则选词过程中会一直闪。

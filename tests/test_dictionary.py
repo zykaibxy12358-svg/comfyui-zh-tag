@@ -252,6 +252,52 @@ def main():
        and unknown_mode_of('丢弃未命中（推荐，只写进报告）') == 'drop',
        '新旧两版下拉文字都能识别（老工作流里存的旧文案也认）')
 
+    print('\n[12] IDE 式补全（中文 / 拼音 / 英文 → tag 候选）')
+    from py.complete import get_completer  # noqa: E402
+    c = get_completer()
+    ok(len(c.entries) > 3000, '补全索引条目', f'{len(c.entries)} 条')
+    ok(len(c.pinyin) > 20000, '拼音表已加载', f'{len(c.pinyin)} 字')
+    ok('pinyin_chars.tsv' not in d.sources, '拼音表不会被当成中英词典加载',
+       ', '.join(d.sources))
+
+    def first(q, limit=5):
+        r = c.complete(q, limit=limit)
+        return r[0]['en'] if r else ''
+
+    ok(first('lanfa') == 'blue hair', '全拼 lanfa → blue hair', first('lanfa'))
+    ok(first('smw') == 'twintails', '首字母 smw → twintails', first('smw'))
+    ok(first('shuangmawei') == 'twintails', '全拼 shuangmawei → twintails', first('shuangmawei'))
+    ok(first('蓝发') == 'blue hair' and c.complete('蓝发')[0]['score'] == 100,
+       '中文精确命中排第一', first('蓝发'))
+    ok(first('一个女孩') == '1girl', '中文短语 一个女孩 → 1girl', first('一个女孩'))
+    ok(first('yigenvhai') == '1girl', '全拼 yigenvhai → 1girl', first('yigenvhai'))
+    # 多音字：长 = cháng/zhǎng，两种拼法都要能查到长发
+    ok('long hair' in [r['en'] for r in c.complete('changfa')], '多音字 changfa → long hair',
+       ' / '.join(r['en'] for r in c.complete('changfa')[:3]))
+    ok('long hair' in [r['en'] for r in c.complete('zhangfa')], '多音字 zhangfa → long hair',
+       ' / '.join(r['en'] for r in c.complete('zhangfa')[:3]))
+    ok('long_hair' in [r['en'] for r in c.complete('long_h')], '英文前缀 long_h → long_hair',
+       ' / '.join(r['en'] for r in c.complete('long_h')[:3]))
+    ok(c.complete('') == [] and c.complete('   ') == [], '空查询返回空')
+    ok(len(c.complete('lf', limit=2)) <= 2, 'limit 生效')
+    ok(c.complete('qianziwoya') == [], '查不到的词返回空（交给在线翻译）')
+    res_hong = c.complete('红色', limit=8)
+    ok(all(res_hong[i]['score'] >= res_hong[i + 1]['score'] for i in range(len(res_hong) - 1)),
+       '结果按匹配质量从高到低排', ' / '.join(f"{r['en']}({r['score']})" for r in res_hong[:4]))
+    same_score = {}
+    for r in res_hong:
+        same_score.setdefault(r['score'], []).append(r['count'])
+    ok(all(v == sorted(v, reverse=True) for v in same_score.values()),
+       '同分数内按 Danbooru 热度排序',
+       ' / '.join(f"{r['en']}({r['score']},{r['count']})" for r in res_hong[:5]))
+
+    import time as _t
+    t0 = _t.time()
+    for q in ['lanfa', 'smw', '蓝发', 'changfa', 'long_h', 'yigenvhai', 'weixiao', 'hongsefa'] * 5:
+        c.complete(q)
+    avg = (_t.time() - t0) / 40 * 1000
+    ok(avg < 30, '单次补全查询耗时 < 30ms', f'{avg:.1f} ms/次')
+
     print(f'\n结果：{PASS} 通过 / {FAIL} 失败')
     return 1 if FAIL else 0
 

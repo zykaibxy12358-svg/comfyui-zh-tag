@@ -110,6 +110,8 @@ class TagDictionary:
                     continue                      # 说明文件不要当成词典来源
                 if low in ('config.json', 'cache.json', 'settings.json'):
                     continue                      # 兜底翻译的配置/缓存，不是词典
+                if 'pinyin' in low:
+                    continue                      # 拼音表是「字→拼音」，由补全引擎单独读取，别当词典
                 if 'danbooru_index' in low and low.endswith(('.tsv', '.txt')):
                     self._load_danbooru_index(path)
                 elif low.startswith('ts_') or 'tscharacters' in low or 'ts_characters' in low:
