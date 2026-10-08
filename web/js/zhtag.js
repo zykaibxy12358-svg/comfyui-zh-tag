@@ -26,6 +26,7 @@ const DEFAULTS = {
     complete: true, // IDE 式补全开关
     completeOnline: true, // 词库里没有时联网翻译
     completeLimit: 10,
+    onlineProvider: "google", // 在线翻译服务商：google | microsoft | llm | keep
 };
 
 function setting(id, name, type, defaultValue, extra = {}) {
@@ -82,12 +83,11 @@ const FRAG_RE = /[^,，、;；:|：\n\r\t()（）\[\]{}<>]+$/;   // 光标前的
 let POPUP = null;                 // 单例弹层元素
 let STATE = null;                 // {el, widget, node, frag, rows, index, seq}
 const onlineCache = new Map();    // 片段 → 在线翻译结果
-let TRANSLATOR = null;            // 后端兜底翻译配置（keep/llm/google），用于判断「在线翻译」能不能用
+// 在线翻译状态（后端为准）：{mode, providers:[{id,desc}], status:{google:{ok,at,msg}, microsoft:{...}}}
+let ONLINE = { mode: null, providers: [{ id: "google", desc: "谷歌在线翻译" }, { id: "microsoft", desc: "微软在线翻译" }], status: {} };
 
-const HINT_UNCONFIGURED = "在线翻译未配置 —— 点这里看怎么开";
-const HINT_TEXT = "编辑 custom_nodes/comfyui-zh-tag/data/user/config.json，把 fallback 改成 "
-    + "\"llm\"（本地 Ollama/LM Studio，填 base_url+model）或 \"google\"（免 key 在线端点），"
-    + "改完重启 ComfyUI 或刷新页面即可。";
+const PROVIDER_LABEL = { google: "谷歌", microsoft: "微软", llm: "LLM", keep: "关闭" };
+const HINT_UNCONFIGURED = "在线翻译没开 —— 点右上角「谷歌 / 微软」开启";
 
 const fmtCount = (n) => (!n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M"
     : n >= 1e3 ? Math.round(n / 1e3) + "k" : String(n));
@@ -125,8 +125,17 @@ function ensurePopup() {
 .zht-pop .zht-en{font-weight:600;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis}
 .zht-pop .zht-src{opacity:.65;font-size:11px;flex:0 0 auto;max-width:190px;overflow:hidden;text-overflow:ellipsis}
 .zht-pop .zht-cnt{opacity:.5;font-size:11px;flex:0 0 auto}
-.zht-pop .zht-head{padding:2px 10px 3px;font-size:11px;opacity:.5;border-bottom:1px solid #33333c}
+.zht-pop .zht-head{padding:2px 10px 3px;font-size:11px;opacity:.62;border-bottom:1px solid #33333c;
+  display:flex;justify-content:space-between;align-items:center;gap:10px}
+.zht-pop .zht-sw{display:flex;align-items:center;gap:4px;opacity:1}
+.zht-pop .zht-sw-label{opacity:.75}
+.zht-pop .zht-pill{padding:0 6px;border:1px solid #4a4a56;border-radius:9px;cursor:pointer;
+  font-weight:600;font-size:11px;line-height:15px;background:#26262e;color:#c9c9d4}
+.zht-pop .zht-pill:hover{border-color:#6f9fe0;color:#fff}
+.zht-pop .zht-pill.on{background:#2f6fd0;border-color:#2f6fd0;color:#fff}
 .zht-pop .zht-online{color:#8fd3ff}
+.zht-pop .zht-dim{opacity:.6}
+.zht-pop .zht-warn{color:#ffd479}
 `;
     try { document.head?.appendChild(style); } catch (e) { /* ignore */ }
     POPUP = document.createElement("div");
@@ -192,11 +201,17 @@ function renderPopup() {
     POPUP.textContent = "";
     const head = document.createElement("div");
     head.className = "zht-head";
-    head.textContent = `ZHTag 补全 · ↑↓ 选择 · Enter 采用 · Esc 关闭`;
+    const tips = document.createElement("span");
+    tips.textContent = "↑↓ 选择 · Enter 采用 · Esc 关闭";
+    head.appendChild(tips);
+    head.appendChild(buildSwitch());
     POPUP.appendChild(head);
     rows.forEach((r, i) => {
         const row = document.createElement("div");
-        row.className = "zht-row" + (i === STATE.index ? " on" : "") + (r.kind === "online" ? " zht-online" : "");
+        row.className = "zht-row" + (i === STATE.index ? " on" : "")
+            + (r.kind === "online" ? " zht-online" : "")
+            + (r.kind === "loading" ? " zht-dim" : "")
+            + (r.kind === "hint" || r.kind === "error" ? " zht-warn" : "");
         row.dataset.i = String(i);
         const en = document.createElement("span");
         en.className = "zht-en";
@@ -219,6 +234,34 @@ function renderPopup() {
     });
     placePopup();
     POPUP.style.display = "block";
+}
+
+/** 右上角的「在线：谷歌 / 微软」切换按钮（带连通状态灯） */
+function buildSwitch() {
+    const wrap = document.createElement("span");
+    wrap.className = "zht-sw";
+    const label = document.createElement("span");
+    label.className = "zht-sw-label";
+    label.textContent = "在线：";
+    wrap.appendChild(label);
+    (ONLINE.providers || []).forEach((p) => {
+        const b = document.createElement("b");
+        b.className = "zht-pill" + (ONLINE.mode === p.id ? " on" : "");
+        b.dataset.mode = p.id;
+        const st = ONLINE.status?.[p.id];
+        const dot = st ? (st.ok ? "●" : "✗") : "";
+        b.textContent = `${PROVIDER_LABEL[p.id] || p.id}${dot}`;
+        b.title = st
+            ? (st.ok ? "上次连接正常" : `上次失败：${st.msg || "无返回"}`)
+            : `点一下切到${PROVIDER_LABEL[p.id] || p.id}在线翻译`;
+        b.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOnlineMode(p.id);
+        });
+        wrap.appendChild(b);
+    });
+    return wrap;
 }
 
 function renderSelection() {
@@ -271,20 +314,75 @@ async function fetchOnline(q) {
     return english;
 }
 
-/** 后端兜底翻译配好了没有（keep = 没配，不会真的翻译） */
+/** 后端兜底翻译配好了没有（keep = 没开在线翻译） */
 function translatorReady() {
-    const mode = String(TRANSLATOR?.fallback || "").toLowerCase();
-    return mode === "llm" || mode === "google";
+    return ONLINE.mode === "google" || ONLINE.mode === "microsoft" || ONLINE.mode === "llm";
 }
 
-async function refreshTranslatorStatus() {
+async function refreshOnlineStatus({ test = "" } = {}) {
     try {
-        const r = await fetch("/zhtag/status");
-        if (!r.ok) return TRANSLATOR;
+        const url = "/zhtag/online" + (test ? `?test=${encodeURIComponent(test)}` : "");
+        const r = await fetch(url);
+        if (!r.ok) return ONLINE;
         const d = await r.json();
-        TRANSLATOR = d?.translator || null;
-    } catch (e) { /* 拿不到就当没配 */ }
-    return TRANSLATOR;
+        if (d?.mode) {
+            ONLINE = {
+                mode: d.mode,
+                providers: d.providers || ONLINE.providers,
+                status: d.status || {},
+            };
+        }
+    } catch (e) { /* 拿不到就保持原样 */ }
+    return ONLINE;
+}
+
+/** 点「谷歌 / 微软」按钮：先立刻切过去（不等网络），连通性检查放到后台 */
+async function setOnlineMode(mode, { quiet = false } = {}) {
+    const label = PROVIDER_LABEL[mode] || mode;
+    ONLINE.mode = mode;                                     // 乐观更新：按钮立刻高亮
+    refreshPopupIfOpen();
+    try { app.ui?.settings?.setSettingValue?.(`${PLUGIN}.onlineProvider`, mode); } catch (e) { /* ignore */ }
+    if (!quiet) toast("ZHTag", `在线翻译 → ${label}（正在后台测连通…）`, true);
+    // 1) 立刻把配置写回后端（不测连通，几十毫秒就回）
+    try {
+        const r = await fetch("/zhtag/online", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode }),
+        });
+        const d = await r.json();
+        if (d?.mode) ONLINE = { mode: d.mode, providers: d.providers || ONLINE.providers, status: d.status || ONLINE.status };
+    } catch (e) {
+        toast("ZHTag", "切换失败：" + e, true);
+        return ONLINE.mode;
+    }
+    // 当前片段重新查一次（把上一轮的在线结果丢掉）
+    if (STATE?.el && STATE?.widget && STATE?.node) {
+        onlineCache.clear();
+        STATE.rows = STATE.rows.filter((r) => !["online", "hint", "error", "loading"].includes(r.kind));
+        openCompletion(STATE.node, STATE.widget, STATE.el);
+    }
+    // 2) 后台测一次连通（真发一条翻译），好了再更新状态灯 + 提示
+    if (mode === "google" || mode === "microsoft") {
+        const seq = ONLINE.mode;
+        try {
+            const r = await fetch(`/zhtag/online?test=${encodeURIComponent(mode)}`);
+            const d = await r.json();
+            if (d?.status && ONLINE.mode === seq) {
+                ONLINE = { ...ONLINE, status: d.status };
+                refreshPopupIfOpen();
+                if (!quiet) toast("ZHTag", d.status?.[mode]?.ok
+                    ? `在线翻译：${label} · 连通正常`
+                    : `在线翻译：${label} · 连不上（${d.status?.[mode]?.msg || "无返回"}），可以换成另一个`, true);
+            }
+        } catch (e) { /* 测不通就算了，用的时候自然会失败 */ }
+    }
+    return ONLINE.mode;
+}
+
+/** 候选框开着就重画一下（切换按钮和在线翻译行需要立刻反映新状态） */
+function refreshPopupIfOpen() {
+    if (POPUP && STATE && POPUP.style.display !== "none") renderPopup();
 }
 
 /** 弹候选框（会异步补上「在线翻译」那一行） */
@@ -312,16 +410,17 @@ async function openCompletion(node, widget, el) {
         closePopup();                                   // 没候选也不联网 → 直接收摊，别留状态
         return;
     }
-    if (STATE.rows.length) {
-        renderPopup();
-    } else if (POPUP) {
-        POPUP.style.display = "none";
-        POPUP.textContent = "";                         // 清掉上一轮的候选行，避免残留
+    if (!STATE.rows.length) {
+        // 只有在线翻译这一条路：先把框显示出来（右上角的「谷歌/微软」按钮要能点）
+        STATE.rows = [{ en: `正在用${PROVIDER_LABEL[ONLINE.mode] || "在线"}翻译…`, zh: "",
+                        score: 30, count: 0, kind: "loading" }];
     }
+    renderPopup();
     if (!willTryOnline) return;
-    if (!translatorReady()) {                           // 后端没配在线翻译 → 给一行提示，别静默失败
-        if (TRANSLATOR === null) refreshTranslatorStatus();   // 后台刷新一次，配好后下次就准了
-        STATE.rows = STATE.rows.concat([{ en: HINT_UNCONFIGURED, zh: "", score: 30, count: 0, kind: "hint" }]);
+    if (!translatorReady()) {                           // 没开在线翻译 → 给一行提示（点右上角按钮就能开）
+        refreshOnlineStatus();
+        STATE.rows = STATE.rows.filter((r) => r.kind !== "loading")
+            .concat([{ en: HINT_UNCONFIGURED, zh: "", score: 30, count: 0, kind: "hint" }]);
         renderPopup();
         return;
     }
@@ -333,9 +432,21 @@ async function openCompletion(node, widget, el) {
         } catch (e) {
             log("在线翻译失败", e);
         }
-        if (!english || !STATE || STATE.seq !== seq || STATE.q !== q) return;
-        if (english.toLowerCase() === q.toLowerCase()) return;
-        STATE.rows = STATE.rows.concat([{ en: english, zh: "", score: 30, count: 0, kind: "online" }]);
+        if (!STATE || STATE.seq !== seq || STATE.q !== q) return;
+        const drop = (kind) => STATE.rows.filter((r) => r.kind !== kind);
+        const usable = english && english.toLowerCase() !== q.toLowerCase();
+        if (usable) {
+            STATE.rows = drop("loading").concat([{ en: english, zh: "", score: 30, count: 0, kind: "online" }]);
+        } else {
+            const label = PROVIDER_LABEL[ONLINE.mode] || "在线";
+            const st = ONLINE.status?.[ONLINE.mode];
+            STATE.rows = drop("loading").concat([{
+                en: `${label}翻译${english ? "没得到结果" : "连不上"}${st?.msg ? "（" + String(st.msg).slice(0, 40) + "）" : ""}`
+                    + " —— 可点右上角换一个",
+                zh: "", score: 20, count: 0, kind: "error",
+            }]);
+            refreshOnlineStatus();                      // 把状态灯刷新一下
+        }
         renderPopup();
     }, ONLINE_DEBOUNCE);
 }
@@ -345,14 +456,17 @@ function commitRow(i) {
     if (!st) return;
     const row = st.rows[i];
     if (!row) return;
-    if (row.kind === "hint") {                          // 提示行：不动文本框，只告诉用户怎么开
-        toast("ZHTag 在线翻译", HINT_TEXT, true);
-        refreshTranslatorStatus();
-        closePopup();
+    if (row.kind === "loading") return;                 // 还在翻译，别把占位文字写进文本框
+    if (row.kind === "error") {                         // 失败提示：只提示，不动文本框
+        toast("ZHTag 在线翻译", row.en, true);
         return;
     }
-    const el = st.el;
-    const value = String(el.value ?? "");
+    if (row.kind === "hint") {                          // 没开在线翻译：提示 + 顺手开一下
+        toast("ZHTag 在线翻译", HINT_UNCONFIGURED + "（也可以继续只用本地词库）", true);
+        refreshOnlineStatus();
+        return;
+    }
+    const el = st.el;    const value = String(el.value ?? "");
     const before = value.slice(0, st.frag.start);
     const after = value.slice(st.frag.end);
     let insert = String(row.en || "").trim();
@@ -515,6 +629,13 @@ app.registerExtension({
         setting(`${PLUGIN}.complete`, "ZHTag：IDE 式补全（打中文/拼音就出候选）", "boolean", DEFAULTS.complete),
         setting(`${PLUGIN}.completeLimit`, "ZHTag：补全候选数量", "number", DEFAULTS.completeLimit),
         setting(`${PLUGIN}.completeOnline`, "ZHTag：词库没有时在候选里给出「在线翻译」", "boolean", DEFAULTS.completeOnline),
+        setting(`${PLUGIN}.onlineProvider`, "ZHTag：在线翻译服务商（弹层右上角也能直接切）", "combo", DEFAULTS.onlineProvider,
+            {
+                options: ["google", "microsoft", "llm", "keep"],
+                onChange: (v) => {
+                    if (v !== ONLINE.mode) setOnlineMode(String(v || "google"), { quiet: true });
+                },
+            }),
         setting(`${PLUGIN}.auto`, "ZHTag：失焦/停顿时整句翻译", "boolean", DEFAULTS.auto),
         setting(`${PLUGIN}.trigger`, "ZHTag：整句翻译的触发时机", "combo", DEFAULTS.trigger,
             { options: ["blur", "idle", "off"] }),
@@ -529,18 +650,19 @@ app.registerExtension({
     async setup() {
         log("已加载：IDE 式补全（中文/拼音→英文 tag）+ 失焦整句翻译 + 右键菜单 + Ctrl+Alt+T");
         ensurePopup();
-        // 词库/兜底翻译状态自检（控制台可见；顺便判断「在线翻译」能不能用）
+        // 词库 + 在线翻译状态自检（控制台可见；右上角按钮的状态灯也用它）
         try {
             const r = await fetch("/zhtag/status");
             if (r.ok) {
                 const d = await r.json();
-                TRANSLATOR = d?.translator || null;
-                log(`词库 ${d.entries} 条，来源 ${(d.sources || []).join(", ")}`,
-                    `；在线翻译：${translatorReady() ? d.translator.fallback : "未配置（config.json 里改 fallback）"}`);
+                log(`词库 ${d.entries} 条，来源 ${(d.sources || []).join(", ")}`);
             }
         } catch (e) {
             log("拿不到词库状态（后端接口未就绪？）", e);
         }
+        await refreshOnlineStatus();
+        try { app.ui?.settings?.setSettingValue?.(`${PLUGIN}.onlineProvider`, ONLINE.mode); } catch (e) { /* ignore */ }
+        log(`在线翻译：${PROVIDER_LABEL[ONLINE.mode] || ONLINE.mode}（弹层右上角可切换）`);
     },
 
     nodeCreated(node) {
@@ -575,6 +697,12 @@ app.registerExtension({
                             const d = await r.json();
                             toast("ZHTag 词库", `${d.entries} 条中文词条；来源：${(d.sources || []).join("、") || "无"}`);
                         } catch (e) { toast("ZHTag", "读取失败：" + e); }
+                    },
+                });
+                options.push({
+                    content: `ZHTag：在线翻译用「${ONLINE.mode === "google" ? "微软" : "谷歌"}」`,
+                    callback: async () => {
+                        await setOnlineMode(ONLINE.mode === "google" ? "microsoft" : "google");
                     },
                 });
                 options.push({
@@ -649,8 +777,10 @@ window.ZHTag = {
     commitRow,
     closePopup,
     handleCompletionKey,
-    refreshTranslatorStatus,
+    refreshOnlineStatus,
+    setOnlineMode,
     translatorReady,
+    getOnline: () => ONLINE,
     getPopupState: () => STATE,
     getPopupEl: () => POPUP,
 };

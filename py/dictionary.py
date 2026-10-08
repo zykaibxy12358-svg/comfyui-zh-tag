@@ -458,6 +458,10 @@ class TagDictionary:
 
         out_parts: List[str] = []
 
+        # 只有「整句就是一个字」时才允许把这个单字送去在线翻译；
+        # 否则「红裙子」被切成 红裙 + 子 时，孤零零的「子」会被翻成 child 之类的噪音。
+        single_char_input = len(_norm(text)) <= 1
+
         def emit(tags: Iterable[str]) -> None:
             for t in tags:
                 if t:
@@ -494,7 +498,8 @@ class TagDictionary:
                     emit(hit[:1] if first_only else hit)
                     report['matched'] += 1
                     continue
-                if unknown_mode == 'fallback' and fallback:
+                allow_online = len(frag) >= 2 or single_char_input
+                if unknown_mode == 'fallback' and fallback and allow_online:
                     en = fallback(frag)
                     if en:
                         emit([en])
@@ -507,6 +512,8 @@ class TagDictionary:
                 else:
                     report['dropped'] += 1
                     report['unknown'].append(frag)
+                    if not allow_online:
+                        report['skipped_online'] = report.get('skipped_online', 0) + 1
             if weight and out_parts:
                 out_parts[-1] = f'{prefix}{out_parts[-1]}{weight}{suffix}'
 

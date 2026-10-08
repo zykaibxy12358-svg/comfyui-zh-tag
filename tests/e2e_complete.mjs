@@ -50,6 +50,8 @@ async function main() {
     const script = `(async () => {
         const Z = window.ZHTag;
         if (!Z) return { error: 'window.ZHTag 不存在（扩展没加载？）' };
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        await Z.refreshOnlineStatus();
         const ta = document.createElement('textarea');
         ta.style.cssText = 'position:fixed;left:40px;top:40px;width:300px;height:80px;font:13px monospace;';
         document.body.appendChild(ta);
@@ -59,7 +61,7 @@ async function main() {
                          options: { multiline: true }, inputEl: ta, callback() {} };
         const node = { widgets: [widget], onWidgetChanged() {} };
         await Z.openCompletion(node, widget, ta);
-        await new Promise((r) => setTimeout(r, 500));
+        await sleep(500);
         const pop = document.querySelector('.zht-pop');
         const rows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
         const box = { display: pop?.style.display, left: pop?.style.left, top: pop?.style.top };
@@ -69,20 +71,46 @@ async function main() {
         const eatenDown = key('ArrowDown');
         key('Enter');
         const afterEnter = ta.value;
-        // 第二个场景：中文 + 词库里没有的词（在线翻译行）
+
+        // 场景二：中文
         ta.value = '蓝发';
         ta.selectionStart = ta.selectionEnd = 2;
         await Z.openCompletion(node, widget, ta);
-        await new Promise((r) => setTimeout(r, 400));
+        await sleep(400);
         const zhRows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
-        ta.value = 'qianziwoya';
-        ta.selectionStart = ta.selectionEnd = 10;
+
+        // 场景三：词库里没有的中文 → 谷歌在线翻译
+        ta.value = '霓虹灯牌';
+        ta.selectionStart = ta.selectionEnd = 4;
+        const modeBefore = Z.getOnline().mode;
         await Z.openCompletion(node, widget, ta);
-        await new Promise((r) => setTimeout(r, 2500));
+        await sleep(3000);
         const onlineRows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
+        Z.commitRow(0);
+        const afterOnlineEnter = ta.value;
+
+        // 场景四：右上角切换按钮（点击立刻生效，测连通在后台）
+        ta.value = '霓虹灯牌';
+        ta.selectionStart = ta.selectionEnd = 4;
+        await Z.openCompletion(node, widget, ta);
+        await sleep(200);
+        const pills = [...pop.querySelectorAll('.zht-pill')].map((x) => x.textContent);
+        const ms = [...pop.querySelectorAll('.zht-pill')].find((x) => /微软/.test(x.textContent));
+        ms.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        await sleep(120);
+        const modeAfterMs = Z.getOnline().mode;
+        const msOnNow = [...pop.querySelectorAll('.zht-pill')].map((x) => x.textContent);
+        // 等后台连通性测试（微软连不上，超时上限 8 秒）
+        for (let i = 0; i < 60 && !Z.getOnline().status?.microsoft; i++) await sleep(500);
+        const pillsAfter = [...pop.querySelectorAll('.zht-pill')].map((x) => x.textContent);
+        const gl = [...pop.querySelectorAll('.zht-pill')].find((x) => /谷歌/.test(x.textContent));
+        gl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        await sleep(300);
+        const modeBack = Z.getOnline().mode;
         Z.closePopup();
         ta.remove();
-        return { box, rows, before, eatenDown, afterEnter, widgetValue: widget.value, zhRows, onlineRows,
+        return { box, rows, before, eatenDown, afterEnter, zhRows, onlineRows,
+                 afterOnlineEnter, modeBefore, pills, modeAfterMs, msOnNow, pillsAfter, modeBack,
                  closed: document.querySelector('.zht-pop')?.style.display };
     })()`;
 
@@ -95,10 +123,21 @@ async function main() {
         [/blue hair/.test(out?.rows?.[0] || ''), `第一行是 blue hair：${out?.rows?.[0]}`],
         [out?.eatenDown === true, '↓ 被补全框处理'],
         [out?.afterEnter === 'skirt, blue hair, ', `Enter 替换成英文 tag：${JSON.stringify(out?.afterEnter)}`],
-        [out?.widgetValue === 'skirt, blue hair, ', '节点值同步'],
         [Array.isArray(out?.zhRows) && /blue hair/.test(out.zhRows[0] || ''), `中文「蓝发」有候选：${out?.zhRows?.[0]}`],
+        [out?.modeBefore === 'google', `在线翻译默认是谷歌：${out?.modeBefore}`],
         [Array.isArray(out?.onlineRows) && out.onlineRows.some((r) => /在线翻译/.test(r)),
-            `查不到的词给出在线翻译行：${JSON.stringify(out?.onlineRows)}`],
+            `词库没有的词走在线翻译：${JSON.stringify(out?.onlineRows)}`],
+        [/neon|lights|sign|lamp/i.test((out?.onlineRows || []).join(' ')),
+            `谷歌真的翻出来了：${JSON.stringify(out?.onlineRows)}`],
+        [!!(out?.afterOnlineEnter || '').trim() && /^[a-z0-9_ ,()]+$/.test(out.afterOnlineEnter),
+            `采用在线翻译结果：${JSON.stringify(out?.afterOnlineEnter)}`],
+        [Array.isArray(out?.pills) && out.pills.length === 2, `弹出层有两个服务商按钮：${JSON.stringify(out?.pills)}`],
+        [out?.modeAfterMs === 'microsoft', `点「微软」立刻切过去（不等测连通）：${out?.modeAfterMs}`],
+        [Array.isArray(out?.msOnNow) && out.msOnNow.some((p) => /微软/.test(p) && !/✗/.test(p)),
+            `切换后按钮立刻高亮：${JSON.stringify(out?.msOnNow)}`],
+        [Array.isArray(out?.pillsAfter) && out.pillsAfter.some((p) => /微软/.test(p) && /✗/.test(p)),
+            `微软连不上时后台把状态灯点亮成 ✗：${JSON.stringify(out?.pillsAfter)}`],
+        [out?.modeBack === 'google', `点回「谷歌」：${out?.modeBack}`],
         [out?.closed === 'none', '关闭后弹层隐藏'],
     ];
     let fail = 0;

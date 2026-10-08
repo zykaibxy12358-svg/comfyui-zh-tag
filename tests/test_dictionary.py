@@ -113,6 +113,19 @@ def main():
     ok(d.translate(src, fallback=fake_fb)[0].find('mystery tag') < 0,
        '默认 drop 模式下不会偷偷调用翻译器')
 
+    # 切分残留的单字不要送去在线翻译（否则「红裙子」→ 红裙 + 子 → child 这种噪音）
+    single_calls = []
+
+    def spy(word):
+        single_calls.append(word)
+        return 'X'
+
+    out_seg, rep_seg = d.translate('红裙子', unknown_mode='fallback', fallback=spy)
+    ok('子' not in single_calls, '切分残留的单字不送在线翻译', f'送了：{single_calls}')
+    ok('child' not in out_seg.lower() or 'child' not in out_seg, '不会冒出 child 这种噪音', out_seg)
+    ok(d.translate('伞', unknown_mode='fallback', fallback=spy)[0].lower() == 'x',
+       '整句就一个字时仍然允许在线翻译', repr(d.translate('伞', unknown_mode='fallback', fallback=spy)[0]))
+
     print('\n[6.5] Danbooru 规范化与热度排序')
     ok(d.canonical_en('longhair') == 'long_hair', '别名归一：longhair → long_hair', str(d.canonical_en('longhair')))
     ok(d.normalize_en('long_hair') == 'long hair', 'normalize 默认空格风格', d.normalize_en('long_hair'))
@@ -127,18 +140,30 @@ def main():
     raw, _ = d.translate('红色长发', normalize=False)
     ok('red' in raw, 'normalize=False 也能出结果', raw)
 
-    print('\n[7] 兜底翻译（不联网：用假配置验证链路）')
+    print('\n[7] 兜底翻译与在线服务商切换（不联网：用假配置验证链路）')
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
         fb = FallbackTranslator(tmp)
-        ok(fb.config['fallback'] == 'keep', '默认兜底策略=保留原文', fb.config['fallback'])
+        ok(fb.mode() == 'google', '默认在线翻译 = 谷歌', fb.mode())
+        ok([p['id'] for p in fb.state()['providers']] == ['google', 'microsoft'],
+           '可选服务商是谷歌与微软', str([p['id'] for p in fb.state()['providers']]))
+        fb.set_mode('keep')
+        ok(fb.mode() == 'keep', '切到 keep', fb.mode())
         ok(fb('完全未知词XYZ') is None, 'keep 模式下不翻译，交给上层保留原文')
         fb.cache['测试词'] = 'test tag'
         ok(fb('测试词') == 'test tag', '缓存命中直接返回')
-        fb.config['fallback'] = 'llm'
-        fb.config['base_url'] = 'http://127.0.0.1:1/v1'      # 肯定连不上
-        ok(fb('另一个未知词') is None, 'LLM 连不上时安全失败（不抛异常）')
+        ok(fb.set_mode('microsoft') == 'microsoft' and fb.mode() == 'microsoft',
+           '切到微软在线翻译', fb.mode())
+        fb2 = FallbackTranslator(tmp)
+        ok(fb2.mode() == 'microsoft', '切换会写回 config.json（重载后仍是微软）', fb2.mode())
+        ok(fb2.set_mode('乱写的') == 'microsoft', '非法值被忽略，不会把配置写坏', fb2.mode())
+        fb2.config['fallback'] = 'llm'
+        fb2.config['base_url'] = 'http://127.0.0.1:1/v1'      # 肯定连不上
+        ok(fb2('另一个未知词') is None, 'LLM 连不上时安全失败（不抛异常）')
         ok(os.path.isfile(os.path.join(tmp, 'config.json')), 'config.json 已生成，方便用户改')
+        st = fb2.test('microsoft')                            # 真发一次请求（这里连不上）
+        ok(st['provider'] == 'microsoft' and 'ok' in st and 'status' in st,
+           '连通性自检接口有返回', f"ok={st['ok']} msg={st['message'][:30]}")
 
     print('\n[8] 自定义词典目录（用户丢进来的文件要能被加载）')
     import tempfile

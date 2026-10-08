@@ -75,6 +75,29 @@ def register_routes() -> bool:
         results = get_completer().complete(q, limit=limit)
         return web.json_response({'ok': True, 'q': q, 'results': results})
 
+    @routes.get('/zhtag/online')
+    async def zhtag_online_get(request):
+        """当前在线翻译服务商（谷歌/微软）+ 最近一次连通状态。"""
+        tr = translator()
+        if request.query.get('test'):
+            tr.test(request.query.get('test'))
+        return web.json_response({'ok': True, **tr.state()})
+
+    @routes.post('/zhtag/online')
+    async def zhtag_online_set(request):
+        """切换在线翻译服务商：{mode: 'google'|'microsoft'|'llm'|'keep', test?: bool}"""
+        try:
+            data = await request.json()
+        except Exception:
+            data = {}
+        tr = translator()
+        mode = tr.set_mode(data.get('mode') or '')
+        out = {'ok': True, **tr.state()}
+        if data.get('test'):
+            out['result'] = tr.test(mode if mode in ('google', 'microsoft') else 'google')
+            out.update(tr.state())
+        return web.json_response(out)
+
     @routes.get('/zhtag/status')
     async def zhtag_status(request):
         dic = get_dictionary()
@@ -117,6 +140,6 @@ def register_routes() -> bool:
     async def zhtag_dict_sources(request):
         return web.json_response({'ok': True, 'sources': community.list_sources()})
 
-    print('[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/complete, /zhtag/status, '
+    print('[ZHTag] HTTP 接口已注册：/zhtag/translate, /zhtag/complete, /zhtag/online, /zhtag/status, '
           '/zhtag/reload, /zhtag/dict/download, /zhtag/dict/sources')
     return True

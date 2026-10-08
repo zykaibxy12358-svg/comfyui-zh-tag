@@ -1,4 +1,4 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.2.0）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.1）
 
 **像 IDE 一样写提示词**：在文本框里打**中文或拼音**，光标下方直接弹出英文 Danbooru tag 候选，
 `↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
@@ -12,7 +12,7 @@
 
 - **补全**：中文 / 全拼（`lanfa`）/ 首字母（`lf`、`smw`）/ 多音字（`changfa`、`zhangfa` 都查到长发）/ 英文 tag 前缀
 - **排序**：匹配质量优先，同质量按 Danbooru 热度 → 最标准的 tag 排最前
-- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」（LLM/Ollama/在线端点，可一键关掉，关掉就不联网）
+- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」；**在线翻译支持谷歌 / 微软两家，弹层右上角一键切换**（带连通状态灯）
 - **数据**：3955 条中英词条 + 31171 条 Danbooru 正名/热度 + 26703 字拼音表，全部本地，**零第三方依赖**
 - 整句翻译（打中文失焦/停顿自动翻）仍然保留，两种用法可以同时开着
 
@@ -50,12 +50,14 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 | `changfa` / `zhangfa` | `long hair`（长发，多音字两种拼法都行） |
 | `蓝发` / `双马尾` / `一个女孩` | `blue hair` / `twintails` / `1girl` |
 | `long_h` | `long_hair`、`long_horns`… |
-| `红裙子`（词库里没有） | 先给本地相近词，随后追加「在线翻译 → red skirt」 |
+| `红裙子`（词库里没有） | 先显示「正在用谷歌翻译…」，随后出现「在线翻译 → red skirt」 |
 
 - `↑↓` 移动、`Enter`/`Tab` 采用、`Esc` 关闭；鼠标直接点也行
 - 采用后会把**正在打的拼音/中文替换成英文 tag**，并自动补好 `, ` 方便接着打
 - 也支持 **Ctrl+Space** 手动唤起；在括号权重里（`(蓝发:1.2)`）照样能补全
 - 候选框在**输入法拼字过程中不会弹**（composition 期间静默），选完词立刻弹
+- 候选框**右上角有「在线：谷歌 / 微软」按钮**：点一下即切换在线翻译服务商（写回后端配置，重启也记得），
+  按钮上的 `●` / `✗` 是上次连通状态；右键菜单里也有一个切换项，设置面板里也有同名下拉
 
 ### 2）整句翻译（原功能，仍然保留）
 打一整句中文，按设置的时机自动翻（默认**失焦时**）：
@@ -103,6 +105,7 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 | **IDE 式补全（打中文/拼音就出候选）** | 开 | 补全总开关 |
 | **补全候选数量** | 10 | 候选行数 |
 | **词库没有时在候选里给出「在线翻译」** | 开 | 关掉后打字完全不联网 |
+| **在线翻译服务商** | `google` | `google` 谷歌 / `microsoft` 微软 / `llm` 本地模型 / `keep` 不翻译 |
 | 失焦/停顿时整句翻译 | 开 | 原来的整句翻译开关 |
 | 整句翻译的触发时机 | `blur` | `blur` / `idle` / `off` |
 | 停顿多久后翻译（毫秒） | 900 | 选 `idle` 时生效 |
@@ -175,13 +178,16 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 ---
 
-## 五、兜底翻译怎么配
+## 五、在线翻译怎么配 / 怎么切
 
-编辑 `comfyui-zh-tag/data/user/config.json`（首次运行自动生成）：
+**最省事**：不用改任何文件——补全弹层右上角点「谷歌」或「微软」即可，配置会自动写回
+`comfyui-zh-tag/data/user/config.json`，重启也记得。
+
+也可以直接编辑 `data/user/config.json`（首次运行自动生成）：
 
 ```json
 {
-  "fallback": "llm",
+  "fallback": "google",
   "base_url": "http://127.0.0.1:11434/v1",
   "api_key": "",
   "model": "qwen2.5:7b",
@@ -189,10 +195,14 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 }
 ```
 
-- `fallback`：`keep`（默认，保留中文）/ `llm`（OpenAI 兼容接口）/ `google`（免 key 的在线端点，可能不稳）
-- `base_url`：任何 OpenAI 兼容服务都行——**Ollama**（`http://127.0.0.1:11434/v1`）、**LM Studio**（`http://127.0.0.1:1234/v1`）、DeepSeek/OpenAI（填官方地址 + `api_key`）
+- `fallback`：`google`（谷歌，默认）/ `microsoft`（微软）/ `llm`（本地/远程 OpenAI 兼容接口）/ `keep`（不翻译）
+- 两家在线翻译都是**免 key** 的公开端点：谷歌用 `translate.googleapis.com`，微软用 Edge 翻译接口
+  （`edge.microsoft.com/translate/auth` 取 token + `api-edge.cognitive.microsofttranslator.com`）
+- 弹层按钮上的 `●` = 上次连接正常，`✗` = 上次失败；点按钮时会**真发一次试翻**并告诉你结果
+- 微软的接口在部分网络环境（含一些国内线路）连不上——这时按钮会显示 `✗`，切回谷歌即可
+- `llm` 模式：`base_url` 支持任何 OpenAI 兼容服务——**Ollama**（`http://127.0.0.1:11434/v1`）、
+  **LM Studio**（`http://127.0.0.1:1234/v1`）、DeepSeek/OpenAI（填官方地址 + `api_key`）
 - 翻译结果会缓存到 `data/user/cache.json`，同一个词只翻一次；连不上时静默失败（不会卡住跑图）
-- 只在「没查到的词怎么办 = fallback」且「用兜底翻译」都打开时才会真的调用
 
 ---
 
@@ -201,6 +211,8 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | GET | `/zhtag/complete` | `?q=lanfa&limit=10` → `{results:[{en, zh, score, count, kind}]}`（中文/拼音/英文补全） |
+| GET | `/zhtag/online` | 当前在线翻译服务商 + 连通状态；`?test=microsoft` 可顺手测一次 |
+| POST | `/zhtag/online` | `{mode:'google'\|'microsoft'\|'llm'\|'keep', test?:true}` 切换并写回配置 |
 | POST | `/zhtag/translate` | `{text, mode, fallback, unknownMode, normalize, firstOnly}` → `{english, unknown, dropped, function, info}` |
 | GET | `/zhtag/status` | 词库条数、来源文件、兜底配置、社区词典下载状态 |
 | POST | `/zhtag/reload` | 重新加载 `data/` 与 `data/user/` 下所有词典文件（补全索引一起重建） |
@@ -211,6 +223,8 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 ```bash
 curl "http://127.0.0.1:8188/zhtag/complete?q=lanfa"       # → blue hair（蓝发）
 curl "http://127.0.0.1:8188/zhtag/complete?q=smw"         # → twintails（双马尾）
+curl "http://127.0.0.1:8188/zhtag/online"                 # → 当前用的是谷歌还是微软
+curl -X POST http://127.0.0.1:8188/zhtag/online -H "Content-Type: application/json" -d "{\"mode\":\"microsoft\",\"test\":true}"
 curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application/json" -d "{\"text\":\"一个蓝发漂亮姑娘站在樱花树下微笑\"}"
 # → {"ok":true,"english":"smile, standing, blue hair, tree, cherry blossoms, beautiful, girl", ...}
 ```
@@ -220,22 +234,27 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 七、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 87 项
-node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 58 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 96 项
+node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 74 项
+node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 16 项（需 ComfyUI 8188 + Chrome 9222）
 ```
 
-**后端 87 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 96 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
-Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、自定义词典加载、
-配置文件/拼音表不被误当词典、节点层默认设置、**老工作流位置兼容**（复刻前端按位置映射
-widgets_values，含现有工作流那份真实取值）、
-**补全引擎**（全拼/首字母/多音字/中文精确/英文前缀/排序/limit/耗时）、性能（整句 0.5 ms、补全 2 ms）。
+**切分残留的单字不送在线翻译**、Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、
+**在线服务商切换与写回配置**、自定义词典加载、配置文件/拼音表不被误当词典、节点层默认设置、
+**老工作流位置兼容**、**补全引擎**（全拼/首字母/多音字/中文精确/英文前缀/排序/limit/耗时）、
+性能（整句 0.5 ms、补全 2 ms）。
 
-**前端 58 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
-注册与 10 项设置、失焦自动翻译并写回、不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、
-`Ctrl+Alt+T`、设置变化同步进请求体，以及**补全交互**：片段识别（逗号/权重/光标位置）、
-触发条件（中文 1 字、拼音 2 字母起）、候选框渲染（tag+来源+热度）、`↑↓` 选择、`Enter` 替换并补分隔符、
-`Esc` 关闭、鼠标点选、中文输入、本地没有时追加「在线翻译」、关掉联网后零请求。
+**前端 74 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
+注册与 11 项设置、失焦自动翻译并写回、不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、
+`Ctrl+Alt+T`、设置同步，以及**补全交互**：片段识别、触发条件、候选框渲染、`↑↓` 选择、
+`Enter` 替换并补分隔符、`Esc`、鼠标点选、中文输入、在线翻译、「没开在线翻译」提示、
+**谷歌/微软切换按钮**（立刻生效 + 后台测连通 + 状态灯 + 反馈）。
+
+**E2E 16 项**：用 Chrome DevTools Protocol 在**真实浏览器**里跑一遍：候选框按光标定位、
+`Enter` 替换、中文候选、词库没有的词经**谷歌真翻译**（霓虹灯牌 → neon lights）并采用、
+右上角按钮切微软 → 立刻高亮 → 后台测出连不上显示 `✗` → 切回谷歌。
 
 ---
 
