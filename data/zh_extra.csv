@@ -313,3 +313,72 @@
 交叉双腿|crossed legs
 翘腿|翘着腿,crossed legs
 盘腿坐着|席地而坐,sitting on floor
+
+# —— 词组制度：单词级的「修饰词 / 部位 / 材质」 ——
+# 这些词单独看没什么，但两两组合就能拼出上万个 Danbooru 词组（巨大乳房→huge breasts、
+# 黑色蕾丝→black lace），补全引擎会把它们拼成词组直接给你候选。
+# 颜色（单词级，词组另一半用得上；也顺手盖掉社区词库里 white long upper shan 那种脏别名）
+白|白色,white
+黑|黑色,black
+红|红色,red
+蓝|蓝色,blue
+绿|绿色,green
+黄|黄色,yellow
+粉|粉色,pink
+紫|紫色,purple
+橙,orange
+灰|灰色,gray
+棕|棕色,brown
+金|金色,gold
+银|银色,silver
+# 尺寸与程度
+巨大|超大,huge
+大型|大的,large
+小型|小的,small
+微小,tiny
+中等,medium
+短,short
+高,tall
+宽,wide
+窄,narrow
+厚,thick
+薄,thin
+# 材质与质感
+彩色,multicolored
+丝绸|缎面,silk
+皮革,leather
+牛仔,denim
+棉,cotton
+针织,knit
+毛绒|绒毛,fur
+金属,metal
+塑料,plastic
+玻璃,glass
+网纱|渔网,mesh
+半透明,translucent
+湿|湿润,wet
+干,dry
+破损,broken
+撕裂|撕破,torn
+光滑,smooth
+光泽,glossy
+闪亮|闪闪发光,shiny
+柔软|软,soft
+坚硬|硬,hard
+紧|紧绷,tight
+松|宽松,loose
+# 身体部位（词组另一半）
+乳房|胸部,breasts
+大腿,thighs
+臀部,ass
+腰部,waist
+背部,back
+肩膀,shoulders
+手臂,arms
+腿,legs
+耳朵,ears
+尾巴,tail
+# 服装
+内衣,underwear
+雨,rain
+雪,snow

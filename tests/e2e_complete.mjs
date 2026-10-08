@@ -2,17 +2,19 @@
  * 真机端到端验证：用 Chrome DevTools Protocol 在真实浏览器里跑一遍补全。
  *
  *   node tests/e2e_complete.mjs            # 需要 ComfyUI 在 8188、Chrome 开着 9222 调试端口
+ *   COMFY_PORT=8189 node tests/e2e_complete.mjs   # 换端口（验证时不影响你自己在用的实例）
  *
  * 做的是：造一个真 textarea（真 DOM/真 getComputedStyle/真 fetch）→ 调 openCompletion
  * → 检查候选框渲染 → 模拟 ↓ 和 Enter → 检查文本框被替换成英文 tag。
  */
 const PORT = process.env.CDP_PORT || 9222;
+const COMFY_PORT = process.env.COMFY_PORT || 8188;
 
 async function main() {
     const targets = await (await fetch(`http://127.0.0.1:${PORT}/json`)).json();
-    const page = targets.find((t) => t.type === 'page' && /8188/.test(t.url || ''));
+    const page = targets.find((t) => t.type === 'page' && new RegExp(`:${COMFY_PORT}/`).test(t.url || ''));
     if (!page) {
-        console.error('找不到 ComfyUI 页面（Chrome 调试端口上没有 8188 的标签页）');
+        console.error(`找不到 ComfyUI 页面（调试端口 ${PORT} 上没有 ${COMFY_PORT} 的标签页）`);
         process.exit(1);
     }
     const ws = new WebSocket(page.webSocketDebuggerUrl);
@@ -107,10 +109,29 @@ async function main() {
         gl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
         await sleep(300);
         const modeBack = Z.getOnline().mode;
+        // 场景五：全词联想（英文）与词组（中文）
+        ta.value = 'breasts';
+        ta.selectionStart = ta.selectionEnd = 7;
+        await Z.openCompletion(node, widget, ta);
+        await sleep(500);
+        const wordRows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
+        ta.value = '巨大乳房';
+        ta.selectionStart = ta.selectionEnd = 4;
+        await Z.openCompletion(node, widget, ta);
+        await sleep(500);
+        const phraseRows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
+        Z.commitRow(0);
+        const afterPhrase = ta.value;
+        ta.value = '黑色蕾丝';
+        ta.selectionStart = ta.selectionEnd = 4;
+        await Z.openCompletion(node, widget, ta);
+        await sleep(500);
+        const laceRows = pop ? [...pop.querySelectorAll('.zht-row')].map((x) => x.textContent) : [];
         Z.closePopup();
         ta.remove();
         return { box, rows, before, eatenDown, afterEnter, zhRows, onlineRows,
                  afterOnlineEnter, modeBefore, pills, modeAfterMs, msOnNow, pillsAfter, modeBack,
+                 wordRows, phraseRows, afterPhrase, laceRows,
                  closed: document.querySelector('.zht-pop')?.style.display };
     })()`;
 
@@ -138,6 +159,14 @@ async function main() {
         [Array.isArray(out?.pillsAfter) && out.pillsAfter.some((p) => /微软/.test(p) && /✗/.test(p)),
             `微软连不上时后台把状态灯点亮成 ✗：${JSON.stringify(out?.pillsAfter)}`],
         [out?.modeBack === 'google', `点回「谷歌」：${out?.modeBack}`],
+        [Array.isArray(out?.wordRows) && out.wordRows.some((r) => /huge breasts/.test(r)),
+            `breasts → 联想到 huge breasts：${JSON.stringify(out?.wordRows)}`],
+        [Array.isArray(out?.phraseRows) && /huge breasts/.test(out.phraseRows[0] || '')
+            && /词组/.test(out.phraseRows[0] || ''),
+            `巨大乳房 → 词组 huge breasts：${out?.phraseRows?.[0]}`],
+        [out?.afterPhrase === 'huge breasts, ', `采用词组：${JSON.stringify(out?.afterPhrase)}`],
+        [Array.isArray(out?.laceRows) && /black lace/.test(out.laceRows[0] || ''),
+            `黑色蕾丝 → black lace：${out?.laceRows?.[0]}`],
         [out?.closed === 'none', '关闭后弹层隐藏'],
     ];
     let fail = 0;

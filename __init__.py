@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-"""ZHTag —— ComfyUI 中文提示词插件（v1.2.1）
+"""ZHTag —— ComfyUI 中文提示词插件（v1.2.2）
 
-像 IDE 一样写提示词：在文本框里打中文或拼音，光标下方直接列出英文 Danbooru tag
+像 IDE 一样写提示词：在文本框里打中文、拼音或英文词，光标下方直接列出英文 Danbooru tag
 候选（↑↓ 选、Enter 采用、Esc 关），词库里没有的词给一行「在线翻译」
 ——在线翻译支持**谷歌**与**微软**两家，弹层右上角一键切换（配置写回 data/user/config.json）。
 
-- 补全：中文（蓝发）/ 全拼（lanfa）/ 首字母（lf）/ 多音字（changfa、zhangfa）/ 英文前缀（long_h）
+- 补全：中文（蓝发）/ 拼音（lanfa、smw、多音字 changfa）/ 英文 tag 前缀（long_h）
+- **全词联想**：输入 breasts → large breasts / huge breasts；hair → long hair / blonde hair
+- **词组制度**：输入 巨大乳房 → huge breasts（真实 Danbooru 标签）；黑色蕾丝 → black lace；
+  白色连衣裙 → white dress。词组表由「单词级中英映射 + Danbooru 多词标签」在本机拼装而成
 - 数据：data/zh_tags.csv + data/zh_extra.csv（中英词条）、data/danbooru_index.tsv（正名与热度）、
         data/pinyin_chars.tsv（汉字→拼音；构建期用 pypinyin 生成，运行时零依赖）
-- 在线翻译：google（translate.googleapis.com）/ microsoft（Edge 翻译接口），均免 key
 - 节点：ZHTag 中文→英文Tag / ZHTag 中文CLIP编码 / ZHTag 词典查询
 - 大词典（约 5 万条社区中文表）不随插件分发，右键菜单「下载/更新社区词典」按需拉取
 """
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 import os
 import sys

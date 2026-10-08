@@ -443,6 +443,24 @@ ok(pillsAfter[1].classList.contains('on') && /✗/.test(pillsAfter[1].textConten
 Z.closePopup();
 onlineMode = 'google';
 
+console.log('\n[15] 全词联想 / 词组行的来源标签');
+completeResults = [
+    { en: 'breasts', zh: '', score: 85, count: 3439214, kind: 'en' },
+    { en: 'huge breasts', zh: '', score: 72, count: 209571, kind: 'enword' },
+    { en: 'black lace', zh: '黑色蕾丝', score: 88, count: 0, kind: 'phrase' },
+];
+ta.value = 'bre';
+ta.selectionStart = ta.selectionEnd = 3;
+await Z.openCompletion(nc, wc, ta);
+await tick(40);
+const tagRows = Z.getPopupEl().querySelectorAll('.zht-row');
+ok(tagRows.length === 3, '三行都渲染出来了', String(tagRows.length));
+ok(tagRows[1].children[1].textContent === '英文联想', '联想行标「英文联想」', tagRows[1].children[1].textContent);
+ok(tagRows[2].children[1].textContent === '黑色蕾丝 · 词组', '词组行标「词组」', tagRows[2].children[1].textContent);
+ok(tagRows[2].classList.contains('zht-phrase'), '词组行有单独的配色');
+ok(tagRows[1].children[0].textContent === 'huge breasts', '英文联想显示完整 tag', tagRows[1].children[0].textContent);
+Z.closePopup();
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(`\n结果：${pass} 通过 / ${fail} 失败`);
 process.exit(fail ? 1 : 0);

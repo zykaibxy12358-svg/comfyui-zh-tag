@@ -301,7 +301,7 @@ def main():
        ' / '.join(r['en'] for r in c.complete('changfa')[:3]))
     ok('long hair' in [r['en'] for r in c.complete('zhangfa')], '多音字 zhangfa → long hair',
        ' / '.join(r['en'] for r in c.complete('zhangfa')[:3]))
-    ok('long_hair' in [r['en'] for r in c.complete('long_h')], '英文前缀 long_h → long_hair',
+    ok('long hair' in [r['en'] for r in c.complete('long_h')], '英文前缀 long_h → long hair',
        ' / '.join(r['en'] for r in c.complete('long_h')[:3]))
     ok(c.complete('') == [] and c.complete('   ') == [], '空查询返回空')
     ok(len(c.complete('lf', limit=2)) <= 2, 'limit 生效')
@@ -322,6 +322,51 @@ def main():
         c.complete(q)
     avg = (_t.time() - t0) / 40 * 1000
     ok(avg < 30, '单次补全查询耗时 < 30ms', f'{avg:.1f} ms/次')
+
+    print('\n[13] 全词联想（英文）与词组制度（中文）')
+    ok(len(c.word_index) > 8000, '英文词联想索引已建', f'{len(c.word_index)} 个词')
+    ok(len(c.phrase_map) > 3000, '中文词组表已建（拼装自 Danbooru 多词标签）', f'{len(c.phrase_map)} 条')
+    ok(c.en2zh.get('breasts') == ['乳房'] or '乳房' in (c.en2zh.get('breasts') or []),
+       '乳房 ↔ breasts 的单词级映射', str(c.en2zh.get('breasts')))
+    ok('白' in (c.en2zh.get('white') or []), '对齐挖掘出 白 ↔ white', str(c.en2zh.get('white')))
+
+    res_b = c.complete('breasts', limit=8)
+    ok(res_b and res_b[0]['en'] == 'breasts' and res_b[0]['kind'] == 'en',
+       'breasts：精确命中排第一', res_b[0]['en'] if res_b else '')
+    names_b = [r['en'] for r in res_b]
+    ok('huge breasts' in names_b, 'breasts → 联想到 huge breasts（用户举的例子）', ' / '.join(names_b))
+    ok(any(r['kind'] == 'enword' for r in res_b), '联想行标成 enword（界面显示「英文联想」）')
+    ok('large breasts' in names_b and names_b.index('large breasts') < names_b.index('huge breasts'),
+       '联想按热度排（large 1.58M 在 huge 210k 前面）', ' / '.join(names_b[:5]))
+    ok(len(set(names_b)) == len(names_b), '不会出现下划线/空格两个重复行', ' / '.join(names_b))
+
+    res_h = [r['en'] for r in c.complete('hair', limit=6)]
+    ok('long hair' in res_h and 'blonde hair' in res_h, 'hair → long hair / blonde hair', ' / '.join(res_h))
+    res_br = [r['en'] for r in c.complete('breast', limit=6)]
+    ok(res_br, 'breast（少个 s）也能联想到', ' / '.join(res_br[:3]))
+    res_rd = [r['en'] for r in c.complete('red dress', limit=4)]
+    ok('red dress' in res_rd, '英文带空格也认（red dress = red_dress）', ' / '.join(res_rd))
+
+    res_ls = c.complete('黑色蕾丝', limit=4)
+    ok(res_ls and res_ls[0]['en'] == 'black lace' and res_ls[0]['kind'] == 'phrase',
+       '黑色蕾丝 → black lace（用户举的例子）', str(res_ls[0]) if res_ls else '')
+    res_qq = c.complete('巨大乳房', limit=4)
+    ok(res_qq and res_qq[0]['en'] == 'huge breasts' and res_qq[0]['count'] > 100000,
+       '巨大乳房 → huge breasts（词组命中真实 Danbooru 标签，带热度）',
+       f"{res_qq[0]['en']}({res_qq[0]['kind']},{res_qq[0]['count']})" if res_qq else '')
+    res_wt = c.complete('白色长筒袜', limit=3)
+    ok(res_wt and res_wt[0]['en'] == 'white thighhighs',
+       '白色长筒袜 → white thighhighs', res_wt[0]['en'] if res_wt else '')
+    res_rd = c.complete('红裙子', limit=3)
+    ok(res_rd and 'red' in res_rd[0]['en'],
+       '红裙子 → red pleated skirt（命中一段也给出候选，不留空）',
+       res_rd[0]['en'] if res_rd else '(空)')
+
+    t0 = _t.time()
+    for q in ['breasts', 'hair', '黑色蕾丝', '巨大乳房'] * 5:
+        c.complete(q)
+    avg2 = (_t.time() - t0) / 20 * 1000
+    ok(avg2 < 30, '联想/词组查询耗时 < 30ms', f'{avg2:.1f} ms/次')
 
     print(f'\n结果：{PASS} 通过 / {FAIL} 失败')
     return 1 if FAIL else 0

@@ -87,6 +87,8 @@ const onlineCache = new Map();    // 片段 → 在线翻译结果
 let ONLINE = { mode: null, providers: [{ id: "google", desc: "谷歌在线翻译" }, { id: "microsoft", desc: "微软在线翻译" }], status: {} };
 
 const PROVIDER_LABEL = { google: "谷歌", microsoft: "微软", llm: "LLM", keep: "关闭" };
+// 候选来源标签（后端 kind → 界面文字）
+const KIND_LABEL = { zh: "", pinyin: "拼音", en: "英文标签", enword: "英文联想", phrase: "词组" };
 const HINT_UNCONFIGURED = "在线翻译没开 —— 点右上角「谷歌 / 微软」开启";
 
 const fmtCount = (n) => (!n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M"
@@ -134,6 +136,7 @@ function ensurePopup() {
 .zht-pop .zht-pill:hover{border-color:#6f9fe0;color:#fff}
 .zht-pop .zht-pill.on{background:#2f6fd0;border-color:#2f6fd0;color:#fff}
 .zht-pop .zht-online{color:#8fd3ff}
+.zht-pop .zht-phrase{color:#c9f0a4}
 .zht-pop .zht-dim{opacity:.6}
 .zht-pop .zht-warn{color:#ffd479}
 `;
@@ -210,6 +213,7 @@ function renderPopup() {
         const row = document.createElement("div");
         row.className = "zht-row" + (i === STATE.index ? " on" : "")
             + (r.kind === "online" ? " zht-online" : "")
+            + (r.kind === "phrase" ? " zht-phrase" : "")
             + (r.kind === "loading" ? " zht-dim" : "")
             + (r.kind === "hint" || r.kind === "error" ? " zht-warn" : "");
         row.dataset.i = String(i);
@@ -218,7 +222,10 @@ function renderPopup() {
         en.textContent = r.kind === "online" ? `在线翻译 → ${r.en}` : r.en;
         const src = document.createElement("span");
         src.className = "zht-src";
-        src.textContent = r.zh ? `${r.zh}${r.kind === "pinyin" ? " · 拼音" : ""}` : (r.kind === "en" ? "英文标签" : "");
+        const kindLabel = KIND_LABEL[r.kind] || "";
+        src.textContent = r.zh
+            ? `${r.zh}${kindLabel ? " · " + kindLabel : ""}`
+            : kindLabel;
         const cnt = document.createElement("span");
         cnt.className = "zht-cnt";
         cnt.textContent = fmtCount(r.count);

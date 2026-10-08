@@ -1,19 +1,22 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.2.1）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.2）
 
-**像 IDE 一样写提示词**：在文本框里打**中文或拼音**，光标下方直接弹出英文 Danbooru tag 候选，
+**像 IDE 一样写提示词**：在文本框里打**中文、拼音或英文词**，光标下方直接弹出英文 Danbooru tag 候选，
 `↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
 
 ```
-打 lanfa  →  候选：blue hair（蓝发 · 拼音）      Enter → blue hair,
-打 lf     →  候选：blue hair / green hair / …     Enter → 绿发那条
-打 蓝发   →  候选：blue hair（蓝发）              Enter → blue hair,
-打 long_h →  候选：long_hair / long_horns / …     Enter → long_hair,
+打 lanfa    →  候选：blue hair（蓝发 · 拼音）        Enter → blue hair,
+打 breasts  →  候选：breasts / large breasts / **huge breasts** / …
+打 巨大乳房  →  候选：huge breasts（词组，真实标签 209k）
+打 黑色蕾丝  →  候选：black lace（词组）              Enter → black lace,
+打 白色连衣裙 →  候选：white dress（词组，真实标签 267k）
 ```
 
-- **补全**：中文 / 全拼（`lanfa`）/ 首字母（`lf`、`smw`）/ 多音字（`changfa`、`zhangfa` 都查到长发）/ 英文 tag 前缀
+- **补全**：中文 / 拼音全拼（`lanfa`）/ 拼音首字母（`lf`、`smw`）/ 多音字（`changfa`、`zhangfa`）/ 英文 tag 前缀（`long_h`）
+- **全词联想**：输入 `breasts` → `large breasts`、`huge breasts`；`hair` → `long hair`、`blonde hair`；`dress` → `white dress`、`black dress`
+- **词组制度**：中文两三个词直接拼成真实 tag —— `巨大乳房`→`huge breasts`、`白色连衣裙`→`white dress`（带 Danbooru 热度）；查不到的组合也会现场拼出短语（`黑色蕾丝`→`black lace`）
 - **排序**：匹配质量优先，同质量按 Danbooru 热度 → 最标准的 tag 排最前
-- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」；**在线翻译支持谷歌 / 微软两家，弹层右上角一键切换**（带连通状态灯）
-- **数据**：3955 条中英词条 + 31171 条 Danbooru 正名/热度 + 26703 字拼音表，全部本地，**零第三方依赖**
+- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」；**谷歌 / 微软两家，弹层右上角一键切换**（带连通状态灯）
+- **数据**：4000+ 条中英词条 + 31171 条 Danbooru 正名/热度 + 26703 字拼音表 + 1.6 万词联想索引 + 4900+ 条中文词组，全部本地，**零第三方依赖**
 - 整句翻译（打中文失焦/停顿自动翻）仍然保留，两种用法可以同时开着
 
 ---
@@ -49,8 +52,13 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 | `smw` | `twintails`（双马尾） |
 | `changfa` / `zhangfa` | `long hair`（长发，多音字两种拼法都行） |
 | `蓝发` / `双马尾` / `一个女孩` | `blue hair` / `twintails` / `1girl` |
-| `long_h` | `long_hair`、`long_horns`… |
-| `红裙子`（词库里没有） | 先显示「正在用谷歌翻译…」，随后出现「在线翻译 → red skirt」 |
+| `long_h` | `long hair`、`long horns`… |
+| `breasts` | `breasts`、`large breasts`、`medium breasts`、`huge breasts`…（英文整词联想） |
+| `巨大乳房` | `huge breasts`（词组，真实 Danbooru 标签，热度 209k） |
+| `白色连衣裙` | `white dress`（词组，真实标签 267k） |
+| `黑色蕾丝` | `black lace`（词组，现场拼出来的短语） |
+| `红裙子` | `red skirt`（词库里只有「红裙」，也会给出候选） |
+| `霓虹灯牌`（词库里没有） | 先显示「正在用谷歌翻译…」，随后出现「在线翻译 → neon lights」 |
 
 - `↑↓` 移动、`Enter`/`Tab` 采用、`Esc` 关闭；鼠标直接点也行
 - 采用后会把**正在打的拼音/中文替换成英文 tag**，并自动补好 `, ` 方便接着打
@@ -123,20 +131,44 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 ---
 
-## 三、翻译优先级（重要）
+## 三、匹配优先级（重要）
 
 ```
-① 本地词典：精确命中 → 繁简归一 → 最长匹配切分（「红色长发」→ 红色 + 长发）
-② 数量短语：「两个女孩」→ 2girls、「三个人物」→ 3people
-③ 功能词直接丢弃：「一个／的／了／着／她／非常／突然／缓缓地」不会变成 tag
-④ 剩余片段按「没查到的词怎么办」处理：drop / keep / fallback
-⑤ Danbooru 规范化：别名归一到正名（longhair → long_hair），再按热度排序输出
+① 中文精确命中        蓝发 → blue hair                       100 分
+② 中文词组（真实标签） 巨大乳房 → huge breasts（209k）          98 分
+③ 中文词组（拼装）     黑色蕾丝 → black lace                    88 分
+④ 拼音（全拼/首字母，含多音字变体）  lanfa / smw / changfa      95/90 分
+⑤ 英文 tag 精确        breasts → breasts                      85 分
+⑥ 中文前缀            双马 → 双马尾…                          80 分
+⑦ 英文整词联想         breasts → large breasts / huge breasts   72/66/62 分
+⑧ 拼音前缀 / 英文前缀   lanf → 蓝发；long_h → long hair         70/55 分
+⑨ 在线翻译            词库完全没有的词                         兜底
 ```
 
-**为什么要有 ③⑤ 这两步**：直接用「中文→英文」的对照表去翻自然语言，会出现
+**词组制度怎么来的**（全部本机、零依赖、启动时 0.2 秒建好）：
+
+1. **单词级映射**：直接取词典里本来就是单词的条目（`蕾丝→lace`、`乳房→breasts`），
+   并把「红发→red hair」这类 1:1 条目**按字对词对齐**，攒出 `白↔white`、`发↔hair`（带投票去歧义）
+2. **拼装**：拿 Danbooru 索引里的 2~3 词标签（`white_thighhighs`），用上面的表把每个英文词换成中文再拼起来
+   → 得到「中文词组 → 真实 Danbooru 标签」的对照表，**自带热度**，不用人工写几万条
+3. **现场拆词**：对照表里没有的，就把你打的这句话按词典切成词、按顺序拼成英文短语
+   （`黑色蕾丝` → `black` + `lace` → `black lace`）
+
+**全词联想**用的是同一份 Danbooru 索引：把每个 tag 按 `_` 切成词建倒排索引，
+所以打 `breasts` 能联想到 `large breasts`、`huge breasts`，打 `dress` 能联想到 `white dress`、`black dress`。
+修饰词在前的（`huge_breasts`）比别的（`breasts_squeeze`）分更高，同分按热度排。
+
+---
+
+## 四、整句翻译（原功能，仍然保留）
+
+**为什么要过滤功能词、又要做 Danbooru 规范化**：直接用「中文→英文」的对照表去翻自然语言，会出现
 `一个, blue hair, 的漂亮姑娘` 这种结果——量词和「的」被当成 tag，未命中的中文片段也被原样写进提示词。
 现在功能词/代词/语气词/程度副词全部过滤，未命中片段默认丢弃（只写进报告），
 输出还会按 Danbooru 热度排序，所以最标准、最常被模型识别的 tag 排在最前面。
+
+拆词顺序是：精确命中 → 繁简归一 → 最长匹配切分（「红色长发」→ 红色 + 长发）→ 数量短语（「两个女孩」→ 2girls）
+→ 剩余片段按「没查到的词怎么办」处理：`drop` / `keep` / `fallback`。
 
 **权重与括号会被保留**：`(微笑:1.2)` → `(smile:1.2)`；`[[长发]]` → `[[long hair]]`。
 
@@ -144,7 +176,7 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 ---
 
-## 四、扩充词库
+## 五、扩充词库
 
 ### 1）右键菜单一键下载社区大词典
 节点右键 →「**ZHTag：下载/更新社区词典**」，会从上游拉取并立刻重建词库：
@@ -158,7 +190,7 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 > 大词典**不随插件打包**（它和你自己的词典一起放在 `data/user/`，属于你的本地数据）：
 > 一来 BooruTagCart 是 GPL-3.0，混进 MIT 仓库会造成许可问题；二来几十兆的大表也没必要进包。
-> 你也可以完全不下——内置的 3955 条已经覆盖日常出图。
+> 你也可以完全不下——内置的 4000+ 条已经覆盖日常出图。
 
 ### 2）丢文件进去（离线）
 把任意词典文件放进 `comfyui-zh-tag/data/user/`，重启（或调 `POST /zhtag/reload`）即可：
@@ -178,7 +210,7 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 ---
 
-## 五、在线翻译怎么配 / 怎么切
+## 六、在线翻译怎么配 / 怎么切
 
 **最省事**：不用改任何文件——补全弹层右上角点「谷歌」或「微软」即可，配置会自动写回
 `comfyui-zh-tag/data/user/config.json`，重启也记得。
@@ -206,7 +238,7 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 
 ---
 
-## 六、接口（前端在用，也可以自己调）
+## 七、接口（前端在用，也可以自己调）
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
@@ -231,34 +263,34 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 
 ---
 
-## 七、自测（都不需要 ComfyUI）
+## 八、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 96 项
-node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 74 项
-node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 16 项（需 ComfyUI 8188 + Chrome 9222）
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 113 项
+node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 79 项
+node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 20 项（需 ComfyUI 8188 + Chrome 9222）
 ```
 
-**后端 96 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 113 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 **切分残留的单字不送在线翻译**、Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、
 **在线服务商切换与写回配置**、自定义词典加载、配置文件/拼音表不被误当词典、节点层默认设置、
 **老工作流位置兼容**、**补全引擎**（全拼/首字母/多音字/中文精确/英文前缀/排序/limit/耗时）、
 性能（整句 0.5 ms、补全 2 ms）。
 
-**前端 74 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
+**前端 79 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
 注册与 11 项设置、失焦自动翻译并写回、不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、
 `Ctrl+Alt+T`、设置同步，以及**补全交互**：片段识别、触发条件、候选框渲染、`↑↓` 选择、
 `Enter` 替换并补分隔符、`Esc`、鼠标点选、中文输入、在线翻译、「没开在线翻译」提示、
 **谷歌/微软切换按钮**（立刻生效 + 后台测连通 + 状态灯 + 反馈）。
 
-**E2E 16 项**：用 Chrome DevTools Protocol 在**真实浏览器**里跑一遍：候选框按光标定位、
+**E2E 20 项**：用 Chrome DevTools Protocol 在**真实浏览器**里跑一遍：候选框按光标定位、
 `Enter` 替换、中文候选、词库没有的词经**谷歌真翻译**（霓虹灯牌 → neon lights）并采用、
 右上角按钮切微软 → 立刻高亮 → 后台测出连不上显示 `✗` → 切回谷歌。
 
 ---
 
-## 八、词库来源与许可
+## 九、词库来源与许可
 
 - 内置 `data/zh_tags.csv` 由 **[sd-webui-prompt-all-in-one](https://github.com/Physton/sd-webui-prompt-all-in-one)** 的 `group_tags/zh_CN.yaml`（MIT License）派生。
 - `data/zh_extra.csv` 是本插件自己补充的常用词（自然语言动作/姿态/风格，MIT）。
@@ -270,7 +302,7 @@ node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 16 项�
 
 ---
 
-## 九、开发注意（踩过的坑）
+## 十、开发注意（踩过的坑）
 
 1. **前端 import 的层级**：`web/js/zhtag.js` 里必须写 `../../../scripts/app.js`（不是 `../../`）。
    URL 空间是 `/extensions/<插件目录名>/js/zhtag.js`，`../../` 只会走到 `/extensions/` → 404，
