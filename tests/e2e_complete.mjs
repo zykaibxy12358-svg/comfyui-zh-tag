@@ -101,7 +101,8 @@ async function main() {
         ms.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
         await sleep(120);
         const modeAfterMs = Z.getOnline().mode;
-        const msOnNow = [...pop.querySelectorAll('.zht-pill')].map((x) => x.textContent);
+        const msOnNow = [...pop.querySelectorAll('.zht-pill')]
+            .map((x) => x.textContent + (x.classList.contains('on') ? '←当前' : ''));
         // 等后台连通性测试（微软连不上，超时上限 8 秒）
         for (let i = 0; i < 60 && !Z.getOnline().status?.microsoft; i++) await sleep(500);
         const pillsAfter = [...pop.querySelectorAll('.zht-pill')].map((x) => x.textContent);
@@ -110,6 +111,7 @@ async function main() {
         await sleep(300);
         const modeBack = Z.getOnline().mode;
         // 场景五：全词联想（英文）与词组（中文）
+        await sleep(1500);                 // 等切换触发的重新查询落地，别读到上一轮的候选
         ta.value = 'breasts';
         ta.selectionStart = ta.selectionEnd = 7;
         await Z.openCompletion(node, widget, ta);
@@ -152,10 +154,13 @@ async function main() {
             `谷歌真的翻出来了：${JSON.stringify(out?.onlineRows)}`],
         [!!(out?.afterOnlineEnter || '').trim() && /^[a-z0-9_ ,()]+$/.test(out.afterOnlineEnter),
             `采用在线翻译结果：${JSON.stringify(out?.afterOnlineEnter)}`],
-        [Array.isArray(out?.pills) && out.pills.length === 2, `弹出层有两个服务商按钮：${JSON.stringify(out?.pills)}`],
+        [Array.isArray(out?.pills) && out.pills.length === 5 && /词典/.test(out.pills[0]),
+            `弹出层有 5 个按钮（词典/谷歌/微软/百度/有道）：${JSON.stringify(out?.pills)}`],
+        [Array.isArray(out?.pills) && out.pills.some((p) => /百度/.test(p) && /·/.test(p)),
+            `没填 key 的百度显示「·」：${JSON.stringify(out?.pills)}`],
         [out?.modeAfterMs === 'microsoft', `点「微软」立刻切过去（不等测连通）：${out?.modeAfterMs}`],
-        [Array.isArray(out?.msOnNow) && out.msOnNow.some((p) => /微软/.test(p) && !/✗/.test(p)),
-            `切换后按钮立刻高亮：${JSON.stringify(out?.msOnNow)}`],
+        [Array.isArray(out?.msOnNow) && out.msOnNow.some((p) => /微软/.test(p) && /←当前/.test(p)),
+            `切换后微软按钮立刻高亮：${JSON.stringify(out?.msOnNow)}`],
         [Array.isArray(out?.pillsAfter) && out.pillsAfter.some((p) => /微软/.test(p) && /✗/.test(p)),
             `微软连不上时后台把状态灯点亮成 ✗：${JSON.stringify(out?.pillsAfter)}`],
         [out?.modeBack === 'google', `点回「谷歌」：${out?.modeBack}`],

@@ -11,7 +11,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
 from py.dictionary import TagDictionary, default_data_dirs, has_cjk  # noqa: E402
-from py.translator import FallbackTranslator  # noqa: E402
+from py.translator import FallbackTranslator, baidu_sign, youdao_sign  # noqa: E402
 
 PASS = FAIL = 0
 
@@ -140,23 +140,63 @@ def main():
     raw, _ = d.translate('红色长发', normalize=False)
     ok('red' in raw, 'normalize=False 也能出结果', raw)
 
-    print('\n[7] 兜底翻译与在线服务商切换（不联网：用假配置验证链路）')
+    print('\n[7] 翻译方式切换 / 在线服务商 / 不联网模式（不真的联网）')
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
         fb = FallbackTranslator(tmp)
         ok(fb.mode() == 'google', '默认在线翻译 = 谷歌', fb.mode())
-        ok([p['id'] for p in fb.state()['providers']] == ['google', 'microsoft'],
-           '可选服务商是谷歌与微软', str([p['id'] for p in fb.state()['providers']]))
-        fb.set_mode('keep')
-        ok(fb.mode() == 'keep', '切到 keep', fb.mode())
-        ok(fb('完全未知词XYZ') is None, 'keep 模式下不翻译，交给上层保留原文')
+        ok([p['id'] for p in fb.state()['providers']] == ['google', 'microsoft', 'baidu', 'youdao'],
+           '四家在线服务商都在（谷歌/微软/百度/有道）', str([p['id'] for p in fb.state()['providers']]))
+        ok(fb.state()['off']['id'] == 'off', '有「只用词典（不联网）」这一档')
+
+        # 百度 / 有道：没填 key 就不该发请求
+        ok(fb.configured('baidu') is False and fb.configured('youdao') is False,
+           '百度/有道没填 key 时不算可用')
+        ok(fb.configured('google') is True and fb.configured('microsoft') is True,
+           '谷歌/微软不需要 key')
+        fb.set_mode('baidu')
+        ok('还没配置' in fb.test('baidu')['message'] or '配置' in fb.test('baidu')['message'],
+           '百度没配 key 时给明确提示', fb.test('baidu')['message'][:34])
+        fb.config['baidu_appid'] = 'appid123'
+        fb.config['baidu_key'] = 'key456'
+        ok(fb.configured('baidu') is True, '填了 appid+key 后百度变成可用')
+        fb.config['youdao_appid'] = 'yapp'
+        fb.config['youdao_key'] = 'ykey'
+        ok(fb.configured('youdao') is True, '有道同理')
+
+        # 签名算法（固定向量，防止以后改坏）
+        import hashlib as _h
+        ok(baidu_sign('appid123', '蓝发', '123456', 'key456')
+           == _h.md5('appid123蓝发123456key456'.encode('utf-8')).hexdigest(),
+           '百度签名 = md5(appid+q+salt+key)')
+        short = '蓝色裙子'
+        ok(youdao_sign('yapp', short, '111', '222', 'ykey')
+           == _h.sha256(('yapp' + short + '111222' + 'ykey').encode('utf-8')).hexdigest(),
+           '有道签名（短词原样） = sha256(appKey+q+salt+curtime+secret)')
+        long_q = '一二三四五六七八九十一二三四五六七八九十一'
+        trunc = long_q[:10] + str(len(long_q)) + long_q[-10:]
+        ok(youdao_sign('yapp', long_q, '1', '2', 'ykey')
+           == _h.sha256(('yapp' + trunc + '12' + 'ykey').encode('utf-8')).hexdigest(),
+           '有道签名（长词要 truncate）', trunc)
+
+        # 「只用词典」= 一个字都不联网
+        calls = []
+        fb.set_mode('off')
+        fb._via_google = lambda frag: calls.append(frag) or 'SHOULD NOT HAPPEN'
+        fb._via_microsoft = lambda frag: calls.append(frag) or 'SHOULD NOT HAPPEN'
+        fb._via_baidu = lambda frag: calls.append(frag) or 'SHOULD NOT HAPPEN'
+        fb._via_youdao = lambda frag: calls.append(frag) or 'SHOULD NOT HAPPEN'
+        ok(fb('完全不认识的词ABC') is None and calls == [],
+           '翻译方式=词典 时不发任何网络请求', f'调用 {calls}')
+
+        # 缓存命中不走网络
         fb.cache['测试词'] = 'test tag'
-        ok(fb('测试词') == 'test tag', '缓存命中直接返回')
-        ok(fb.set_mode('microsoft') == 'microsoft' and fb.mode() == 'microsoft',
-           '切到微软在线翻译', fb.mode())
+        ok(fb('测试词') == 'test tag' and calls == [], '缓存命中直接用缓存')
+
         fb2 = FallbackTranslator(tmp)
-        ok(fb2.mode() == 'microsoft', '切换会写回 config.json（重载后仍是微软）', fb2.mode())
-        ok(fb2.set_mode('乱写的') == 'microsoft', '非法值被忽略，不会把配置写坏', fb2.mode())
+        ok(fb2.mode() == 'off', '切换会写回 config.json（重载后仍是词典模式）', fb2.mode())
+        ok(fb2.set_mode('乱写的') == 'off', '非法值被忽略，不会把配置写坏', fb2.mode())
+        ok(fb2.set_mode('keep') == 'off', '旧的 keep 写法映射到词典模式（兼容）', fb2.mode())
         fb2.config['fallback'] = 'llm'
         fb2.config['base_url'] = 'http://127.0.0.1:1/v1'      # 肯定连不上
         ok(fb2('另一个未知词') is None, 'LLM 连不上时安全失败（不抛异常）')
@@ -164,6 +204,72 @@ def main():
         st = fb2.test('microsoft')                            # 真发一次请求（这里连不上）
         ok(st['provider'] == 'microsoft' and 'ok' in st and 'status' in st,
            '连通性自检接口有返回', f"ok={st['ok']} msg={st['message'][:30]}")
+
+    print('\n[7.1] 跑图不干等：短超时 + 可中断')
+    with tempfile.TemporaryDirectory() as tmp:
+        fb = FallbackTranslator(tmp)
+        fb.config['timeout'] = 20
+        fb.config['exec_timeout'] = 6
+        fb.in_execution = False
+        ok(fb._timeout() == 20, '打字/补全时用长超时', str(fb._timeout()))
+        fb.in_execution = True
+        ok(fb._timeout() == 6, '跑图执行时用短超时（默认 6 秒）', str(fb._timeout()))
+        fb.in_execution = False
+
+        class InterruptProcessingException(Exception):
+            pass
+
+        called = []
+        def interrupt():
+            called.append(1)
+            raise InterruptProcessingException('中断了')
+
+        fb.set_mode('google')
+        fb.interrupt_check = interrupt
+        fb._via_google = lambda frag: 'never'
+        raised = False
+        try:
+            fb('一个不该被翻译的词')
+        except InterruptProcessingException:
+            raised = True
+        ok(raised and called, '一按中断，翻译立刻放弃（抛中断异常，不再等网络）')
+
+        # 普通异常不该打断翻译
+        fb.interrupt_check = lambda: (_ for _ in ()).throw(RuntimeError('中断功能没启用'))
+        ok(fb('另一个词') == 'never', '中断检查本身出错时不影响翻译（继续翻）', repr(fb('另一个词')))
+
+        # 跑图里「失败一次就不再等」：3 个陌生词最多只等一次超时
+        fb.interrupt_check = None
+        fb.set_mode('google')
+        tries = []
+
+        def slow_fail(frag):
+            tries.append(frag)
+            return None                     # 模拟连不上/超时
+
+        fb._via_google = slow_fail
+        fb.begin_execution()
+        out3 = [fb(f'陌生词{i}') for i in range(3)]
+        ok(tries == ['陌生词0'], '跑图时失败一次就不再继续等（本轮只尝试 1 次）', f'尝试 {tries}')
+        ok(all(x is None for x in out3), '三个词都安全失败，不会卡住跑图')
+        fb.in_execution = False
+        fb._neg.clear()
+        fb('陌生词A')
+        ok(tries == ['陌生词0', '陌生词A'], '打字/补全时不受「本轮只等一次」限制', f'尝试 {tries}')
+
+    print('\n[7.2] 纯英文输入不联网（跑图不等待）')
+    calls = []
+    def spy(frag):
+        calls.append(frag)
+        return 'X'
+
+    for text in ['1girl, long hair, masterpiece', 'blue hair, smile', '(((best quality)))']:
+        out, rep = d.translate(text, unknown_mode='fallback', fallback=spy)
+        pass
+    ok(calls == [], '整句都是英文时不调用翻译器（原样通过）', f'调用 {calls}')
+    ok(d.translate('1girl, long hair, masterpiece')[0] == '1girl, long hair, masterpiece',
+       '英文 tag 原样保留、不会被拆成两个 tag', d.translate('1girl, long hair, masterpiece')[0])
+
 
     print('\n[8] 自定义词典目录（用户丢进来的文件要能被加载）')
     import tempfile
@@ -198,8 +304,12 @@ def main():
     print('\n[10] ComfyUI 节点层（脱离 ComfyUI 也能跑，CLIP 节点自动跳过）')
     from py.nodes import ZHTagTranslate, ZHTagQuery, unknown_mode_of  # noqa: E402
     types = ZHTagTranslate.INPUT_TYPES()
-    ok('未命中处理' in types['optional'] and 'Danbooru 规范化' in types['optional'],
-       '新增输入都放在 optional（老工作流缺这两项也能跑）', ', '.join(types['optional'].keys()))
+    ok('Danbooru 规范化' in types['optional'] and '提示词(连线优先)' in types['optional'],
+       '新增输入都放在 optional（老工作流缺这些也能跑）', ', '.join(types['optional'].keys()))
+    ok('未命中处理' not in types['optional'] and '未命中处理' not in types['required'],
+       '删掉了重复的「未命中处理」下拉（节点更简洁）', ', '.join(types['optional'].keys()))
+    ok(len(types['required']) == 6 and len(types['optional']) == 2,
+       '节点输入数量精简为 6 + 2', f"{len(types['required'])} + {len(types['optional'])}")
     ok('未命中时保留中文' in types['required'],
        'v1.0.0 就有的输入仍是 required（位置不变）', ', '.join(types['required'].keys()))
     ok('提示词(连线优先)' in types['optional']
@@ -220,6 +330,14 @@ def main():
     })
     ok('blue hair' in out and '一个' not in out, '节点的默认设置就能出干净结果', out)
     ok('命中' in report and '词库' in report, '第二个输出是给人看的报告', report.splitlines()[0])
+    # 老工作流/老 API 里仍可能带着「未命中处理」，节点要能接住（节点上已经没有这个输入了）
+    out_legacy, _ = ZHTagTranslate().run(**{
+        '中文提示词': '完全未知词XYZ', '未命中时保留中文': False,
+        '未命中处理': '保留中文原文', '用兜底翻译（LLM/在线）': False,
+    })
+    ok('完全未知词XYZ' in out_legacy, '老请求里带的「未命中处理」仍然生效（兼容）', out_legacy)
+    plain, _ = ZHTagTranslate().run(**{'中文提示词': '1girl, long hair, masterpiece'})
+    ok(plain == '1girl, long hair, masterpiece', '纯英文输入原样通过（不拆词、不联网）', plain)
     q, st = ZHTagQuery().run('双马尾')
     ok('twintails' in q, '词典查询节点可用', q)
 
@@ -258,9 +376,9 @@ def main():
     ok(new_keys[:len(OLD_ORDER)] == OLD_ORDER,
        'v1.0.0 的 6 个输入位置原封不动（老工作流不会错位）', ' / '.join(new_keys))
     combos = [n for n, s in widget_keys(ZHTagTranslate) if isinstance(s[0], list)]
-    ok(new_keys[-1] == '未命中处理' and isinstance(dict(widget_keys(ZHTagTranslate))['未命中处理'][0], list),
-       '新增的 COMBO 一律追加到最后（只有 COMBO 会因取值不在列表而失败）',
-       f'COMBO 顺序：{" / ".join(combos)}')
+    ok(len(new_keys) == len(OLD_ORDER) + 1 and set(combos) == {'输出模式', '同义词'},
+       '小部件 = v1.0.0 的 6 个 + Danbooru 规范化；下拉只有老位置那两个（新输入不会插到中间）',
+       f'{" / ".join(new_keys)}；COMBO：{" / ".join(combos)}')
 
     # 用户真实工作流 ONE 通用成熟.json 里存下来的 widgets_values
     user_values = ['skirt, wearing, white long upper shan, beautiful, girl',

@@ -476,6 +476,12 @@ class TagDictionary:
             if w and has_cjk(w.group(3)):
                 prefix, suffix, weight = w.group(2), w.group(5), (':' + w.group(4) if w.group(4) else '')
                 block = w.group(3).strip()
+            if not has_cjk(block):
+                # 纯英文/数字/符号块：整块原样输出。
+                # 以前这里会走分词逻辑，把「long hair」拆成 long + hair 两个 tag；
+                # 而且英文输入根本不需要翻译，这样也保证「打英文不联网、不等待」。
+                emit([block])
+                continue
             for zh, ens in self.longest_match(block):
                 if ens:
                     emit(ens[:1] if first_only else ens)

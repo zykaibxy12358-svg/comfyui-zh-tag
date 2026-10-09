@@ -1,4 +1,4 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.2.3）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.4）
 
 **像 IDE 一样写提示词**：在文本框里打**中文、拼音或英文词**，光标下方直接弹出英文 Danbooru tag 候选，
 `↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
@@ -15,7 +15,7 @@
 - **全词联想**：输入 `breasts` → `large breasts`、`huge breasts`；`hair` → `long hair`、`blonde hair`；`dress` → `white dress`、`black dress`
 - **词组制度**：中文两三个词直接拼成真实 tag —— `巨大乳房`→`huge breasts`、`白色连衣裙`→`white dress`（带 Danbooru 热度）；查不到的组合也会现场拼出短语（`黑色蕾丝`→`black lace`）
 - **排序**：匹配质量优先，同质量按 Danbooru 热度 → 最标准的 tag 排最前
-- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」；**谷歌 / 微软两家，弹层右上角一键切换**（带连通状态灯）
+- **兜底**：本地查不到 → 候选框出现「在线翻译 → xxx」；**词典 / 谷歌 / 微软 / 百度 / 有道 一键切换**（带状态灯，百度有道填自己的 key）
 - **数据**：4000+ 条中英词条 + 31171 条 Danbooru 正名/热度 + 26703 字拼音表 + 1.6 万词联想索引 + 4900+ 条中文词组，全部本地，**零第三方依赖**
 - 整句翻译（打中文失焦/停顿自动翻）仍然保留，两种用法可以同时开着
 
@@ -126,10 +126,10 @@ ComfyUI 的规矩是：**一个输入口一旦接了线，对应的文本框就�
 
 | 设置 | 默认 | 说明 |
 | --- | --- | --- |
-| **IDE 式补全（打中文/拼音就出候选）** | 开 | 补全总开关 |
-| **补全候选数量** | 10 | 候选行数 |
-| **词库没有时在候选里给出「在线翻译」** | 开 | 关掉后打字完全不联网 |
-| **在线翻译服务商** | `google` | `google` 谷歌 / `microsoft` 微软 / `llm` 本地模型 / `keep` 不翻译 |
+| IDE 式补全（打中文/拼音就出候选） | 开 | 补全总开关 |
+| 补全候选数量 | 10 | 候选行数 |
+| 整句翻译时词典没查到的词怎么办 | `drop` | `drop` 丢掉 / `keep` 保留中文 / `fallback` 交给翻译方式 |
+| **翻译方式** | `google` | `off` 只用词典（不联网）/ `google` / `microsoft` / `baidu` / `youdao` / `llm` |
 | 失焦/停顿时整句翻译 | 开 | 原来的整句翻译开关 |
 | 整句翻译的触发时机 | `blur` | `blur` / `idle` / `off` |
 | 停顿多久后翻译（毫秒） | 900 | 选 `idle` 时生效 |
@@ -236,21 +236,40 @@ ComfyUI 的规矩是：**一个输入口一旦接了线，对应的文本框就�
 ```json
 {
   "fallback": "google",
+  "timeout": 20,
+  "exec_timeout": 6,
+  "baidu_appid": "",
+  "baidu_key": "",
+  "youdao_appid": "",
+  "youdao_key": "",
   "base_url": "http://127.0.0.1:11434/v1",
   "api_key": "",
-  "model": "qwen2.5:7b",
-  "timeout": 20
+  "model": "qwen2.5:7b"
 }
 ```
 
-- `fallback`：`google`（谷歌，默认）/ `microsoft`（微软）/ `llm`（本地/远程 OpenAI 兼容接口）/ `keep`（不翻译）
-- 两家在线翻译都是**免 key** 的公开端点：谷歌用 `translate.googleapis.com`，微软用 Edge 翻译接口
-  （`edge.microsoft.com/translate/auth` 取 token + `api-edge.cognitive.microsofttranslator.com`）
-- 弹层按钮上的 `●` = 上次连接正常，`✗` = 上次失败；点按钮时会**真发一次试翻**并告诉你结果
-- 微软的接口在部分网络环境（含一些国内线路）连不上——这时按钮会显示 `✗`，切回谷歌即可
-- `llm` 模式：`base_url` 支持任何 OpenAI 兼容服务——**Ollama**（`http://127.0.0.1:11434/v1`）、
-  **LM Studio**（`http://127.0.0.1:1234/v1`）、DeepSeek/OpenAI（填官方地址 + `api_key`）
-- 翻译结果会缓存到 `data/user/cache.json`，同一个词只翻一次；连不上时静默失败（不会卡住跑图）
+- `fallback` 就是弹层右上角那个开关：`off`（只用词典，不联网）/ `google` / `microsoft` / `baidu` / `youdao` / `llm`
+- **免 key 的两家**：谷歌（`translate.googleapis.com`）、微软（Edge 翻译接口）
+- **要自己填 key 的两家**：
+  - 百度 → [百度翻译开放平台](https://fanyi-api.baidu.com) 申请「通用文本翻译」，把 `appid` 填 `baidu_appid`、密钥填 `baidu_key`
+  - 有道 → [有道智云](https://ai.youdao.com) 创建「文本翻译」应用，`应用ID` 填 `youdao_appid`、`应用密钥` 填 `youdao_key`
+  - 没填 key 时按钮上显示 `·`，点它会提示去哪填，**不会发请求、也不会让跑图干等**
+- `llm`：`base_url` 支持任何 OpenAI 兼容服务（Ollama `http://127.0.0.1:11434/v1`、LM Studio `http://127.0.0.1:1234/v1`、DeepSeek/OpenAI…）
+- 弹层按钮上的 `●` = 上次正常，`✗` = 上次失败，`·` = 还没配 key
+- 翻译结果缓存到 `data/user/cache.json`，同一个词只翻一次；切翻译方式时会清掉失败记录重试
+
+### 跑图不想等翻译？（v1.2.4 重点）
+
+| 你想要的 | 怎么做 |
+| --- | --- |
+| 完全不等、只用词典 | 弹层右上角点**「词典」**（或设置里把翻译方式选 `off`）——一个字都不联网 |
+| 输入的是英文，不该等待 | 已经是这样了：**纯英文/纯 tag 输入直接原样通过，不联网不拆词**（`1girl, long hair` 原样保留） |
+| 想联网但别等太久 | 节点执行时的网络超时是 `exec_timeout`（默认 **6 秒**，打字时才是 20 秒） |
+| 跑图卡在翻译上想强行终止 | **按 ComfyUI 的「中断」**：翻译会立刻放弃（不再等网络），跑图马上结束 |
+| 一个词连不上，别拖累后面的 | 一轮执行里翻译**失败一次就不再试**，所以最多只等一次超时 |
+
+> 内核里还做了一件事：节点执行时会把 ComfyUI 的中断回调接进翻译器，
+> 所以「中断」对翻译也是有效的，而不是要等 `urllib` 超时。
 
 ---
 
@@ -259,8 +278,9 @@ ComfyUI 的规矩是：**一个输入口一旦接了线，对应的文本框就�
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | GET | `/zhtag/complete` | `?q=lanfa&limit=10` → `{results:[{en, zh, score, count, kind}]}`（中文/拼音/英文补全） |
-| GET | `/zhtag/online` | 当前在线翻译服务商 + 连通状态；`?test=microsoft` 可顺手测一次 |
-| POST | `/zhtag/online` | `{mode:'google'\|'microsoft'\|'llm'\|'keep', test?:true}` 切换并写回配置 |
+| GET | `/zhtag/online` | 当前翻译方式 + 各家配置/连通状态；`?test=baidu` 可顺手测一次 |
+| POST | `/zhtag/online` | `{mode:'off'\|'google'\|'microsoft'\|'baidu'\|'youdao'\|'llm', test?:true}` 切换并写回配置 |
+| GET | `/zhtag/config` | 翻译相关配置（key 只回「填没填」，不回明文） |
 | POST | `/zhtag/translate` | `{text, mode, fallback, unknownMode, normalize, firstOnly}` → `{english, unknown, dropped, function, info}` |
 | GET | `/zhtag/status` | 词库条数、来源文件、兜底配置、社区词典下载状态 |
 | POST | `/zhtag/reload` | 重新加载 `data/` 与 `data/user/` 下所有词典文件（补全索引一起重建） |
@@ -282,19 +302,19 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 八、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 116 项
-node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 84 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 137 项
+node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 90 项
 node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 20 项（需 ComfyUI 8188 + Chrome 9222）
 ```
 
-**后端 116 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 137 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 **切分残留的单字不送在线翻译**、Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、
 **在线服务商切换与写回配置**、自定义词典加载、配置文件/拼音表不被误当词典、节点层默认设置、
 **老工作流位置兼容**、**补全引擎**（全拼/首字母/多音字/中文精确/英文前缀/排序/limit/耗时）、
 性能（整句 0.5 ms、补全 2 ms）。
 
-**前端 84 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
+**前端 90 项**：在临时目录里搭出 `<tmp>/scripts/app.js` 桩 + 极简 DOM 桩 + 真实的 `zhtag.js`，验证
 注册与 11 项设置、失焦自动翻译并写回、不重复翻译、纯英文不触发、右键菜单注入与点击（含下载词典）、
 `Ctrl+Alt+T`、设置同步，以及**补全交互**：片段识别、触发条件、候选框渲染、`↑↓` 选择、
 `Enter` 替换并补分隔符、`Esc`、鼠标点选、中文输入、在线翻译、「没开在线翻译」提示、

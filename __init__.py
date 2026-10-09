@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
-"""ZHTag —— ComfyUI 中文提示词插件（v1.2.3）
+"""ZHTag —— ComfyUI 中文提示词插件（v1.2.4）
 
 像 IDE 一样写提示词：在文本框里打中文、拼音或英文词，光标下方直接列出英文 Danbooru tag
-候选（↑↓ 选、Enter 采用、Esc 关），词库里没有的词给一行「在线翻译」
-——在线翻译支持**谷歌**与**微软**两家，弹层右上角一键切换（配置写回 data/user/config.json）。
+候选（↑↓ 选、Enter 采用、Esc 关），词库里没有的词给一行「在线翻译」。
 
+- 翻译方式一档到底：**词典（不联网）/ 谷歌 / 微软 / 百度 / 有道 / LLM**，弹层右上角点一下即切
+- **跑图不干等**：纯英文输入原样通过、执行时网络超时只 6 秒、失败一次就不再试；
+  按 ComfyUI 的「中断」会立刻放弃正在进行的翻译
 - 补全：中文（蓝发）/ 拼音（lanfa、smw、多音字 changfa）/ 英文 tag 前缀（long_h）
-- **全词联想**：breasts → large breasts / huge breasts；hair → long hair / blonde hair
+- **全词联想**：breasts → large breasts / huge breasts
 - **词组制度**：巨大乳房 → huge breasts（真实 Danbooru 标签）；黑色蕾丝 → black lace
 - **子图友好**：有个纯插口输入「提示词(连线优先)」——在子图里连它，中文文本框照样能打字
-  （ComfyUI 会把「被连线的那个小部件」藏起来，所以别把「中文提示词」本身提升成子图输入）
 - 数据：data/zh_tags.csv + data/zh_extra.csv（中英词条）、data/danbooru_index.tsv（正名与热度）、
         data/pinyin_chars.tsv（汉字→拼音；构建期用 pypinyin 生成，运行时零依赖）
 - 节点：ZHTag 中文→英文Tag / ZHTag 中文CLIP编码 / ZHTag 词典查询
-- 大词典（约 5 万条社区中文表）不随插件分发，右键菜单「下载/更新社区词典」按需拉取
 """
-__version__ = '1.2.3'
+__version__ = '1.2.4'
 
 import os
 import sys

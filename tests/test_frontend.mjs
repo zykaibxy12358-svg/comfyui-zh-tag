@@ -34,8 +34,8 @@ export const app = {
   _ext: null, _toasts: [], _settings: {
     'ZHTag.auto': true, 'ZHTag.trigger': 'blur', 'ZHTag.idleMs': 900,
     'ZHTag.unknownMode': 'drop', 'ZHTag.normalize': true,
-    'ZHTag.fallback': false, 'ZHTag.showToast': false,
-    'ZHTag.complete': true, 'ZHTag.completeOnline': true, 'ZHTag.completeLimit': 10,
+    'ZHTag.showToast': false,
+    'ZHTag.complete': true, 'ZHTag.completeLimit': 10,
   },
   registerExtension(e) { this._ext = e; return e; },
   ui: { settings: { getSettingValue(id) { return app._settings[id]; } } },
@@ -126,7 +126,7 @@ globalThis.getComputedStyle = () => ({
 const fetchCalls = [];
 const winListeners = {};
 let completeResults = [];
-let onlineMode = 'google';        // 后端在线翻译服务商：google / microsoft / llm / keep
+let onlineMode = 'google';        // 后端翻译方式：off / google / microsoft / baidu / youdao / llm
 const onlineStatus = { google: { ok: true, at: 1, msg: '' } };
 globalThis.window = {
     addEventListener: (t, fn) => { winListeners[t] = fn; },
@@ -147,7 +147,13 @@ globalThis.fetch = async (url, opts) => {
         }
         const payload = {
             ok: true, mode: onlineMode,
-            providers: [{ id: 'google', desc: '谷歌在线翻译' }, { id: 'microsoft', desc: '微软在线翻译' }],
+            off: { id: 'off', desc: '只用词典（不联网）' },
+            providers: [
+                { id: 'google', desc: '谷歌在线翻译', configured: true },
+                { id: 'microsoft', desc: '微软在线翻译', configured: true },
+                { id: 'baidu', desc: '百度在线翻译', configured: false },
+                { id: 'youdao', desc: '有道在线翻译', configured: false },
+            ],
             status: onlineStatus,
         };
         if (body?.test) {
@@ -177,18 +183,20 @@ globalThis.fetch = async (url, opts) => {
 
 const mod = await import(pathToFileURL(path.join(jsDir, 'zhtag.js')).href);
 const { app } = await import(pathToFileURL(appStubPath).href);
+const Z = globalThis.window.ZHTag;      // 扩展暴露出来的入口（各段测试都用它）
 
 console.log('\n[1] 注册与设置');
 const ext = app._ext;
 ok(!!ext && ext.name === 'ZHTag', 'registerExtension 被调用且名字正确', ext ? ext.name : '(无)');
-ok(Array.isArray(ext.settings) && ext.settings.length === 11, '声明了 11 项设置', String(ext.settings?.length));
+ok(Array.isArray(ext.settings) && ext.settings.length === 9, '声明了 9 项设置（精简后）', String(ext.settings?.length));
 ok(ext.settings.some((s) => s.id === 'ZHTag.complete' && s.type === 'boolean')
-    && ext.settings.some((s) => s.id === 'ZHTag.completeOnline' && s.type === 'boolean')
     && ext.settings.some((s) => s.id === 'ZHTag.completeLimit' && s.type === 'number'),
-    '有 IDE 式补全的三个设置（开关/联网/候选数量）');
+    '有 IDE 式补全的设置（开关 / 候选数量）');
+ok(!ext.settings.some((s) => s.id === 'ZHTag.completeOnline' || s.id === 'ZHTag.fallback'),
+    '去掉了两个重复的联网开关（统一由「翻译方式」管）');
 ok(ext.settings.some((s) => s.id === 'ZHTag.onlineProvider' && s.type === 'combo'
-    && s.options.join() === 'google,microsoft,llm,keep'),
-    '有「在线翻译服务商」下拉（谷歌/微软/LLM/关闭）');
+    && s.options.join() === 'off,google,microsoft,baidu,youdao,llm'),
+    '有「翻译方式」下拉（词典/谷歌/微软/百度/有道/LLM）');
 ok(ext.settings.every((s) => s && typeof s === 'object' && s.id && s.name && s.type && 'defaultValue' in s),
     '设置项都不是 undefined（新版前端会因此报错）',
     ext.settings.map((s) => (s && s.id) || 'undefined').join(','));
@@ -240,10 +248,11 @@ await ext.beforeRegisterNodeDef(nodeType, {});
 const options = [];
 const ret = nodeType.prototype.getExtraMenuOptions.call(node, null, options);
 ok(typeof nodeType.prototype.getExtraMenuOptions === 'function', 'getExtraMenuOptions 已被包装', String(ret === undefined));
-ok(options.length >= 2, '注入了菜单项', options.map((o) => o.content).join(' / '));
+ok(options.length === 2, '右键菜单只留 2 项（精简后）', options.map((o) => o.content).join(' / '));
 ok(options.some((o) => /中文Tag→英文/.test(o.content)), '有「中文Tag→英文」');
-ok(options.some((o) => /词库状态/.test(o.content)), '有「查看词库状态」');
 ok(options.some((o) => /下载\/更新社区词典/.test(o.content)), '有「下载/更新社区词典」');
+ok(!options.some((o) => /词库状态|在线翻译用/.test(o.content)),
+    '去掉了「查看词库状态」「切换在线翻译」这两个冗余项');
 widget.value = '再翻一次给我看';
 const beforeMenu = fetchCalls.length;
 options.find((o) => /中文Tag→英文/.test(o.content)).callback();
@@ -262,14 +271,22 @@ ok(fetchCalls.length === before + 1, '快捷键触发了翻译', `请求数 ${fe
 ok(w2.value === 'twintails, girl, smile', '选中节点的文本框被翻译', w2.value);
 app.canvas.selected_nodes = {};
 
-console.log('\n[6] 兜底开关随设置变化');
-app._settings['ZHTag.fallback'] = true;
+console.log('\n[6] 联网与否由「翻译方式」一个开关决定');
+await Z.refreshOnlineStatus();                     // 后端当前是 google
 const w3 = { name: 'text', type: 'customtext', value: '未知词', options: { multiline: true }, callback: () => {} };
 ext.nodeCreated({ widgets: [w3] });
-// 直接调内部翻译入口（window.ZHTag 暴露的）
 await globalThis.window.ZHTag?.translateText('测试');
-ok(fetchCalls[fetchCalls.length - 1]?.body?.fallback === true, '设置打开后请求里带 fallback=true',
+ok(fetchCalls[fetchCalls.length - 1]?.body?.fallback === true,
+    '翻译方式=谷歌 → 整句翻译允许联网', JSON.stringify(fetchCalls[fetchCalls.length - 1]?.body));
+onlineMode = 'off';
+await Z.refreshOnlineStatus();
+ok(Z.onlineOn() === false, '翻译方式=词典 → onlineOn() 为 false');
+await globalThis.window.ZHTag?.translateText('测试');
+ok(fetchCalls[fetchCalls.length - 1]?.body?.fallback === false,
+    '翻译方式=词典 → 请求里 fallback=false（一个字都不联网）',
     JSON.stringify(fetchCalls[fetchCalls.length - 1]?.body));
+onlineMode = 'google';
+await Z.refreshOnlineStatus();
 
 console.log('\n[7] 未命中处理与规范化随设置变化');
 app._settings['ZHTag.unknownMode'] = 'keep';
@@ -291,7 +308,6 @@ ok(fetchCalls.length === beforeDl + 1 && fetchCalls[beforeDl].url === '/zhtag/di
 ok(app._toasts.length > 0, '结果通过 toast 反馈给用户', app._toasts[app._toasts.length - 1]?.summary || '');
 
 console.log('\n[9] IDE 式补全：片段识别与触发条件');
-const Z = globalThis.window.ZHTag;
 ok(typeof Z?.openCompletion === 'function' && typeof Z?.handleCompletionKey === 'function',
     '补全相关入口已暴露（供测试/高级用法）');
 ok(Z.fragmentAt({ value: 'skirt, lanfa', selectionStart: 12 }).text === 'lanfa',
@@ -357,8 +373,8 @@ ok(Z.getPopupState() === null, '点选后关闭');
 
 console.log('\n[12] IDE 式补全：词库没有时给「在线翻译」一行');
 await Z.refreshOnlineStatus();
-ok(Z.getOnline().mode === 'google' && Z.translatorReady() === true,
-    '读到后端在线翻译服务商（google）', Z.getOnline().mode);
+ok(Z.getOnline().mode === 'google' && Z.onlineOn() === true,
+    '读到后端翻译方式（google）', Z.getOnline().mode);
 completeResults = [];
 ta.value = 'qianzi';
 ta.selectionStart = ta.selectionEnd = 6;
@@ -376,21 +392,26 @@ const onlineReq = fetchCalls.slice(beforeOnline).find((c) => c.url === '/zhtag/t
 ok(onlineReq?.body?.fallback === true && onlineReq?.body?.unknownMode === 'fallback',
     '在线翻译走的是兜底链路', JSON.stringify(onlineReq?.body));
 Z.closePopup();
-// 关掉联网开关后不再请求
-app._settings['ZHTag.completeOnline'] = false;
+// 切成「词典」（不联网）后，在线翻译那一行不再出现、也不发请求
+onlineMode = 'off';
+await Z.refreshOnlineStatus();
 completeResults = [];
 const beforeOffline = fetchCalls.length;
 ta.value = 'qianzi';
 await Z.openCompletion(nc, wc, ta);
 await tick(700);
 ok(!fetchCalls.slice(beforeOffline).some((c) => c.url === '/zhtag/translate'),
-    '关掉「在线翻译」后一个网络请求都不发', String(fetchCalls.length - beforeOffline));
-app._settings['ZHTag.completeOnline'] = true;
+    '翻译方式=词典 → 一个翻译请求都不发', String(fetchCalls.length - beforeOffline));
+ok((Z.getPopupState()?.rows || []).length === 0 || Z.getPopupState() === null,
+    '翻译方式=词典 → 没有在线翻译候选行',
+    JSON.stringify((Z.getPopupState()?.rows || []).map((r) => r.kind)));
+Z.closePopup();
 
-console.log('\n[13] IDE 式补全：没开在线翻译时给可点的提示行（不静默失败）');
-onlineMode = 'keep';
+console.log('\n[13] 提示行：只在「没开」或「没配 key」时出现，点了只提示不动文本框');
+// 13a：百度没填 key（后端 configured=false）
+onlineMode = 'baidu';
 await Z.refreshOnlineStatus();
-ok(Z.translatorReady() === false, 'keep = 在线翻译关着');
+ok(Z.onlineOn() === true && Z.providerReady() === false, '百度：开着但没配 key → providerReady=false');
 completeResults = [];
 ta.value = 'qianziwoya';
 ta.selectionStart = ta.selectionEnd = 10;
@@ -398,18 +419,30 @@ const beforeHint = fetchCalls.length;
 await Z.openCompletion(nc, wc, ta);
 await tick(700);
 const hintRows = Z.getPopupState()?.rows || [];
-ok(hintRows.some((r) => r.kind === 'hint'), '给出「在线翻译没开」提示行',
-    JSON.stringify(hintRows.map((r) => r.kind)));
-ok(!fetchCalls.slice(beforeHint).some((c) => c.url === '/zhtag/translate'),
-    '没开就不发翻译请求（不浪费你的时间）');
+ok(hintRows.some((r) => r.kind === 'hint' && /还没配置/.test(r.en)), '给出「还没配置」提示行',
+    JSON.stringify(hintRows.map((r) => r.en)));
+ok(!fetchCalls.slice(beforeHint).some((c) => c.url === '/zhtag/translate'), '没配 key 就不发翻译请求');
 const toastsBefore = app._toasts.length;
 const textBefore = ta.value;
-Z.commitRow(0);
-ok(app._toasts.length > toastsBefore, '点提示行 → 提示怎么开',
-    app._toasts[app._toasts.length - 1]?.detail?.slice(0, 30));
+Z.commitRow(hintRows.findIndex((r) => r.kind === 'hint'));
+ok(app._toasts.length > toastsBefore, '点提示行 → 告诉用户去哪填',
+    app._toasts[app._toasts.length - 1]?.detail?.slice(0, 34));
 ok(ta.value === textBefore, '提示行不会被写进文本框', JSON.stringify(ta.value));
+Z.closePopup();
 
-console.log('\n[14] 在线翻译切换按钮（弹层右上角 谷歌 / 微软）');
+// 13b：翻译方式=词典
+onlineMode = 'off';
+await Z.refreshOnlineStatus();
+completeResults = [];
+ta.value = 'qianziwoya';
+await Z.openCompletion(nc, wc, ta);
+await tick(700);
+const offRows = Z.getPopupState()?.rows || [];
+ok(offRows.some((r) => r.kind === 'hint') || offRows.length === 0,
+    '词典模式：不会偷偷联网，也不会卡住', JSON.stringify(offRows.map((r) => r.kind)));
+Z.closePopup();
+
+console.log('\n[14] 翻译方式切换按钮（弹层右上角 词典/谷歌/微软/百度/有道）');
 onlineMode = 'google';
 await Z.refreshOnlineStatus();
 completeResults = [];
@@ -418,19 +451,22 @@ ta.selectionStart = ta.selectionEnd = 10;
 await Z.openCompletion(nc, wc, ta);
 await tick(30);
 const pills = Z.getPopupEl().querySelectorAll('.zht-pill');
-ok(pills.length === 2, '弹层里有两个服务商按钮', pills.map((p) => p.textContent).join(' / '));
-ok(pills[0].classList.contains('on') && /谷歌/.test(pills[0].textContent), '当前是谷歌（高亮）',
-    pills[0].textContent);
-ok(/●/.test(pills[0].textContent), '连通过的按钮带状态点', pills[0].textContent);
+ok(pills.length === 5, '弹层里有 5 个按钮（词典/谷歌/微软/百度/有道）',
+    pills.map((p) => p.textContent).join(' / '));
+ok(/词典/.test(pills[0].textContent) && pills[1].classList.contains('on') && /谷歌/.test(pills[1].textContent),
+    '第一个是「词典」，当前是谷歌（高亮）', pills[0].textContent + ' / ' + pills[1].textContent);
+ok(/●/.test(pills[1].textContent), '连通过的按钮带状态点', pills[1].textContent);
+ok(/·/.test(pills[3].textContent) && /百度/.test(pills[3].textContent),
+    '没填 key 的百度显示「·」而不是假装能用', pills[3].textContent);
 const beforeSwitch = fetchCalls.length;
-pills[1].dispatch('mousedown', { preventDefault() {}, stopPropagation() {} });
+pills[2].dispatch('mousedown', { preventDefault() {}, stopPropagation() {} });
 await tick(60);
 const switchReq = fetchCalls.slice(beforeSwitch).find((c) => c.url === '/zhtag/online');
 ok(switchReq?.method === 'POST' && switchReq?.body?.mode === 'microsoft',
-    '点「微软」→ 立刻把服务商写回后端（不等测连通）', JSON.stringify(switchReq?.body));
+    '点「微软」→ 立刻把翻译方式写回后端（不等测连通）', JSON.stringify(switchReq?.body));
 ok(Z.getOnline().mode === 'microsoft', '前端立刻切到 microsoft（乐观更新）', Z.getOnline().mode);
 const pillsAfterClick = Z.getPopupEl().querySelectorAll('.zht-pill');
-ok(pillsAfterClick[1].classList.contains('on'), '按钮立刻高亮（不用等网络）', pillsAfterClick[1].textContent);
+ok(pillsAfterClick[2].classList.contains('on'), '按钮立刻高亮（不用等网络）', pillsAfterClick[2].textContent);
 await tick(120);                                   // 等后台那次连通性测试
 ok(fetchCalls.some((c) => String(c.url).startsWith('/zhtag/online?test=microsoft')),
     '后台再单独测一次连通（不阻塞按钮）');
@@ -438,8 +474,8 @@ ok(app._toasts.some((t2) => /微软/.test(t2.detail || '')), '给用户反馈切
     app._toasts[app._toasts.length - 1]?.detail?.slice(0, 46));
 ok(Z.getOnline().status?.microsoft?.ok === false, '微软连不上会被记下来（按钮上显示 ✗）');
 const pillsAfter = Z.getPopupEl().querySelectorAll('.zht-pill');
-ok(pillsAfter[1].classList.contains('on') && /✗/.test(pillsAfter[1].textContent),
-    '高亮与状态灯都跟着变', pillsAfter[1].textContent);
+ok(pillsAfter[2].classList.contains('on') && /✗/.test(pillsAfter[2].textContent),
+    '高亮与状态灯都跟着变', pillsAfter[2].textContent);
 Z.closePopup();
 onlineMode = 'google';
 

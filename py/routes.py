@@ -77,7 +77,7 @@ def register_routes() -> bool:
 
     @routes.get('/zhtag/online')
     async def zhtag_online_get(request):
-        """当前在线翻译服务商（谷歌/微软）+ 最近一次连通状态。"""
+        """当前翻译方式（词典/谷歌/微软/百度/有道/LLM）+ 各家最近一次连通状态。"""
         tr = translator()
         if request.query.get('test'):
             tr.test(request.query.get('test'))
@@ -85,7 +85,7 @@ def register_routes() -> bool:
 
     @routes.post('/zhtag/online')
     async def zhtag_online_set(request):
-        """切换在线翻译服务商：{mode: 'google'|'microsoft'|'llm'|'keep', test?: bool}"""
+        """切换翻译方式：{mode: off|google|microsoft|baidu|youdao|llm, test?: bool}"""
         try:
             data = await request.json()
         except Exception:
@@ -93,10 +93,28 @@ def register_routes() -> bool:
         tr = translator()
         mode = tr.set_mode(data.get('mode') or '')
         out = {'ok': True, **tr.state()}
-        if data.get('test'):
-            out['result'] = tr.test(mode if mode in ('google', 'microsoft') else 'google')
+        if data.get('test') and mode not in ('off', 'llm'):
+            out['result'] = tr.test(mode)
             out.update(tr.state())
         return web.json_response(out)
+
+    @routes.get('/zhtag/config')
+    async def zhtag_config_get(request):
+        """翻译相关的配置（key 只回「填没填」，不回明文）。"""
+        tr = translator()
+        cfg = tr.config
+        def filled(name):
+            return bool(str(cfg.get(name) or '').strip())
+        return web.json_response({
+            'ok': True,
+            'config_path': tr.config_path,
+            'online': tr.state(),
+            'llm': {'base_url': cfg.get('base_url'), 'model': cfg.get('model'), 'has_key': filled('api_key')},
+            'baidu': {'has_appid': filled('baidu_appid'), 'has_key': filled('baidu_key')},
+            'youdao': {'has_appid': filled('youdao_appid'), 'has_key': filled('youdao_key')},
+            'timeout': cfg.get('timeout'),
+            'exec_timeout': cfg.get('exec_timeout'),
+        })
 
     @routes.get('/zhtag/status')
     async def zhtag_status(request):
