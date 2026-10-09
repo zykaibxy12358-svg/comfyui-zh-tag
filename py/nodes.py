@@ -93,6 +93,11 @@ class ZHTagTranslate:
             'optional': {
                 'Danbooru 规范化': ('BOOLEAN', {'default': True}),
                 '未命中处理': (UNKNOWN_MODES,),
+                # 单独的「连线用」输入口（forceInput = 只做插口，不占小部件位置）：
+                # 在子图里把它提升成子图输入并连线，中文文本框依然能直接打字
+                # ——因为被连线的不是那个文本框本身（ComfyUI 会把连了线的文本框藏起来）。
+                '提示词(连线优先)': ('STRING', {'forceInput': True,
+                                                'tooltip': '接了这条线就用它的内容；不接就用上面的「中文提示词」文本框'}),
             },
         }
 
@@ -101,10 +106,12 @@ class ZHTagTranslate:
     FUNCTION = 'run'
     CATEGORY = CATEGORY
     DESCRIPTION = ('把中文提示词翻成英文 tag：功能词过滤 + 词典最长匹配 + 数字人物规则 + Danbooru 规范化；'
-                   '未命中默认丢弃并列在报告里。')
+                   '未命中默认丢弃并列在报告里。放子图里请用「提示词(连线优先)」这个口，'
+                   '别把「中文提示词」提升成输入，否则 ComfyUI 会把文本框藏起来。')
 
     def run(self, **kw):
-        text = kw.get('中文提示词', '')
+        # 连线优先：接了线就用线里的内容，否则用文本框
+        text = kw.get('提示词(连线优先)') or kw.get('中文提示词', '')
         mode = 'raw' if str(kw.get('输出模式', '')).startswith('raw') else 'tags'
         keep = bool(kw.get('未命中时保留中文', False))
         use_fb = bool(kw.get('用兜底翻译（LLM/在线）', False))
@@ -175,6 +182,8 @@ def _build_clip_node():
                     'Danbooru 规范化': ('BOOLEAN', {'default': True}),
                     '同义词': (['只输出最佳英文', '输出全部同义写法'],),
                     '未命中处理': (UNKNOWN_MODES,),
+                    '提示词(连线优先)': ('STRING', {'forceInput': True,
+                                                    'tooltip': '接了这条线就用它的内容；不接就用上面的「中文提示词」文本框'}),
                 },
             }
 
@@ -182,10 +191,11 @@ def _build_clip_node():
         RETURN_NAMES = ('条件', '英文提示词')
         FUNCTION = 'run'
         CATEGORY = CATEGORY
-        DESCRIPTION = '中文提示词 → 英文 tag → 直接编码，省掉中间一个节点。'
+        DESCRIPTION = ('中文提示词 → 英文 tag → 直接编码，省掉中间一个节点。'
+                       '放子图里请用「提示词(连线优先)」这个口，别把文本框提升成输入。')
 
         def run(self, clip=None, **kw):
-            text = kw.get('中文提示词', '')
+            text = kw.get('提示词(连线优先)') or kw.get('中文提示词', '')
             keep = bool(kw.get('未命中时保留中文', False))
             use_fb = bool(kw.get('用兜底翻译（LLM/在线）', False))
             umode = unknown_mode_of(kw.get('未命中处理'))

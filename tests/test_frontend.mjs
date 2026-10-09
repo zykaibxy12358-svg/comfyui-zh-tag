@@ -461,6 +461,42 @@ ok(tagRows[2].classList.contains('zht-phrase'), '词组行有单独的配色');
 ok(tagRows[1].children[0].textContent === 'huge breasts', '英文联想显示完整 tag', tagRows[1].children[0].textContent);
 Z.closePopup();
 
+console.log('\n[16] 新版前端（1.5x）兼容：只有 element 的小部件 / 迟到的小部件');
+// 1.5x 子图里的「提升小部件」是 DOMWidgetImpl：常常没有 inputEl，只有 element
+const elOnlyListeners = {};
+const elOnly = new FakeEl('textarea');
+elOnly.value = 'lanfa';
+elOnly.selectionStart = elOnly.selectionEnd = 5;
+elOnly.addEventListener = (t, fn) => { (elOnlyListeners[t] ||= []).push(fn); };
+const wElOnly = {
+    name: 'text', type: 'customtext', value: 'lanfa',
+    options: { multiline: true }, element: elOnly, callback: () => {},
+};
+const nElOnly = { widgets: [wElOnly], onWidgetChanged: () => {} };
+ext.nodeCreated(nElOnly);
+ok(!!wElOnly._zht_hooked, '只有 element（没有 inputEl）的小部件也会被装饰');
+ok(elOnlyListeners.input && elOnlyListeners.input.length > 0, '并且真的绑上了 input 事件');
+completeResults = [{ en: 'blue hair', zh: '蓝发', score: 95, count: 855605, kind: 'pinyin' }];
+const beforeElOnly = fetchCalls.length;
+elOnlyListeners.input[0]();
+await tick(150);
+ok(fetchCalls.slice(beforeElOnly).some((c) => String(c.url).startsWith('/zhtag/complete')),
+    '在这个元素上打字也会请求补全', String(fetchCalls.length - beforeElOnly));
+Z.closePopup();
+
+// 迟到的小部件：子图节点上的提升小部件是节点建好之后才加上的
+const late = new FakeEl('textarea');
+late.value = '蓝发';
+const wLate = { name: 'text', type: 'customtext', value: '蓝发', options: { multiline: true }, element: late, callback: () => {} };
+const nLate = { widgets: [], onWidgetChanged: () => {} };
+ext.nodeCreated(nLate);
+ok(!wLate._zht_hooked, '一开始没有小部件，不会被误装饰');
+nLate.widgets.push(wLate);
+const fakeType = { prototype: { onDrawForeground() {} } };
+await ext.beforeRegisterNodeDef(fakeType, {});
+fakeType.prototype.onDrawForeground.call(nLate);
+ok(!!wLate._zht_hooked, '节点画的时候会把后加的小部件补上装饰（onDrawForeground 钩子）');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(`\n结果：${pass} 通过 / ${fail} 失败`);
 process.exit(fail ? 1 : 0);

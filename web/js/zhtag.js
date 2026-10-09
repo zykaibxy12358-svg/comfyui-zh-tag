@@ -473,7 +473,8 @@ function commitRow(i) {
         refreshOnlineStatus();
         return;
     }
-    const el = st.el;    const value = String(el.value ?? "");
+    const el = st.el;
+    const value = String(el.value ?? "");
     const before = value.slice(0, st.frag.start);
     const after = value.slice(st.frag.end);
     let insert = String(row.en || "").trim();
@@ -617,16 +618,33 @@ function decorateTextField(node, widget) {
             }
         });
     };
-    bindEl(widget.inputEl || widget.element);
-    if (!widget.inputEl && !widget.element) {
-        // 老版本：文本框是延迟创建到 body 上的，等一小会儿再找
-        setTimeout(() => {
-            try {
-                const el = document.querySelector(".comfy-multiline-input:focus, .comfy-multiline-input");
-                bindEl(el);
-            } catch (e) { /* ignore */ }
-        }, 300);
-    }
+    // 文本框元素在 1.5x 前端里可能晚一步才建好（widget.element 一开始是 undefined），
+    // 所以这里定时重试几次；绝不退化成「随便找一个 textarea 绑上去」——那会绑错节点。
+    const resolveEl = () => {
+        const w = widget;
+        return w.inputEl || w.element
+            || w.elementWrapper?.querySelector?.("textarea")
+            || null;
+    };
+    const tryBind = (attempt = 0) => {
+        const el = resolveEl();
+        if (el) { bindEl(el); return; }
+        if (attempt < 12) {
+            setTimeout(() => tryBind(attempt + 1), 250);
+        } else {
+            log(`「${widget.name}」的文本框一直没出现，跳过绑定（不影响打字，只是没有补全）`);
+        }
+    };
+    tryBind();
+}
+
+/** 把一个节点上所有文本小部件都装饰一遍（补丁式：新出现的小部件也能补上） */
+function decorateNode(node) {
+    if (!node || node._zht_decorated === undefined) node._zht_decorated = 0;
+    const widgets = node.widgets || [];
+    if (widgets.length === node._zht_decorated && node._zht_decorated > 0) return;
+    widgets.forEach((w) => decorateTextField(node, w));
+    node._zht_decorated = widgets.length;
 }
 
 app.registerExtension({
@@ -674,13 +692,21 @@ app.registerExtension({
 
     nodeCreated(node) {
         try {
-            (node?.widgets || []).forEach((w) => decorateTextField(node, w));
+            decorateNode(node);
         } catch (e) {
             log("nodeCreated 处理失败", e);
         }
     },
 
     async beforeRegisterNodeDef(nodeType) {
+        // 小部件可能是节点建好之后才加上去的（比如子图节点上的「提升小部件」），
+        // 所以顺手在画节点时补一遍装饰。
+        const originalDraw = nodeType.prototype.onDrawForeground;
+        nodeType.prototype.onDrawForeground = function (ctx) {
+            try { decorateNode(this); } catch (e) { /* ignore */ }
+            return originalDraw?.apply(this, arguments);
+        };
+
         const original = nodeType.prototype.getExtraMenuOptions;
         nodeType.prototype.getExtraMenuOptions = function (canvas, options) {
             const ret = original?.apply(this, arguments);

@@ -202,6 +202,14 @@ def main():
        '新增输入都放在 optional（老工作流缺这两项也能跑）', ', '.join(types['optional'].keys()))
     ok('未命中时保留中文' in types['required'],
        'v1.0.0 就有的输入仍是 required（位置不变）', ', '.join(types['required'].keys()))
+    ok('提示词(连线优先)' in types['optional']
+       and types['optional']['提示词(连线优先)'][1].get('forceInput') is True,
+       '有纯插口版输入「提示词(连线优先)」（子图里连它，文本框照样能打字）')
+    sock_out, _ = ZHTagTranslate().run(**{'中文提示词': '蓝发', '提示词(连线优先)': '红色长发'})
+    ok('long hair' in sock_out and 'blue hair' not in sock_out,
+       '插口接了线就用线里的内容（连线优先）', sock_out)
+    sock_out2, _ = ZHTagTranslate().run(**{'中文提示词': '蓝发', '提示词(连线优先)': ''})
+    ok('blue hair' in sock_out2, '插口空着就用文本框内容', sock_out2)
     ok(unknown_mode_of('保留中文原文') == 'keep' and unknown_mode_of('丢弃未命中（推荐，只写进报告）') == 'drop'
        and unknown_mode_of('交给兜底翻译（LLM/在线）') == 'fallback', '下拉文字能映射成策略')
     out, report = ZHTagTranslate().run(**{
@@ -219,12 +227,16 @@ def main():
     OLD_ORDER = ['中文提示词', '输出模式', '去重', '未命中时保留中文', '用兜底翻译（LLM/在线）', '同义词']
 
     def widget_keys(cls):
-        """按 ComfyUI 的规则列出「会出现在 widgets_values 里的输入」（排除 CLIP 这类连线输入）。"""
+        """按 ComfyUI 的规则列出「会出现在 widgets_values 里的输入」。
+        forceInput 的输入是纯插口（比如「提示词(连线优先)」），不占小部件位置。"""
         types = cls.INPUT_TYPES()
         keys = []
         for section in ('required', 'optional'):
             for name, spec in types.get(section, {}).items():
                 t = spec[0]
+                opts = spec[1] if len(spec) > 1 and isinstance(spec[1], dict) else {}
+                if opts.get('forceInput'):
+                    continue
                 if isinstance(t, list) or t in ('STRING', 'BOOLEAN', 'INT', 'FLOAT'):
                     keys.append((name, spec))
         return keys
