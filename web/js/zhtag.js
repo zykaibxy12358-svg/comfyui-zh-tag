@@ -23,7 +23,7 @@ const DEFAULTS = {
     normalize: true,
     showToast: true,
     complete: true, // IDE 式补全开关
-    completeLimit: 10,
+    completeLimit: 15,
     onlineProvider: "google", // off（只用词典）| google | microsoft | baidu | youdao | llm
 };
 

@@ -470,6 +470,25 @@ def main():
        '联想按热度排（large 1.58M 在 huge 210k 前面）', ' / '.join(names_b[:5]))
     ok(len(set(names_b)) == len(names_b), '不会出现下划线/空格两个重复行', ' / '.join(names_b))
 
+    # 词族：一个词要能带出「所有涉及它的词条」
+    fam_b = [r['en'] for r in c.complete('breasts', limit=15)]
+    ok(len(c.word_index.get('breasts', [])) > 60, '词索引里 breasts 相关标签够多',
+       f"{len(c.word_index.get('breasts', []))} 个")
+    ok(len(fam_b) >= 12 and 'cum on breasts' in fam_b,
+       'breasts → 一次给出整个词族（含 cum on breasts）', ' / '.join(fam_b[:8]))
+    fam_cn = c.complete('乳房', limit=15)
+    ok(len(fam_cn) >= 8, '中文「乳房」也带出整个词族', ' / '.join(r['en'] for r in fam_cn[:6]))
+    ok(any(r['en'] in ('large breasts', 'huge breasts') for r in fam_cn),
+       '中文词族里含 large/huge breasts', ' / '.join(r['en'] for r in fam_cn[:6]))
+    fam_hair = c.complete('头发', limit=12)
+    ok(len(fam_hair) >= 8 and any('hair' in r['en'] for r in fam_hair),
+       '中文「头发」带出 hair 家族', ' / '.join(r['en'] for r in fam_hair[:5]))
+    ok(c.gloss('bag') == '袋子' and c.gloss('school bag') == '书包' and c.gloss('paper bag') == '纸袋',
+       'bag 家族翻译修正：袋子 / 书包 / 纸袋',
+       f"{c.gloss('bag')} / {c.gloss('school bag')} / {c.gloss('paper bag')}")
+    ok('红' in c.gloss('red bag') and '袋' in c.gloss('red bag'),
+       'red bag → 红袋子（不是「红包」）', c.gloss('red bag'))
+
     res_h = [r['en'] for r in c.complete('hair', limit=6)]
     ok('long hair' in res_h and 'blonde hair' in res_h, 'hair → long hair / blonde hair', ' / '.join(res_h))
     res_br = [r['en'] for r in c.complete('breast', limit=6)]

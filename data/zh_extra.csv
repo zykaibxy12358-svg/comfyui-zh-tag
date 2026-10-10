@@ -434,7 +434,7 @@
 吊带|肩带,strap
 袜,thighhighs
 鞋类|鞋子,footwear
-包|手提包,bag
+袋子|包,bag
 项链,necklace
 耳环|耳饰,earrings
 戒指(已有)
@@ -574,3 +574,42 @@
 背景虚化|虚化,blurry background
 简约背景|单色背景,simple background
 透明背景|透明,transparent background
+
+# —— 容易翻歪的「一词多义」补齐（bag 家族 / 学校相关）——
+# 有这些精确词条后：bag→袋子（不是「手提包」）、school bag→书包、paper bag→纸袋
+书包,school bag
+手提包|手包,handbag
+背包,backpack
+肩包|单肩包,shoulder bag
+行李袋|旅行袋,duffel bag
+化妆包,makeup bag
+垃圾袋,trash bag
+纸袋,paper bag
+塑料袋,plastic bag
+购物袋,shopping bag
+袋子里的东西,bag contents
+包带|包带子,bag strap
+学校|校,school
+教室|课室,classroom
+黑板,blackboard
+课桌|书桌,desk
+文具|文具用品,stationery
+笔|钢笔,pen
+铅笔|铅笔字,pencil
+笔记本|记事本,notebook
+橡皮|橡皮擦,eraser
+尺子|直尺,ruler
+书本(已有)
+盒子|盒,box
+箱子|箱,case
+篮子|筐,basket
+瓶子(已有)
+罐子|罐,jar
+口袋|衣袋,pocket
+钱包,wallet
+钥匙,key
+钥匙串|钥匙圈,keychain
+手表|腕表,watch
+手链,bracelet
+发卡|发夹(已有)
+发箍|发圈,hairband

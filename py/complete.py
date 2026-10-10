@@ -34,7 +34,9 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 MAX_VARIANTS = 8                     # 拼音变体上限
 MAX_INITIAL_VARIANTS = 4
-WORD_HITS_PER_WORD = 40              # 每个英文词最多留多少个热门标签
+WORD_HITS_PER_WORD = 400             # 每个英文词最多留多少个热门标签（要「所有相关词条」就别抠）
+WORD_HITS_IN_QUERY = 120             # 一次查询最多收集多少个词族候选
+RELATED_WORDS = 4                    # 中文词最多带动几个英文词的词族
 PHRASE_MIN_COUNT = 50                # 参与拼装的标签至少要有这么多热度
 PHRASE_MAX_WORDS = 3                 # 只拼 2~3 个词的标签
 PHRASE_VARIANTS = 3                  # 一个标签最多生成几个中文说法
@@ -173,6 +175,8 @@ class Completer:
         self.phrase_map: Dict[str, List[Tuple[str, int]]] = {}
         self.en2zh: Dict[str, List[str]] = {}
         self.en_zh: Dict[str, str] = {}          # 英文标签 → 中文（候选里的中文注释）
+        self.zh2words: Dict[str, List[str]] = {}  # 中文词 → 英文词（用来看「整个词族」）
+        self.curated: Dict[str, str] = {}        # 我们自己的词表给出的翻译（优先用）
         self._en_sorted: List[str] = []
         self._words_sorted: List[str] = []
         self.pinyin_path = pinyin_path or os.path.join(
@@ -331,6 +335,8 @@ class Completer:
           2. 逐词拼：huge(巨大) + breasts(乳房) → 巨大乳房（有任何一个词不认识就放弃，免得拼出怪话）
           3. 拼不出来就不写（界面会退化成只显示英文 + 来源标签）
         """
+        curated = self._load_curated()
+        self.curated = curated
         buckets: Dict[str, List[str]] = {}
         for zh, ens in self.dic.zh2en.items():
             z = (zh or '').strip()
@@ -343,8 +349,45 @@ class Completer:
                 bucket = buckets.setdefault(key, [])
                 if z not in bucket:
                     bucket.append(z)
-        # 同一个英文有多个中文说法时，挑最像「名词注释」的那个（排掉戴眼镜这类动词短语）
+        # 我们自己补的词条（zh_extra.csv）直接定案：bag 就是「包」，不该被社区表里的「手提包」顶掉
+        for key, z in curated.items():
+            buckets[key] = [z]
         self.en_zh = {k: _pick_zh(v) for k, v in buckets.items() if v}
+        # 中文词 → 英文词（只认「完全等于该中文词」的映射，避免「包」把面包店也带出来）
+        zh2words: Dict[str, List[str]] = {}
+        for w, zhs in self.en2zh.items():
+            for z in zhs:
+                bucket = zh2words.setdefault(z, [])
+                if w not in bucket and len(bucket) < RELATED_WORDS:
+                    bucket.append(w)
+        self.zh2words = zh2words
+
+    def _load_curated(self) -> Dict[str, str]:
+        """读我们自己那份 data/zh_extra.csv（MIT），记下「英文 → 我们给的中文」，用于优先选取。"""
+        out: Dict[str, str] = {}
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                            'data', 'zh_extra.csv')
+        if not os.path.isfile(path):
+            return out
+        try:
+            with open(path, 'r', encoding='utf-8-sig') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    parts = [p.strip() for p in line.split(',')]
+                    if len(parts) < 2:
+                        continue
+                    zh_first = parts[0].split('|')[0].strip()
+                    if not zh_first or not _has_cjk(zh_first):
+                        continue
+                    for en in parts[1:]:
+                        key = en.lower().replace(' ', '_')
+                        if key and key not in out:
+                            out[key] = zh_first
+        except Exception as e:
+            print(f'[ZHTag] 读取内置词表失败（不影响补全）：{e}')
+        return out
 
     def gloss(self, tag_en: str) -> str:
         """给一个英文标签配中文注释（没有就返回空串）。"""
@@ -406,7 +449,8 @@ class Completer:
                 if partial:
                     continue
                 return ''
-            parts.append(zs[0] + ('的' if possessive else ''))
+            word_zh = self.curated.get(w) or zs[0]      # 我们自己那份词表优先（bag → 包）
+            parts.append(word_zh + ('的' if possessive else ''))
         if partial and len(parts) < 1:
             return ''
         return ''.join(parts)
@@ -422,6 +466,24 @@ class Completer:
         return self
 
     # ------------------------------------------------------------------ 英文侧
+    def _en_word_family(self, word: str, score: int = 74) -> List[Tuple[int, int, str, str]]:
+        """某个英文词的全部热门词族：breasts → breasts / large breasts / huge breasts / cum on breasts …"""
+        out: List[Tuple[int, int, str, str]] = []
+        for tag, count in self.word_index.get(word, [])[:WORD_HITS_IN_QUERY]:
+            out.append((score, count, tag, ''))
+        return out
+
+    def _cn_related(self, q: str) -> List[Tuple[int, int, str, str]]:
+        """中文词 → 它对应的英文词 → 该词的整个词族。
+
+        例：乳房 → breast/breasts → breast、large breasts、huge breasts、cum on breasts …
+        """
+        out: List[Tuple[int, int, str, str]] = []
+        words = self.zh2words.get(q) or []
+        for w in words[:RELATED_WORDS]:
+            out.extend(self._en_word_family(w, 74))
+        return out
+
     def _en_prefix(self, q: str, limit: int) -> List[Tuple[int, int, str, str]]:
         """英文 tag 前缀：long_h → long_hair"""
         import bisect
@@ -439,7 +501,7 @@ class Completer:
     def _en_word(self, q: str, limit: int) -> List[Tuple[int, int, str, str]]:
         """英文整词联想：breasts → large breasts / huge breasts；breast → breasts"""
         out: List[Tuple[int, int, str, str]] = []
-        for tag, count in self.word_index.get(q, [])[:limit * 4]:
+        for tag, count in self.word_index.get(q, [])[:WORD_HITS_IN_QUERY]:
             if tag == q:
                 continue                                   # 精确命中另有 85 分
             words = tag.split('_')
@@ -522,6 +584,9 @@ class Completer:
         if has_cjk:
             for s, count, en, zh in self._cn_phrases(q):
                 scored.append((s, count, en, zh, 'phrase'))
+            # 中文词也把整个词族带出来：乳房 → breast / breasts 的全部热门标签
+            for s, count, en, zh in self._cn_related(q):
+                scored.append((s, count, en, zh, 'related'))
 
         if not has_cjk and len(q) >= 2:
             # 英文也可以带空格写（red dress = red_dress），统一成下划线再匹配

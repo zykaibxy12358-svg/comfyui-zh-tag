@@ -1,4 +1,4 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.2.6）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.7）
 
 **像 IDE 一样写提示词**：在文本框里打**中文、拼音或英文词**，光标下方直接弹出英文 Danbooru tag 候选，
 `↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
@@ -140,7 +140,7 @@ ComfyUI 的规矩是：**一个输入口一旦接了线，对应的文本框就�
 | 设置 | 默认 | 说明 |
 | --- | --- | --- |
 | IDE 式补全（打中文/拼音就出候选） | 开 | 补全总开关 |
-| 补全候选数量 | 10 | 候选行数 |
+| 补全候选数量 | 15 | 候选行数（词族模式下建议 15~20） |
 | 整句翻译时词典没查到的词怎么办 | `drop` | `drop` 丢掉 / `keep` 保留中文 / `fallback` 交给翻译方式 |
 | **翻译方式** | `google` | `off` 只用词典（不联网）/ `google` / `microsoft` / `baidu` / `youdao` / `llm` |
 | 失焦/停顿时整句翻译 | 开 | 原来的整句翻译开关 |
@@ -315,12 +315,12 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 八、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 151 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 158 项
 node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 96 项
 node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 20 项（需 ComfyUI 8188 + Chrome 9222）
 ```
 
-**后端 151 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 158 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 **切分残留的单字不送在线翻译**、Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、
 **在线服务商切换与写回配置**、自定义词典加载、配置文件/拼音表不被误当词典、节点层默认设置、

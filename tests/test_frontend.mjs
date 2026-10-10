@@ -35,7 +35,7 @@ export const app = {
     'ZHTag.auto': true, 'ZHTag.trigger': 'blur', 'ZHTag.idleMs': 900,
     'ZHTag.unknownMode': 'drop', 'ZHTag.normalize': true,
     'ZHTag.showToast': false,
-    'ZHTag.complete': true, 'ZHTag.completeLimit': 10,
+    'ZHTag.complete': true, 'ZHTag.completeLimit': 15,
   },
   registerExtension(e) { this._ext = e; return e; },
   ui: { settings: { getSettingValue(id) { return app._settings[id]; } } },
@@ -337,7 +337,7 @@ const beforeC = fetchCalls.length;
 await Z.openCompletion(nc, wc, ta);
 await tick(30);
 const cmpReq = fetchCalls.slice(beforeC).find((c) => String(c.url).startsWith('/zhtag/complete'));
-ok(!!cmpReq && cmpReq.url === '/zhtag/complete?q=lanfa&limit=10', '按片段发起补全查询', String(cmpReq?.url));
+ok(!!cmpReq && cmpReq.url === '/zhtag/complete?q=lanfa&limit=15', '按片段发起补全查询', String(cmpReq?.url));
 const pop = Z.getPopupEl();
 ok(!!pop && pop.style.display === 'block', '候选框显示出来了');
 const rows = pop.querySelectorAll('.zht-row');
