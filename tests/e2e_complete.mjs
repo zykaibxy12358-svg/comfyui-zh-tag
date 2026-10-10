@@ -53,6 +53,9 @@ async function main() {
         const Z = window.ZHTag;
         if (!Z) return { error: 'window.ZHTag 不存在（扩展没加载？）' };
         const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        // 先固定到「谷歌」，免得被上一次测试或手动切换留下的状态影响
+        await fetch('/zhtag/online', { method: 'POST',
+            headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: 'google' }) });
         await Z.refreshOnlineStatus();
         const ta = document.createElement('textarea');
         ta.style.cssText = 'position:fixed;left:40px;top:40px;width:300px;height:80px;font:13px monospace;';

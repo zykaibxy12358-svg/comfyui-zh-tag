@@ -108,11 +108,13 @@ class FakeEl {
 
 const fakeBody = new FakeEl('body');
 const fakeHead = new FakeEl('head');
+const docListeners = {};                    // 记录 document 上的监听器，测试「点别处关闭」
 globalThis.document = {
     body: fakeBody, head: fakeHead, activeElement: null,
     createElement: (tag) => new FakeEl(tag),
     querySelector: () => null,
-    addEventListener: () => {},
+    addEventListener: (t, fn) => { (docListeners[t] ||= []).push(fn); },
+    dispatch: (t, e = {}) => (docListeners[t] || []).forEach((fn) => fn(e)),
 };
 globalThis.getComputedStyle = () => ({
     fontFamily: 'monospace', fontSize: '13px', fontWeight: '400', fontStyle: 'normal',
@@ -532,6 +534,34 @@ const fakeType = { prototype: { onDrawForeground() {} } };
 await ext.beforeRegisterNodeDef(fakeType, {});
 fakeType.prototype.onDrawForeground.call(nLate);
 ok(!!wLate._zht_hooked, '节点画的时候会把后加的小部件补上装饰（onDrawForeground 钩子）');
+
+console.log('\n[17] 中文注释（英文候选也要有中文）+ 点别处关闭');
+// 17a：英文候选带中文注释（后端 gloss 出来的）
+completeResults = [
+    { en: 'breasts', zh: '乳房', score: 85, count: 3439214, kind: 'en' },
+    { en: 'huge breasts', zh: '巨大乳房', score: 72, count: 209571, kind: 'enword' },
+    { en: 'between breasts', zh: '', score: 72, count: 49433, kind: 'enword' },
+];
+ta.value = 'bre';
+ta.selectionStart = ta.selectionEnd = 3;
+await Z.openCompletion(nc, wc, ta);
+await tick(40);
+const gl = Z.getPopupEl().querySelectorAll('.zht-row');
+ok(gl[1].children[1].textContent === '巨大乳房', '英文联想行显示中文注释', gl[1].children[1].textContent);
+ok(gl[2].children[1].textContent === '英文联想', '拼不出中文时退化成来源标签', gl[2].children[1].textContent);
+ok(gl[0].children[1].textContent === '乳房', '英文标签行也带中文', gl[0].children[1].textContent);
+
+// 17b：点候选框里面 → 不关
+Z.installOutsideCloser();
+document.dispatch('pointerdown', { target: Z.getPopupEl() });
+ok(Z.getPopupState() !== null, '点候选框本身不会关掉它');
+// 17c：点当前文本框 → 不关
+document.dispatch('pointerdown', { target: ta });
+ok(Z.getPopupState() !== null, '点正在打字的文本框不会关掉它');
+// 17d：点别的地方（画布/别的节点）→ 关
+document.dispatch('pointerdown', { target: new FakeEl('canvas') });
+ok(Z.getPopupState() === null && Z.getPopupEl().style.display === 'none',
+    '点画布/别处 → 候选框立刻关闭');
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(`\n结果：${pass} 通过 / ${fail} 失败`);

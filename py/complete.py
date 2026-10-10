@@ -48,6 +48,13 @@ def _is_cjk(ch: str) -> bool:
     return '\u3400' <= ch <= '\u9fff'
 
 
+# 逐词拼中文注释时，遇到这些结构词就放弃（`cum_on_breasts` → 「精液上乳房」这种不如不写）
+GLOSS_STOPWORDS = {
+    'on', 'in', 'at', 'of', 'with', 'from', 'over', 'under', 'behind', 'near', 'into',
+    'to', 'for', 'by', 'against', 'and', 'or', 'the', 'a', 'an', 'as', 'off', 'out', 'up',
+}
+
+
 def _has_cjk(text: str) -> bool:
     return any(_is_cjk(c) for c in (text or ''))
 
@@ -63,6 +70,7 @@ class Completer:
         self.word_index: Dict[str, List[Tuple[str, int]]] = {}
         self.phrase_map: Dict[str, List[Tuple[str, int]]] = {}
         self.en2zh: Dict[str, List[str]] = {}
+        self.en_zh: Dict[str, str] = {}          # 英文标签 → 中文（候选里的中文注释）
         self._en_sorted: List[str] = []
         self._words_sorted: List[str] = []
         self.pinyin_path = pinyin_path or os.path.join(
@@ -210,6 +218,52 @@ class Completer:
                     break
         self.phrase_map = dict(phrases)
 
+    def _build_en_zh(self) -> None:
+        """英文标签 → 中文，给「只有英文的候选」补上中文注释。
+
+        三个来源，按优先级：
+          1. 词表里现成的整条翻译（词典里 中↔英 反向查；用户下载的社区中文表也在这个池子里）
+          2. 逐词拼：huge(巨大) + breasts(乳房) → 巨大乳房（有任何一个词不认识就放弃，免得拼出怪话）
+          3. 拼不出来就不写（界面会退化成只显示英文 + 来源标签）
+        """
+        m: Dict[str, str] = {}
+        for zh, ens in self.dic.zh2en.items():
+            z = (zh or '').strip()
+            if not (1 <= len(z) <= 14) or not _has_cjk(z):
+                continue
+            for en in ens:
+                key = en.strip().lower().replace(' ', '_')
+                if not key:
+                    continue
+                cur = m.get(key)
+                # 同一标签有多个中文时，优先留更短、更干净的那个
+                if cur is None or len(z) < len(cur) or (' ' in cur and ' ' not in z):
+                    m[key] = z
+        self.en_zh = m
+
+    def gloss(self, tag_en: str) -> str:
+        """给一个英文标签配中文注释（没有就返回空串）。"""
+        key = (tag_en or '').strip().lower().replace(' ', '_')
+        if not key:
+            return ''
+        hit = self.en_zh.get(key)
+        if hit:
+            return hit
+        words = [w for w in key.split('_') if w]
+        if len(words) < 2:
+            return ''
+        # 带介词/连词的标签别硬拼（cum_on_breasts 直译成「精液上乳房」这种就没意思了），
+        # 交给现成翻译或用户下载的社区中文表
+        if any(w in GLOSS_STOPWORDS for w in words):
+            return ''
+        parts = []
+        for w in words:
+            zs = self.en2zh.get(w)
+            if not zs:
+                return ''                       # 有词不认识就别硬拼
+            parts.append(zs[0])
+        return ''.join(parts)
+
     def build(self) -> 'Completer':
         self.load_pinyin()
         self._build_entries()
@@ -217,6 +271,7 @@ class Completer:
         self._en_sorted = sorted(self.dic.en_count.keys())
         self._build_en_words()
         self._build_phrases()
+        self._build_en_zh()
         return self
 
     # ------------------------------------------------------------------ 英文侧
@@ -339,7 +394,11 @@ class Completer:
         ranked = sorted(best.items(), key=lambda kv: (-kv[1][0], -kv[1][1], kv[0]))
         out = []
         for _key, (s, count, zh, kind) in ranked[:max(1, limit)]:
-            out.append({'en': _key.replace('_', ' '), 'zh': zh, 'score': s, 'count': count, 'kind': kind})
+            display = _key.replace('_', ' ')
+            # 没有中文的候选（英文联想/英文前缀）补一个中文注释：现成翻译 → 逐词拼 → 留空
+            if not zh:
+                zh = self.gloss(_key)
+            out.append({'en': display, 'zh': zh, 'score': s, 'count': count, 'kind': kind})
         return out
 
 
@@ -353,5 +412,6 @@ def get_completer(reload: bool = False) -> Completer:
         _COMPLETER = Completer(get_dictionary(reload=reload))
         print(f'[ZHTag] 补全索引就绪：{len(_COMPLETER.entries)} 条中文词条 / '
               f'拼音表 {len(_COMPLETER.pinyin)} 字 / 英文索引 {len(_COMPLETER.en_tags)} 条 / '
-              f'英文词联想 {len(_COMPLETER.word_index)} 词 / 中文词组 {len(_COMPLETER.phrase_map)} 条')
+              f'英文词联想 {len(_COMPLETER.word_index)} 词 / 中文词组 {len(_COMPLETER.phrase_map)} 条 / '
+              f'英文中文注释 {len(_COMPLETER.en_zh)} 条')
     return _COMPLETER

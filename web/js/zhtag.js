@@ -160,6 +160,30 @@ function closePopup() {
     STATE = null;
 }
 
+/**
+ * 点/摸到别的地方就关掉候选框。
+ *
+ * 为什么要单独装这个：画布、节点标题这些地方点了不一定能给 textarea 触发 blur，
+ * 于是候选框会一直挂在那儿。这里在 document 上抓 pointerdown（捕获阶段）：
+ * 只要不是点在候选框里、也不是点在当前那个文本框里，就直接关。
+ */
+let OUTSIDE_HOOKED = false;
+function installOutsideCloser() {
+    if (OUTSIDE_HOOKED || typeof document === "undefined") return;
+    OUTSIDE_HOOKED = true;
+    const handler = (e) => {
+        if (!STATE) return;
+        try {
+            const t = e?.target;
+            if (POPUP && t && (t === POPUP || POPUP.contains?.(t))) return;   // 点候选框本身：不关
+            if (STATE.el && (t === STATE.el || STATE.el.contains?.(t))) return;  // 点当前文本框：不关
+        } catch (err) { /* 保守起见还是关掉 */ }
+        closePopup();
+    };
+    try { document.addEventListener("pointerdown", handler, true); } catch (e) { /* ignore */ }
+    try { document.addEventListener("mousedown", handler, true); } catch (e) { /* 老环境只有 mouse 事件 */ }
+}
+
 /** textarea 里光标的屏幕坐标（镜像 div 量位置，唯一可靠的做法） */
 function caretXY(el, pos) {
     try {
@@ -221,10 +245,10 @@ function renderPopup() {
         en.textContent = r.kind === "online" ? `在线翻译 → ${r.en}` : r.en;
         const src = document.createElement("span");
         src.className = "zht-src";
+        // 优先显示中文（英文候选也会尽量配上中文注释），没有中文才退化成来源标签
         const kindLabel = KIND_LABEL[r.kind] || "";
-        src.textContent = r.zh
-            ? `${r.zh}${kindLabel ? " · " + kindLabel : ""}`
-            : kindLabel;
+        const kindTag = r.kind === "phrase" ? " · 词组" : (r.kind === "pinyin" ? " · 拼音" : "");
+        src.textContent = r.zh ? `${r.zh}${kindTag}` : kindLabel;
         const cnt = document.createElement("span");
         cnt.className = "zht-cnt";
         cnt.textContent = fmtCount(r.count);
@@ -697,6 +721,7 @@ app.registerExtension({
     async setup() {
         log("已加载：IDE 式补全（中文/拼音→英文 tag）+ 失焦整句翻译 + 右键菜单 + Ctrl+Alt+T");
         ensurePopup();
+        installOutsideCloser();
         // 词库 + 在线翻译状态自检（控制台可见；右上角按钮的状态灯也用它）
         try {
             const r = await fetch("/zhtag/status");
@@ -820,6 +845,7 @@ window.ZHTag = {
     setOnlineMode,
     onlineOn,
     providerReady,
+    installOutsideCloser,
     getOnline: () => ONLINE,
     getPopupState: () => STATE,
     getPopupEl: () => POPUP,

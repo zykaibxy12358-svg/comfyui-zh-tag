@@ -477,6 +477,18 @@ def main():
     res_rd = [r['en'] for r in c.complete('red dress', limit=4)]
     ok('red dress' in res_rd, '英文带空格也认（red dress = red_dress）', ' / '.join(res_rd))
 
+    # 中文注释：英文候选也要尽量带上中文（现成翻译 → 逐词拼）
+    ok(len(c.en_zh) > 3000, '英文→中文注释表已建', f'{len(c.en_zh)} 条')
+    ok(c.gloss('huge_breasts') == '巨大乳房', '逐词拼：huge_breasts → 巨大乳房', c.gloss('huge_breasts'))
+    ok(c.gloss('breasts') == '乳房', '现成翻译：breasts → 乳房', c.gloss('breasts'))
+    ok(c.gloss('a_word_that_never_exists_xyz') == '', '拼不出来就返回空（界面退化成只显示英文）')
+    glossed = [r for r in c.complete('breasts', limit=8) if r['zh']]
+    ok(len(glossed) >= 5, 'breasts 的前几个候选大多带中文注释',
+       ' / '.join(f"{r['en']}→{r['zh']}" for r in c.complete('breasts', limit=5)))
+    top3000 = sorted(c.dic.en_count.items(), key=lambda kv: -kv[1])[:3000]
+    covered = sum(1 for t, _ in top3000 if c.gloss(t))
+    ok(covered > 1800, '最热 3000 个标签的中文注释覆盖率', f'{covered} 个（{covered / 30:.0f}%）')
+
     res_ls = c.complete('黑色蕾丝', limit=4)
     ok(res_ls and res_ls[0]['en'] == 'black lace' and res_ls[0]['kind'] == 'phrase',
        '黑色蕾丝 → black lace（用户举的例子）', str(res_ls[0]) if res_ls else '')
