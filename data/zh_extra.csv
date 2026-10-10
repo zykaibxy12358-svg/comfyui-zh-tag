@@ -368,7 +368,8 @@
 紧|紧绷,tight
 松|宽松,loose
 # 身体部位（词组另一半）
-乳房|胸部,breasts
+乳房|胸部|乳,breasts
+乳房,breast
 大腿,thighs
 臀部,ass
 腰部,waist
@@ -551,3 +552,25 @@
 玫瑰|蔷薇,rose
 樱花(已有)
 云(已有)
+
+# —— 拼中文注释要用的普通名词/动作（覆盖率再抬一档） ——
+衣服|衣物,clothes
+裙子下摆|下摆,hem
+交叉|交叉着,crossed
+拉|拉扯,pull
+掀起|揭起,lift
+露出|外露,out
+旁边|一侧,aside
+正面|前方视角,front view
+背面|后方视角,back view
+侧面视角|侧视,side view
+视角|视野,view
+角度|机位,angle
+特写|近景,close-up
+全身|全身照,full body
+半身|半身像,half body
+上半身|上身,upper body
+下半身|下身,lower body
+背景虚化|虚化,blurry background
+简约背景|单色背景,simple background
+透明背景|透明,transparent background

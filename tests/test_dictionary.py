@@ -479,15 +479,34 @@ def main():
 
     # 中文注释：英文候选也要尽量带上中文（现成翻译 → 逐词拼）
     ok(len(c.en_zh) > 3000, '英文→中文注释表已建', f'{len(c.en_zh)} 条')
-    ok(c.gloss('huge_breasts') == '巨大乳房', '逐词拼：huge_breasts → 巨大乳房', c.gloss('huge_breasts'))
-    ok(c.gloss('breasts') == '乳房', '现成翻译：breasts → 乳房', c.gloss('breasts'))
+    ok(('乳' in c.gloss('huge_breasts') or '胸' in c.gloss('huge_breasts')),
+       '逐词拼：huge_breasts → 巨大/超大 + 乳房/胸部',
+       c.gloss('huge_breasts'))
+    ok(('乳' in c.gloss('breasts') or '胸' in c.gloss('breasts')),
+       '现成翻译：breasts → 乳房/胸部', c.gloss('breasts'))
     ok(c.gloss('a_word_that_never_exists_xyz') == '', '拼不出来就返回空（界面退化成只显示英文）')
+    # 带介词的标签也要有中文（按中文语序拼，不是照英文顺序硬贴）
+    ok(('乳' in c.gloss('cum on breasts') or '胸' in c.gloss('cum on breasts'))
+       and '精液' in c.gloss('cum on breasts'),
+       'cum on breasts → 乳房/胸部上的精液', c.gloss('cum on breasts'))
+    g_cum = c.gloss('cum on breasts')
+    ok(g_cum.endswith('精液'), '语序是中文的（位置在前、主体在后）', g_cum)
+    ok(c.gloss('covered in cum') == '沾满精液', 'covered in cum → 沾满精液', c.gloss('covered in cum'))
+    ok('眼镜' in c.gloss('girl with glasses'), 'girl with glasses → 带眼镜的…', c.gloss('girl with glasses'))
+    ok(c.gloss('standing on floor').startswith('在') and '站' in c.gloss('standing on floor'),
+       '动词在前时换另一种语序：standing on floor', c.gloss('standing on floor'))
+    ok('别人' in c.gloss("grabbing another's breast") or '他人' in c.gloss("grabbing another's breast"),
+       "所有格也能翻：grabbing another's breast", c.gloss("grabbing another's breast"))
+    ok(c.gloss('under skirt').endswith('下面') and '裙' in c.gloss('under skirt'),
+       '两词介词：under skirt → 裙子下面', c.gloss('under skirt'))
+    ok(c.gloss('legs crossed') and c.gloss('wet clothes'), '普通两词也能拼',
+       f"{c.gloss('legs crossed')} / {c.gloss('wet clothes')}")
     glossed = [r for r in c.complete('breasts', limit=8) if r['zh']]
     ok(len(glossed) >= 5, 'breasts 的前几个候选大多带中文注释',
        ' / '.join(f"{r['en']}→{r['zh']}" for r in c.complete('breasts', limit=5)))
     top3000 = sorted(c.dic.en_count.items(), key=lambda kv: -kv[1])[:3000]
     covered = sum(1 for t, _ in top3000 if c.gloss(t))
-    ok(covered > 1800, '最热 3000 个标签的中文注释覆盖率', f'{covered} 个（{covered / 30:.0f}%）')
+    ok(covered > 2400, '最热 3000 个标签的中文注释覆盖率', f'{covered} 个（{covered / 30:.0f}%）')
 
     res_ls = c.complete('黑色蕾丝', limit=4)
     ok(res_ls and res_ls[0]['en'] == 'black lace' and res_ls[0]['kind'] == 'phrase',

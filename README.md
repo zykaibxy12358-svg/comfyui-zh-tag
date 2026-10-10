@@ -1,4 +1,4 @@
-# ZHTag · ComfyUI 中文提示词插件（v1.2.5）
+# ZHTag · ComfyUI 中文提示词插件（v1.2.6）
 
 **像 IDE 一样写提示词**：在文本框里打**中文、拼音或英文词**，光标下方直接弹出英文 Danbooru tag 候选，
 `↑↓` 选、`Enter`（或 `Tab`）采用、`Esc` 关掉；词库里没有的词给一行「在线翻译」。
@@ -73,7 +73,10 @@ https://github.com/zykaibxy12358-svg/comfyui-zh-tag
 > **中文注释是怎么来的**：① 词表里现成的整条翻译（`breasts` → 乳房）；
 > ② 逐词拼（`huge`(巨大) + `breasts`(乳房) → 巨大乳房），任何一个词不认识就不硬拼；
 > ③ 拼不出来就只显示英文。
-> 内置数据能覆盖**最热 3000 个标签的约 69%**；
+> **带介词的照翻，而且按中文语序**：`cum on breasts` → 乳房上的精液、`covered in cum` → 沾满精液、
+> `girl with glasses` → 带眼镜的少女、`under skirt` → 裙子下面、`standing on floor` → 在地上站立、
+> `grabbing another's breast` → 抓住别人的乳房。
+> 内置数据能覆盖**最热 3000 个标签的约 82%**；
 > 想「无论什么词汇都有中文」，右键菜单点一次「**下载/更新社区词典**」——
 > 社区中文表加载后，`long hair between eyes`、`big hair` 这类冷门标签也立刻有中文注释。
 
@@ -312,12 +315,12 @@ curl -X POST http://127.0.0.1:8188/zhtag/translate -H "Content-Type: application
 ## 八、自测（都不需要 ComfyUI）
 
 ```bash
-python comfyui-zh-tag/tests/test_dictionary.py   # 后端 143 项
+python comfyui-zh-tag/tests/test_dictionary.py   # 后端 151 项
 node   comfyui-zh-tag/tests/test_frontend.mjs    # 前端 96 项
 node   comfyui-zh-tag/tests/e2e_complete.mjs     # 真浏览器端到端 20 项（需 ComfyUI 8188 + Chrome 9222）
 ```
 
-**后端 143 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
+**后端 151 项**：词典加载、精确/同义词、繁简归一、最长匹配切分、权重括号保留、去重、
 自然语言整句、功能词/人称代词/数量短语、`unknown_mode` 三种策略、
 **切分残留的单字不送在线翻译**、Danbooru 正名与热度排序、兜底链路（含连不上时的安全失败）、
 **在线服务商切换与写回配置**、自定义词典加载、配置文件/拼音表不被误当词典、节点层默认设置、

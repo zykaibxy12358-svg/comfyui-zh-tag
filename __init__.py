@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""ZHTag —— ComfyUI 中文提示词插件（v1.2.5）
+"""ZHTag —— ComfyUI 中文提示词插件（v1.2.6）
 
 像 IDE 一样写提示词：在文本框里打中文、拼音或英文词，光标下方直接列出英文 Danbooru tag
 候选（↑↓ 选、Enter 采用、Esc 关），**每一行都带中文**（英文候选也会补中文注释）；
@@ -10,13 +10,14 @@
   按 ComfyUI 的「中断」会立刻放弃正在进行的翻译
 - 补全：中文（蓝发）/ 拼音（lanfa、smw、多音字 changfa）/ 英文 tag 前缀（long_h）/ 英文整词联想
 - **词组制度**：巨大乳房 → huge breasts（真实 Danbooru 标签）；黑色蕾丝 → black lace
+- **中文注释**：每一行都有中文；带介词的按中文语序拼（cum on breasts → 乳房上的精液）
 - **点别的地方就关**：候选框在点画布/别的节点/侧栏时立刻收起
 - **子图友好**：有个纯插口输入「提示词(连线优先)」——在子图里连它，中文文本框照样能打字
 - 数据：data/zh_tags.csv + data/zh_extra.csv（中英词条）、data/danbooru_index.tsv（正名与热度）、
         data/pinyin_chars.tsv（汉字→拼音；构建期用 pypinyin 生成，运行时零依赖）
 - 节点：ZHTag 中文→英文Tag / ZHTag 中文CLIP编码 / ZHTag 词典查询
 """
-__version__ = '1.2.5'
+__version__ = '1.2.6'
 
 import os
 import sys

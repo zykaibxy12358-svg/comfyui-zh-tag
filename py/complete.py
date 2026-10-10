@@ -27,6 +27,7 @@
 from __future__ import annotations
 
 import os
+import re
 from collections import Counter, defaultdict
 from itertools import product
 from typing import Dict, List, Optional, Sequence, Tuple
@@ -44,14 +45,115 @@ ALIGN_STOPWORDS = {'with', 'of', 'on', 'in', 'and', 'at', 'for', 'to', 'a', 'an'
                    'by', 'from', 'over', 'under', 'as', 'is', 'no', 'or', 'into'}
 
 
+def _zh_rank(zh: str) -> tuple:
+    """中文候选的排序键。
+
+    优先级：不是动词短语（戴眼镜 ✗）→ 不含数字/序号/符号垃圾（双马尾二 ✗）→ 更长更具体
+    （乳房 优于 乳、巨大 优于 超）。同分时保持词典里的原始顺序。
+    """
+    verbish = zh[:1] in VERB_PREFIXES
+    junky = bool(re.search(r'[0-9①-⑩|/（）()\[\]「」]|^[一二三四五六七八九十]+$', zh)) or zh.endswith('二')
+    return (1 if verbish else 0, 1 if junky else 0, -len(zh))
+
+
+def _pick_zh(cands: Sequence[str]) -> str:
+    cleaned: List[str] = []
+    for c in cands:
+        for piece in re.split(r'[|/、;；]', str(c or '')):
+            piece = piece.strip()
+            if piece and piece not in cleaned:
+                cleaned.append(piece)
+    return sorted(cleaned, key=_zh_rank)[0] if cleaned else ''
+
+
 def _is_cjk(ch: str) -> bool:
     return '\u3400' <= ch <= '\u9fff'
 
+
+# 中文里以这些字开头的多半是动词短语（戴眼镜/穿裙子），当「名词注释」不合适
+VERB_PREFIXES = set('戴穿拿握抱牵抓举打踢跑走站坐躺跪摸舔咬吃喝看读写画踩靠在有被用把做')
+
+# 这些字结尾的中文本身已经是方位词了，拼介词时不要再叠一个（地上 + 上 = 地上上 ✗）
+POS_CHARS = set('上下里中内间前后旁外左右side')
+
+
+def _add_pos(base: str, suffix: str) -> str:
+    """给中文名词加方位后缀；已经有方位词就不叠。"""
+    if not base:
+        return base
+    if suffix and base[-1] in POS_CHARS and suffix[0] in POS_CHARS:
+        return base
+    return base + suffix
 
 # 逐词拼中文注释时，遇到这些结构词就放弃（`cum_on_breasts` → 「精液上乳房」这种不如不写）
 GLOSS_STOPWORDS = {
     'on', 'in', 'at', 'of', 'with', 'from', 'over', 'under', 'behind', 'near', 'into',
     'to', 'for', 'by', 'against', 'and', 'or', 'the', 'a', 'an', 'as', 'off', 'out', 'up',
+}
+
+# 介词：`A_介词_B` 这类标签按中文语序拼。
+# 值是 (名词式, 动词式)——动词在前的（standing_on_floor）读「站在地面上」更自然，
+# 名词在前的（cum_on_breasts）读「乳房上的精液」更自然。
+PREP_PATTERNS = {
+    'on': (lambda a, b: f'{_add_pos(b, "上")}的{a}', lambda a, b: f'在{_add_pos(b, "上")}{a}'),
+    'in': (lambda a, b: f'{_add_pos(b, "里")}的{a}', lambda a, b: f'在{_add_pos(b, "里")}{a}'),
+    'at': (lambda a, b: f'在{b}的{a}', lambda a, b: f'在{b}{a}'),
+    'of': (lambda a, b: f'{b}的{a}', lambda a, b: f'{b}的{a}'),
+    'with': (lambda a, b: f'带{b}的{a}', lambda a, b: f'带着{b}{a}'),
+    'and': (lambda a, b: f'{a}和{b}', lambda a, b: f'{a}和{b}'),
+    'or': (lambda a, b: f'{a}或{b}', lambda a, b: f'{a}或{b}'),
+    'from': (lambda a, b: f'从{b}的{a}', lambda a, b: f'从{b}{a}'),
+    'over': (lambda a, b: f'{_add_pos(b, "上方")}的{a}', lambda a, b: f'{a}在{_add_pos(b, "上方")}'),
+    'under': (lambda a, b: f'{_add_pos(b, "下方")}的{a}', lambda a, b: f'{a}在{_add_pos(b, "下方")}'),
+    'between': (lambda a, b: f'{_add_pos(b, "之间")}的{a}', lambda a, b: f'{a}在{_add_pos(b, "之间")}'),
+    'behind': (lambda a, b: f'{_add_pos(b, "后面")}的{a}', lambda a, b: f'{a}在{_add_pos(b, "后面")}'),
+    'near': (lambda a, b: f'{_add_pos(b, "附近")}的{a}', lambda a, b: f'{a}靠近{b}'),
+    'against': (lambda a, b: f'贴着{b}的{a}', lambda a, b: f'{a}贴着{b}'),
+    'into': (lambda a, b: f'进入{b}的{a}', lambda a, b: f'{a}进入{b}'),
+    'by': (lambda a, b: f'被{b}的{a}', lambda a, b: f'被{b}{a}'),
+    'to': (lambda a, b: f'朝{b}的{a}', lambda a, b: f'{a}朝向{b}'),
+    'for': (lambda a, b: f'为{b}的{a}', lambda a, b: f'为{b}{a}'),
+    'off': (lambda a, b: f'脱下{b}的{a}', lambda a, b: f'{a}脱下{b}'),
+    'through': (lambda a, b: f'穿过{b}的{a}', lambda a, b: f'{a}穿过{b}'),
+}
+
+# 两词标签的介词后缀：under_skirt → 裙子下面
+PREP_AFFIX = {
+    'on': lambda b: _add_pos(b, '上'), 'in': lambda b: _add_pos(b, '里'),
+    'at': lambda b: f'在{b}', 'of': lambda b: f'{b}的', 'with': lambda b: f'带{b}',
+    'under': lambda b: _add_pos(b, '下面'), 'over': lambda b: _add_pos(b, '上方'),
+    'between': lambda b: _add_pos(b, '之间'), 'behind': lambda b: _add_pos(b, '后面'),
+    'near': lambda b: _add_pos(b, '附近'), 'from': lambda b: f'从{b}',
+    'to': lambda b: f'朝{b}', 'for': lambda b: f'为{b}', 'by': lambda b: f'被{b}',
+    'against': lambda b: f'贴着{b}', 'into': lambda b: f'进入{b}',
+    'off': lambda b: f'脱下{b}', 'through': lambda b: f'穿过{b}',
+    'and': lambda b: b, 'or': lambda b: b,
+}
+
+# 判定「动词在前」的常见词（决定用哪种语序）；-ing 结尾的词一律按动词处理
+VERB_HINTS = {
+    'tied', 'bound', 'seated', 'dressed', 'undressed', 'covered', 'wet', 'open', 'closed',
+    'spread', 'crossed', 'raised', 'lowered', 'bent', 'cut', 'torn', 'blindfolded',
+}
+
+# 「被…盖住/沾满」这类词 + 介词 → 更自然的中文
+PARTICIPLE_HEADS = {
+    'covered': '沾满', 'wet': '被弄湿的', 'soaked': '浸透', 'stained': '沾着',
+    'dripping': '滴着', 'full': '满是', 'smelling': '闻着', 'smeared': '涂满',
+}
+
+# 词典里没有（或不该当词条收）的英文结构词/方位词，拼注释时用这份兜底
+GLOSS_WORDS = {
+    'below': '下面', 'above': '上面', 'bottom': '底部', 'left': '左', 'right': '右',
+    'front': '前面', 'back': '后面', 'side': '侧面', 'top': '上面', 'under': '下面',
+    'over': '上方', 'upper': '上部', 'lower': '下部', 'inner': '内侧', 'outer': '外侧',
+    'full': '完整', 'half': '一半', 'part': '部分', 'multi': '多个', 'multiiple': '多个',
+    'own': '自己的', 'another': '别人', 'other': '其他', 'same': '相同', 'only': '只有',
+    'no': '无', 'not': '非', 'plus': '加', 'extra': '额外', 'alt': '替代', 'alternate': '替代',
+    'in': '里', 'on': '上', 'at': '在', 'of': '的', 'with': '带', 'from': '从',
+    'overall': '整体', 'close': '近', 'close-up': '特写', 'closeup': '特写', 'wide': '宽',
+    'long': '长', 'short': '短', 'big': '大', 'large': '大', 'huge': '巨大', 'small': '小',
+    'medium': '中等', 'tiny': '微小', 'thick': '厚', 'thin': '薄', 'slim': '纤细',
 }
 
 
@@ -191,6 +293,9 @@ class Completer:
         direct = self._direct_word_pairs()
         en2zh = dict(mined)
         en2zh.update(direct)                 # 直接词条优先
+        # 每个英文词的中文候选按「名词优先、更具体优先」重排，取第一个用来拼注释
+        for w, zhs in list(en2zh.items()):
+            en2zh[w] = sorted(set(zhs), key=_zh_rank)
         self.en2zh = en2zh
 
         phrases: Dict[str, List[Tuple[str, int]]] = defaultdict(list)
@@ -226,7 +331,7 @@ class Completer:
           2. 逐词拼：huge(巨大) + breasts(乳房) → 巨大乳房（有任何一个词不认识就放弃，免得拼出怪话）
           3. 拼不出来就不写（界面会退化成只显示英文 + 来源标签）
         """
-        m: Dict[str, str] = {}
+        buckets: Dict[str, List[str]] = {}
         for zh, ens in self.dic.zh2en.items():
             z = (zh or '').strip()
             if not (1 <= len(z) <= 14) or not _has_cjk(z):
@@ -235,11 +340,11 @@ class Completer:
                 key = en.strip().lower().replace(' ', '_')
                 if not key:
                     continue
-                cur = m.get(key)
-                # 同一标签有多个中文时，优先留更短、更干净的那个
-                if cur is None or len(z) < len(cur) or (' ' in cur and ' ' not in z):
-                    m[key] = z
-        self.en_zh = m
+                bucket = buckets.setdefault(key, [])
+                if z not in bucket:
+                    bucket.append(z)
+        # 同一个英文有多个中文说法时，挑最像「名词注释」的那个（排掉戴眼镜这类动词短语）
+        self.en_zh = {k: _pick_zh(v) for k, v in buckets.items() if v}
 
     def gloss(self, tag_en: str) -> str:
         """给一个英文标签配中文注释（没有就返回空串）。"""
@@ -252,16 +357,58 @@ class Completer:
         words = [w for w in key.split('_') if w]
         if len(words) < 2:
             return ''
-        # 带介词/连词的标签别硬拼（cum_on_breasts 直译成「精液上乳房」这种就没意思了），
-        # 交给现成翻译或用户下载的社区中文表
-        if any(w in GLOSS_STOPWORDS for w in words):
-            return ''
-        parts = []
-        for w in words:
-            zs = self.en2zh.get(w)
+        # ① 找到介词位置，按中文语序拼：
+        #    cum_on_breasts → 乳房上的精液、standing_on_floor → 站在地面上、hands_on_another's_face → 他人的脸上的双手
+        for idx in range(1, len(words) - 1):
+            prep = words[idx]
+            if prep not in PREP_PATTERNS:
+                continue
+            tail = self._gloss_words(words[idx + 1:], partial=False)
+            if not tail:
+                break
+            # 「沾满/满是」这类被动语态的词先单独处理，读起来更自然（covered_in_cum → 沾满精液）
+            if words[0] in PARTICIPLE_HEADS and prep in ('in', 'with', 'of', 'on'):
+                return f'{PARTICIPLE_HEADS[words[0]]}{tail}'
+            head = self._gloss_words(words[:idx], partial=False)
+            if head:
+                noun_fn, verb_fn = PREP_PATTERNS[prep]
+                is_verb = words[0].endswith('ing') or words[0] in VERB_HINTS
+                return (verb_fn if is_verb else noun_fn)(head, tail)
+            break
+        # ①' 两个词的介词开头：under_skirt → 裙子下面
+        if len(words) == 2 and words[0] in PREP_AFFIX:
+            tail = self._gloss_words(words[1:], partial=False)
+            if tail:
+                return PREP_AFFIX[words[0]](tail)
+        # ② 逐词拼（顺序照抄英文）
+        full = self._gloss_words(words, partial=False)
+        if full:
+            return full
+        # ③ 兜底：把认识的词拼出来（总比没有中文强）
+        return self._gloss_words(words, partial=True)
+
+    def _gloss_words(self, words: Sequence[str], partial: bool = False) -> str:
+        """把一串英文词逐词翻成中文并拼起来。
+
+        partial=False：有词不认识就返回空串（不硬拼，保证意思准确）
+        partial=True ：跳过不认识的词（用于兜底，至少给出一部分中文）
+        """
+        parts: List[str] = []
+        for raw in words:
+            w = raw.strip()
+            if not w:
+                continue
+            possessive = w.endswith("'s") or w.endswith('’s')
+            if possessive:
+                w = w[:-2]
+            zs = self.en2zh.get(w) or ([GLOSS_WORDS[w]] if w in GLOSS_WORDS else None)
             if not zs:
-                return ''                       # 有词不认识就别硬拼
-            parts.append(zs[0])
+                if partial:
+                    continue
+                return ''
+            parts.append(zs[0] + ('的' if possessive else ''))
+        if partial and len(parts) < 1:
+            return ''
         return ''.join(parts)
 
     def build(self) -> 'Completer':
